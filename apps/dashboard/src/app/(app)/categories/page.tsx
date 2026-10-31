@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 
 import { ContentSkeleton } from "@/components/ContentSkeleton/ContentSkeleton";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
 import useFetch from "@/hooks/useFetch";
 import { apiFetch } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
@@ -116,39 +117,43 @@ export default function CategoriesPage() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <div>
-          <h1>Categories</h1>
-          {totals ? (
-            <p className={styles.subtitle}>
+      <PageHeader
+        title="Categories"
+        description={
+          totals ? (
+            <>
               {totals.categories} {totals.categories === 1 ? "category" : "categories"} ·{" "}
               {totals.products} {totals.products === 1 ? "product" : "products"}
-            </p>
-          ) : null}
-        </div>
-        <div className={styles.headerActions}>
-          {categories && categories.length > 0 ? (
-            <Input
-              allowClear
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search categories"
-              prefix={<Search className="h-4 w-4 text-[var(--text-muted)]" aria-hidden />}
-              className={styles.search}
-              aria-label="Search categories"
-            />
-          ) : null}
-          {isAtLeastManager(user?.role) && (
-            <Button
-              type="primary"
-              icon={<Plus size={16} strokeWidth={2.25} />}
-              onClick={() => setCreateOpen(true)}
-            >
-              New category
-            </Button>
-          )}
-        </div>
-      </header>
+            </>
+          ) : null
+        }
+        actions={
+          (categories && categories.length > 0) || isAtLeastManager(user?.role) ? (
+            <>
+              {categories && categories.length > 0 ? (
+                <Input
+                  allowClear
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search categories"
+                  prefix={<Search className="h-4 w-4 text-[var(--text-muted)]" aria-hidden />}
+                  className={styles.search}
+                  aria-label="Search categories"
+                />
+              ) : null}
+              {isAtLeastManager(user?.role) && (
+                <Button
+                  type="primary"
+                  icon={<Plus size={16} strokeWidth={2.25} />}
+                  onClick={() => setCreateOpen(true)}
+                >
+                  New category
+                </Button>
+              )}
+            </>
+          ) : null
+        }
+      />
 
       <section aria-label="Category list">
         {!shopCode ? (

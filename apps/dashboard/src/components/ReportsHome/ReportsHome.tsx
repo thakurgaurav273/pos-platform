@@ -40,6 +40,7 @@ import {
 } from "lucide-react";
 
 import { useShop } from "@/contexts/ShopContext";
+import { useChartPalette } from "@/contexts/ThemeContext";
 import { apiFetch } from "@/lib/api";
 import { chartDayLabel, formatInrFull } from "@/lib/chartFormat";
 import {
@@ -72,9 +73,6 @@ function paymentLabel(raw: string) {
   return sharedPaymentLabel(raw, "Other");
 }
 
-/* Copper (brand), teal, blue, mustard, slate - distinct hues, readable on white */
-const PIE_COLORS = ["#a84f1c", "#0f766e", "#2563eb", "#ca8a04", "#64748b"];
-
 /** Presets for rolling window reports (API clamps days to 7–180). */
 const REPORT_QUICK_DAY_PRESETS = [7, 30, 90, 180] as const;
 
@@ -90,6 +88,7 @@ export default function ReportsHome({ variant = "full" }: ReportsHomeProps) {
   const showDailyRevenueChart = !embedded;
   const { message } = App.useApp();
   const { effectiveShopCode, shops } = useShop();
+  const palette = useChartPalette();
   const defaultShop = process.env.NEXT_PUBLIC_API_DEFAULT_SHOP_CODE ?? "";
   const shopKey = effectiveShopCode || defaultShop;
 
@@ -485,7 +484,7 @@ export default function ReportsHome({ variant = "full" }: ReportsHomeProps) {
               <Col xs={24} sm={8}>
                 <Card
                   variant="borderless"
-                  className="rounded-xl border border-[var(--pearl-bush)] bg-[rgba(255,254,249,0.5)] shadow-sm"
+                  className="rounded-xl border border-[var(--pearl-bush)] bg-[var(--surface-subtle)] shadow-sm"
                 >
                   <Statistic
                     title={`Revenue (${periodLabel})`}
@@ -500,7 +499,7 @@ export default function ReportsHome({ variant = "full" }: ReportsHomeProps) {
               <Col xs={24} sm={8}>
                 <Card
                   variant="borderless"
-                  className="rounded-xl border border-[var(--pearl-bush)] bg-[rgba(255,254,249,0.5)] shadow-sm"
+                  className="rounded-xl border border-[var(--pearl-bush)] bg-[var(--surface-subtle)] shadow-sm"
                 >
                   <Statistic
                     title="Bills"
@@ -514,7 +513,7 @@ export default function ReportsHome({ variant = "full" }: ReportsHomeProps) {
               <Col xs={24} sm={8}>
                 <Card
                   variant="borderless"
-                  className="rounded-xl border border-[var(--pearl-bush)] bg-[rgba(255,254,249,0.5)] shadow-sm"
+                  className="rounded-xl border border-[var(--pearl-bush)] bg-[var(--surface-subtle)] shadow-sm"
                 >
                   <Statistic
                     title="Avg. bill value"
@@ -557,15 +556,15 @@ export default function ReportsHome({ variant = "full" }: ReportsHomeProps) {
                         data={barData}
                         margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
                       >
-                        <CartesianGrid vertical={false} stroke="var(--pearl-bush)" />
+                        <CartesianGrid vertical={false} stroke={palette.grid} />
                         <XAxis
                           dataKey="label"
                           interval="preserveStartEnd"
-                          tick={{ fontSize: 10, fill: "var(--bistre-500)" }}
-                          axisLine={{ stroke: "var(--bistre-200)" }}
+                          tick={{ fontSize: 10, fill: palette.axis }}
+                          axisLine={{ stroke: palette.grid }}
                         />
                         <YAxis
-                          tick={{ fontSize: 11, fill: "var(--bistre-500)" }}
+                          tick={{ fontSize: 11, fill: palette.axis }}
                           axisLine={false}
                           width={48}
                           tickFormatter={(v) =>
@@ -576,9 +575,10 @@ export default function ReportsHome({ variant = "full" }: ReportsHomeProps) {
                         />
                         <Tooltip
                           contentStyle={{
-                            borderRadius: 10,
-                            borderColor: "var(--pearl-bush)",
-                            background: "#ffffff",
+                            borderRadius: "var(--ui-radius-md)",
+                            borderColor: palette.tooltipBorder,
+                            background: palette.tooltipBg,
+                            color: palette.text,
                           }}
                           formatter={(value, name) => {
                             if (name === "revenue")
@@ -597,7 +597,7 @@ export default function ReportsHome({ variant = "full" }: ReportsHomeProps) {
                         <Bar
                           dataKey="revenue"
                           name="revenue"
-                          fill="var(--ochre-500)"
+                          fill={palette.primary}
                           radius={[6, 6, 0, 0]}
                         />
                       </BarChart>
@@ -645,15 +645,16 @@ export default function ReportsHome({ variant = "full" }: ReportsHomeProps) {
                           {pieData.map((_, i) => (
                             <Cell
                               key={String(i)}
-                              fill={PIE_COLORS[i % PIE_COLORS.length]}
+                              fill={palette.series[i % palette.series.length]}
                             />
                           ))}
                         </Pie>
                         <Tooltip
                           contentStyle={{
-                            borderRadius: 10,
-                            borderColor: "var(--pearl-bush)",
-                            background: "#ffffff",
+                            borderRadius: "var(--ui-radius-md)",
+                            borderColor: palette.tooltipBorder,
+                            background: palette.tooltipBg,
+                            color: palette.text,
                           }}
                           formatter={(value, _name, item) => {
                             const o = item?.payload as {

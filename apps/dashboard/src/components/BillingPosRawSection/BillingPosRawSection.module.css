@@ -54,7 +54,7 @@
   width: 16px !important;
   height: 16px !important;
   border: 2px solid var(--bistre-600) !important;
-  background-color: #fff !important;
+  background-color: var(--surface) !important;
 }
 
 .gstinCheckboxRoot :global(.ant-checkbox:hover .ant-checkbox-inner) {

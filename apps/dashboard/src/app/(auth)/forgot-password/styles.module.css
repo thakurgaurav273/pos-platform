@@ -2,7 +2,7 @@
     min-width: 400px;
     min-height: 400px;
     margin-top: 40px;
-    background-color: var(--color-white);
+    background-color: var(--surface);
     align-items: center;
 }
 
@@ -18,10 +18,10 @@
 .login_button{
     height: 40px;
     width: 100%;
-    background: linear-gradient(to right, #8a6b4a, #c2885c );
-    color: var(--color-white);
+    background: linear-gradient(to right, var(--ochre-600), var(--ochre-400));
+    color: var(--on-primary);
     border: none;
-    border-radius: 5px;
+    border-radius: var(--ui-radius-sm);
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
@@ -39,9 +39,9 @@
     font-weight: 600;
     color: var(--bistre-500);
     border: 1px solid var(--bistre-200);
-    border-radius: 5px;
+    border-radius: var(--ui-radius-sm);
     outline: none;
-    background-color: var(--color-white);
+    background-color: var(--surface);
 }
 
 .otp_input::-webkit-outer-spin-button,

@@ -9,6 +9,7 @@ import { PlusCircle, Store } from "lucide-react";
 import CreateShopWizard from "./CreateShopWizard";
 import { useState } from "react";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
 
 export default function ShopsPage() {
   const { data, loading, fetchApi } = useFetch('/shops', { method: 'GET' });
@@ -18,21 +19,22 @@ export default function ShopsPage() {
 
   return (
     <div className="p-2">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-        <div>
-          <h1 style={{ fontSize: '24px', fontWeight: 700, margin: 0, color: 'var(--bistre-950)' }}>Shops</h1>
-          <p style={{ color: 'var(--bistre-500)', fontSize: '14px' }}>Manage retail locations and inventory templates.</p>
-        </div>
-        <Button 
-          type="primary" 
-          size="large" 
-          icon={<PlusCircle size={18} />}
-          onClick={() => setWizardOpen(true)}
-          style={{ height: 48, borderRadius: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}
-        >
-          Add New Shop
-        </Button>
-      </div>
+      <PageHeader
+        className="mb-8"
+        title="Shops"
+        description="Manage retail locations and inventory templates."
+        actions={
+          <Button 
+            type="primary" 
+            size="large" 
+            icon={<PlusCircle size={18} />}
+            onClick={() => setWizardOpen(true)}
+            style={{ height: 48, borderRadius: 'var(--ui-radius-lg)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}
+          >
+            Add New Shop
+          </Button>
+        }
+      />
 
       {loading && !data ? (
         <ContentSkeleton variant="card-grid" gridItems={6} />

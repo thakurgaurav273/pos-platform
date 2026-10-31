@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { apiFetch } from '@/lib/api';
+import { apiFetch, EFFECTIVE_SHOP_STORAGE_KEY } from '@/lib/api';
 
 const AUTH_STORAGE_KEY = 'calcutta_auth';
 
@@ -49,6 +49,20 @@ type AuthContextValue = AuthState & {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+/**
+ * Users other than SUPER_ADMIN can only act on their own shop (the API rejects any
+ * other X-Shop). Store it before the first request so it is sent instead of the
+ * env default shop, which made the first calls after login fail with 403.
+ */
+function pinOwnShop(user: AuthUser | null) {
+  if (!user || user.role === 'SUPER_ADMIN' || !user.shopCode) return;
+  try {
+    localStorage.setItem(EFFECTIVE_SHOP_STORAGE_KEY, user.shopCode);
+  } catch {
+    // Storage blocked: the API still scopes the user to their own shop.
+  }
+}
+
 function getStoredAuth(): Pick<AuthState, 'token' | 'user' | 'permissions'> {
   if (typeof window === 'undefined') return { token: null, user: null, permissions: null };
   try {
@@ -75,6 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const { token, user, permissions } = getStoredAuth();
+    pinOwnShop(user);
     setState({
       token,
       user,
@@ -86,6 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const setAuth = useCallback((token: string, user: AuthUser | null, permissions: RolePermissions | null = null) => {
     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ token, user, permissions }));
+    pinOwnShop(user);
     setState({
       token,
       user,

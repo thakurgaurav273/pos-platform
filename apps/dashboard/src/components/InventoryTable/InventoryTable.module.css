@@ -17,12 +17,10 @@
   align-items: stretch;
   gap: 0.875rem;
   padding: 0.75rem 1rem;
-  border-radius: 12px;
-  background: rgba(255, 253, 248, 0.92);
-  border: 1px solid rgba(24, 24, 27, 0.07);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.75) inset,
-    0 1px 3px rgba(24, 24, 27, 0.05);
+  border-radius: var(--ui-radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
 @media (min-width: 768px) {
@@ -95,19 +93,19 @@
 .toolbarBtnPrimary:global(.ant-btn) {
   height: 48px !important;
   padding: 0 18px !important;
-  border-radius: 12px !important;
+  border-radius: var(--ui-radius-lg) !important;
   font-size: 14px !important;
   font-weight: 600 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 0.35rem !important;
-  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.06) !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
 .toolbarBtn:global(.ant-btn) {
-  border-color: rgba(24, 24, 27, 0.12) !important;
-  background: linear-gradient(180deg, #ffffff 0%, var(--linen-100) 100%) !important;
+  border-color: var(--border-strong) !important;
+  background: var(--surface) !important;
   color: var(--bistre-800) !important;
 }
 
@@ -120,23 +118,21 @@
 .toolbarBtnPrimary:global(.ant-btn) {
   background: var(--ochre-600) !important;
   border-color: var(--ochre-600) !important;
-  color: #fff !important;
+  color: var(--on-primary) !important;
 }
 
 .toolbarBtnPrimary:global(.ant-btn:hover) {
   background: var(--ochre-500) !important;
   border-color: var(--ochre-500) !important;
-  color: #fff !important;
+  color: var(--on-primary) !important;
 }
 
 :global(.ant-input-affix-wrapper).searchInput {
   min-height: 48px;
-  border-radius: 12px;
-  border-color: rgba(24, 24, 27, 0.08);
-  background: #ffffff !important;
-  box-shadow:
-    0 2px 4px rgba(24, 24, 27, 0.02),
-    0 1px 2px rgba(24, 24, 27, 0.04);
+  border-radius: var(--ui-radius-lg);
+  border-color: var(--border);
+  background: var(--surface) !important;
+  box-shadow: var(--shadow-xs);
   padding-left: 16px;
   padding-right: 16px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -148,16 +144,14 @@
 :global(.ant-input-affix-wrapper-focused).searchInput,
 :global(.ant-input-affix-wrapper:focus-within).searchInput {
   border-color: var(--ochre-400) !important;
-  background: #ffffff !important;
-  box-shadow:
-    0 4px 12px rgba(168, 79, 28, 0.05),
-    0 0 0 4px rgba(168, 79, 28, 0.15) !important;
+  background: var(--surface) !important;
+  box-shadow: 0 0 0 3px rgba(var(--ochre-rgb), 0.15) !important;
 }
 
 .searchInput :global(.ant-input) {
   background: transparent !important;
   font-size: 14.5px;
-  color: var(--bistre-950);
+  color: var(--text-primary);
 }
 
 .searchInput :global(.ant-input-prefix) {
@@ -172,7 +166,7 @@
   padding: 0;
   min-width: 0;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--ui-radius-lg);
   display: flex;
   flex-direction: column;
 }
@@ -196,13 +190,8 @@
   font-weight: 700;
   letter-spacing: 0.005em;
   color: var(--bistre-700);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.65) 0%,
-    rgba(241, 233, 217, 0.9) 100%
-  );
-  border: 1px solid rgba(142, 118, 96, 0.22);
-  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.04);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -239,7 +228,7 @@
   border-radius: 50%;
   background: var(--ochre-500);
   vertical-align: 0.1em;
-  box-shadow: 0 0 0 2px rgba(168, 79, 28, 0.25);
+  box-shadow: 0 0 0 2px rgba(var(--ochre-rgb), 0.25);
 }
 
 :global(.inventory-min-stock) {
@@ -284,7 +273,7 @@
   height: 2.25rem;
   min-width: unset;
   padding: 0;
-  border-radius: 10px;
+  border-radius: var(--ui-radius-md);
   border: 1px solid transparent;
   background: transparent;
   color: var(--bistre-400);
@@ -305,7 +294,7 @@
   background: var(--ochre-10);
   border-color: var(--ochre-200);
   color: var(--ochre-600);
-  box-shadow: 0 1px 3px rgba(24, 24, 27, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 :global(.inventory-edit-link:focus-visible) {

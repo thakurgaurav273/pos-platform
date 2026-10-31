@@ -64,7 +64,7 @@ export function BarcodePrintModal({
       className="barcode-print-modal"
     >
       <div className="print-preview-content">
-        <p style={{ fontSize: '13px', color: '#666', marginBottom: '16px' }}>
+        <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px' }}>
           {isBulk
             ? 'The preview below shows the selected items. Click "Print Now" to open the formatted printer view.'
             : 'Check the preview below. Click "Print Now" to send to your label printer.'}
@@ -81,19 +81,19 @@ export function BarcodePrintModal({
             maxHeight: '400px',
             overflowY: 'auto',
             padding: '16px',
-            background: '#f8f8f8',
-            borderRadius: '12px',
-            border: '1px solid #eee'
+            background: 'var(--linen)',
+            borderRadius: 'var(--ui-radius-lg)',
+            border: '1px solid var(--border)'
           }}
         >
           {items.length === 0 ? (
-            <div style={{ padding: '20px', color: '#999' }}>No items selected to print.</div>
+            <div style={{ padding: '20px', color: 'var(--text-muted)' }}>No items selected to print.</div>
           ) : (
             items.map((item) => (
               <div 
                 key={item.id} 
                 style={{ 
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.08)', 
+                  boxShadow: 'var(--shadow-md)', 
                   background: 'white',
                   borderRadius: '2px' 
                 }}

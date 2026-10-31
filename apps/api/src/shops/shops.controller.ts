@@ -21,6 +21,7 @@ import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
 import { CreateShopWithInventoryDto } from './dto/create-shop-with-inventory.dto';
 import { UpdateShopDto } from './dto/update-shop.dto';
+import { UpdateShopBrandingDto } from './dto/shop-theme.dto';
 
 @Controller('shops')
 @UseGuards(JwtAuthGuard, ShopScopeGuard)
@@ -64,6 +65,14 @@ export class ShopsController {
   @Get('current')
   findCurrent(@Req() req: Request) {
     return this.shopsService.findByShopCode(req.effectiveShopCode!);
+  }
+
+  /** Logo and theme of the active shop. Shop owners (ADMIN) and SUPER_ADMIN only. */
+  @Patch('current/branding')
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
+  @UseGuards(RolesGuard)
+  updateBranding(@Req() req: Request, @Body() dto: UpdateShopBrandingDto) {
+    return this.shopsService.updateBranding(req.effectiveShopCode!, dto);
   }
 
   @Get(':id')

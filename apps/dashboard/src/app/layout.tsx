@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { THEME_PREPAINT_SCRIPT } from "@/lib/theme/storage";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -11,6 +12,20 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+/* Optional shop typography. Not preloaded: browsers fetch them only when a theme uses them. */
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  preload: false,
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -32,11 +47,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
-    <html lang="en" className="light" suppressHydrationWarning>
+    // The pre-paint script sets theme variables and data-theme-mode on <html> before
+    // hydration, hence suppressHydrationWarning.
+    // Font variables live on <html> because the theme variables set there reference them.
+    <html
+      lang="en"
+      data-theme-mode="light"
+      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${playfair.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_PREPAINT_SCRIPT }} />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[var(--linen)] min-h-screen`}
+        className="antialiased bg-[var(--linen)] min-h-screen"
       >
         <Providers>
           {children}

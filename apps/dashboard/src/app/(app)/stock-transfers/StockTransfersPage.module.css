@@ -8,81 +8,11 @@
   padding: 0;
 }
 
+/* Layout comes from the shared PageHeader; this only adds the divider. */
 .surfaceHeader {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 1.25rem;
-  flex-shrink: 0;
   margin: 0 0 1.125rem;
   padding-bottom: 1.25rem;
-  border-bottom: 1px solid rgba(24, 24, 27, 0.08);
-}
-
-@media (min-width: 768px) {
-  .surfaceHeader {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1.5rem;
-  }
-}
-
-.surfaceHeaderLead {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-  padding-top: 0.375rem;
-}
-
-.surfaceHeaderLead::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 3rem;
-  height: 3px;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    var(--ochre-500) 0%,
-    rgba(168, 79, 28, 0.35) 100%
-  );
-}
-
-.surfaceHeaderFilter {
-  flex-shrink: 0;
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  .surfaceHeaderFilter {
-    width: auto;
-    max-width: 14rem;
-  }
-}
-
-.title {
-  font-size: 1.375rem;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  line-height: 1.25;
-  color: var(--bistre-950);
-  margin: 0;
-}
-
-@media (min-width: 640px) {
-  .title {
-    font-size: 1.5rem;
-  }
-}
-
-.subtitle {
-  margin: 0.5rem 0 0;
-  max-width: 42rem;
-  font-size: 0.9375rem;
-  line-height: 1.55;
-  color: var(--bistre-600);
+  border-bottom: 1px solid var(--border);
 }
 
 .surface {
@@ -91,17 +21,10 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border-radius: 16px;
-  border: 1px solid rgba(232, 226, 217, 0.85);
-  background: linear-gradient(
-    165deg,
-    rgba(255, 254, 249, 0.92) 0%,
-    rgba(249, 246, 240, 0.55) 48%,
-    rgba(245, 235, 224, 0.35) 100%
-  );
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.85) inset,
-    0 12px 40px -24px rgba(24, 24, 27, 0.18);
+  border-radius: var(--ui-radius-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
   padding: 1.25rem 1.25rem 1.125rem;
 }
 
@@ -130,6 +53,7 @@
 @media (min-width: 768px) {
   .filterGroup {
     align-items: flex-end;
+    max-width: 14rem;
   }
 }
 
@@ -139,12 +63,10 @@
 
 .statusSelect :global(.ant-select-selector) {
   min-height: 48px !important;
-  border-radius: 12px !important;
-  border-color: rgba(24, 24, 27, 0.08) !important;
-  background: #ffffff !important;
-  box-shadow:
-    0 2px 4px rgba(24, 24, 27, 0.02),
-    0 1px 2px rgba(24, 24, 27, 0.04) !important;
+  border-radius: var(--ui-radius-lg) !important;
+  border-color: var(--border) !important;
+  background: var(--surface) !important;
+  box-shadow: var(--shadow-xs) !important;
   padding-left: 12px !important;
   padding-right: 12px !important;
   align-items: center !important;
@@ -153,7 +75,7 @@
 .statusSelect:global(.ant-select-focused) :global(.ant-select-selector),
 .statusSelect:global(.ant-select-open) :global(.ant-select-selector) {
   border-color: var(--ochre-400) !important;
-  box-shadow: 0 0 0 3px rgba(168, 79, 28, 0.15) !important;
+  box-shadow: 0 0 0 3px rgba(var(--ochre-rgb), 0.15) !important;
 }
 
 .tableSlot {
@@ -162,7 +84,7 @@
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--ui-radius-lg);
   display: flex;
   flex-direction: column;
 }
@@ -177,7 +99,7 @@
   font-weight: 600;
   color: var(--bistre-800);
   cursor: help;
-  border-bottom: 1px dashed rgba(142, 118, 96, 0.35);
+  border-bottom: 1px dashed var(--border-strong);
   width: fit-content;
 }
 
@@ -215,42 +137,26 @@
 
 .tableSlot :global(.st-status-pending) {
   color: var(--ochre-800);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.75) 0%,
-    rgba(255, 243, 214, 0.95) 100%
-  );
-  border-color: rgba(168, 79, 28, 0.35);
+  background: var(--ochre-100);
+  border-color: rgba(var(--ochre-rgb), 0.35);
 }
 
 .tableSlot :global(.st-status-approved) {
   color: var(--bistre-800);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.65) 0%,
-    rgba(241, 233, 217, 0.9) 100%
-  );
-  border-color: rgba(142, 118, 96, 0.28);
+  background: var(--surface-subtle);
+  border-color: var(--border-strong);
 }
 
 .tableSlot :global(.st-status-rejected) {
-  color: #9f2d2d;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.85) 0%,
-    rgba(254, 226, 226, 0.75) 100%
-  );
-  border-color: rgba(185, 80, 80, 0.35);
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-color: var(--danger);
 }
 
 .tableSlot :global(.st-status-fulfilled) {
-  color: #1b4d2f;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.75) 0%,
-    rgba(220, 252, 231, 0.85) 100%
-  );
-  border-color: rgba(74, 155, 110, 0.35);
+  color: var(--success);
+  background: var(--success-bg);
+  border-color: var(--success);
 }
 
 .tableSlot :global(.st-btn-row) {
@@ -267,7 +173,7 @@
   gap: 0.35rem;
   height: 2rem;
   padding: 0 0.75rem;
-  border-radius: 10px;
+  border-radius: var(--ui-radius-md);
   font-size: 12px;
   font-weight: 600;
   font-family: var(--font-outfit), "Inter", sans-serif;
@@ -287,7 +193,7 @@
 .tableSlot :global(.st-btn-primary) {
   background: var(--ochre-600);
   border: 1px solid var(--ochre-600);
-  color: #fff;
+  color: var(--on-primary);
 }
 
 .tableSlot :global(.st-btn-primary:hover:not(:disabled)) {
@@ -296,12 +202,12 @@
 }
 
 .tableSlot :global(.st-btn-danger) {
-  background: #ffffff;
-  border: 1px solid rgba(185, 80, 80, 0.45);
-  color: #9f2d2d;
+  background: var(--surface);
+  border: 1px solid var(--danger);
+  color: var(--danger);
 }
 
 .tableSlot :global(.st-btn-danger:hover:not(:disabled)) {
-  background: rgba(254, 226, 226, 0.5);
-  border-color: rgba(185, 80, 80, 0.65);
+  background: var(--danger-bg);
+  border-color: var(--danger);
 }

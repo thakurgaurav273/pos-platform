@@ -279,7 +279,7 @@ function BillingPosRawSectionInner({
                   <button
                     type="button"
                     onClick={handleClearSelection}
-                    className="flex h-4 w-4 items-center justify-center rounded-full text-[var(--text-muted)] transition-colors hover:text-red-500"
+                    className="flex h-4 w-4 items-center justify-center rounded-full text-[var(--text-muted)] transition-colors hover:text-[var(--danger)]"
                     aria-label="Clear catalog selection"
                   >
                     <X className="h-3 w-3" />
@@ -355,7 +355,7 @@ function BillingPosRawSectionInner({
         </div>
 
         {isCatalogSelected && (
-          <p className="-mt-1 mb-3 rounded-md border border-green-200 bg-green-50 px-2.5 py-1.5 text-xs text-green-700">
+          <p className="-mt-1 mb-3 rounded-md border border-[var(--border)] bg-[var(--success-bg)] px-2.5 py-1.5 text-xs text-[var(--success)]">
             Catalog item selected
           </p>
         )}

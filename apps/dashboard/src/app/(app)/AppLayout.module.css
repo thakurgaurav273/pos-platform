@@ -1,17 +1,20 @@
-/* Light rail with the copper logo; white top bar over a neutral stone canvas. */
+/*
+ * App shell. Sidebar and header colours come from --sidebar-* / --header-* which the
+ * theme sets per shop (light, dark or brand rail; light, brand or transparent header).
+ */
 .layout {
   background: var(--linen);
   overflow-x: hidden;
 }
 
 .sider {
-  background: var(--surface) !important;
-  border-right: 1px solid var(--border);
+  background: var(--sidebar-bg) !important;
+  border-right: 1px solid var(--sidebar-border);
   display: none !important;
 }
 
 .sider:global(.ant-layout-sider-light) {
-  background: var(--surface) !important;
+  background: var(--sidebar-bg) !important;
 }
 
 .sider :global(.ant-layout-sider-children) {
@@ -28,17 +31,22 @@
 }
 
 .logoLink {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--sidebar-border);
   background: transparent;
   color: inherit;
   text-decoration: none;
 }
 
-/* Widen mark only (horizontal emphasis) without changing bar height */
+/* Fixed-height frame so built-in and uploaded logos sit the same way */
+.logoFrame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+  max-width: 200px;
+}
 .logoImage {
-  display: block;
-  transform: scaleX(1.14);
-  transform-origin: center;
+  max-height: 46px;
 }
 
 .logoLink:hover,
@@ -83,15 +91,15 @@
   margin: 1px 10px !important;
   width: calc(100% - 20px) !important;
   padding-inline: 12px !important;
-  border-radius: 6px !important;
+  border-radius: var(--ui-radius-md) !important;
   font-size: 13.5px;
-  color: var(--bistre-700) !important;
+  color: var(--sidebar-fg) !important;
   font-weight: 500;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
 .menu :global(.ant-menu-item .ant-menu-item-icon) {
-  color: var(--bistre-400);
+  color: var(--sidebar-muted);
   transition: color 0.15s ease;
 }
 
@@ -100,23 +108,25 @@
 }
 
 .menu :global(.ant-menu-item:hover) {
-  background: var(--linen-90) !important;
-  color: var(--bistre-950) !important;
+  background: var(--sidebar-hover-bg) !important;
+  color: var(--sidebar-hover-fg) !important;
 }
-
 .menu :global(.ant-menu-item:hover .ant-menu-item-icon) {
-  color: var(--bistre-700);
+  color: var(--sidebar-hover-fg);
+}
+.menu :global(.ant-menu-item:focus-visible) {
+  outline: 2px solid var(--sidebar-indicator);
+  outline-offset: -2px;
 }
 
 .menu :global(.ant-menu-item-selected),
 .menu :global(.ant-menu-item-selected:hover) {
-  background: var(--ochre-100) !important;
-  color: var(--ochre-600) !important;
+  background: var(--sidebar-active-bg) !important;
+  color: var(--sidebar-active-fg) !important;
   font-weight: 600;
 }
-
 .menu :global(.ant-menu-item-selected .ant-menu-item-icon) {
-  color: var(--ochre-500) !important;
+  color: var(--sidebar-indicator) !important;
 }
 
 .menu :global(.ant-menu-item-selected)::before {
@@ -127,13 +137,13 @@
   bottom: 8px;
   width: 3px;
   border-radius: 0 3px 3px 0;
-  background: var(--ochre-500);
+  background: var(--sidebar-indicator);
 }
 
 /* Quiet hairline between nav groups (sell / catalogue / admin) */
 .menu :global(.ant-menu-item-divider) {
   margin: 10px 22px !important;
-  border-color: var(--border) !important;
+  border-color: var(--sidebar-border) !important;
 }
 
 .mainLayout {
@@ -150,8 +160,9 @@
 }
 
 .header {
-  background: var(--surface) !important;
-  border-bottom: 1px solid var(--border);
+  background: var(--header-bg) !important;
+  color: var(--header-fg);
+  border-bottom: 1px solid var(--header-border);
   padding: 0 16px !important;
   padding-top: env(safe-area-inset-top, 0px) !important;
   flex-shrink: 0;
@@ -193,7 +204,7 @@
   width: 1px;
   height: 1.5rem;
   flex-shrink: 0;
-  background: var(--border);
+  background: var(--header-control-border);
 }
 
 /* Shop chip: reads as context, not a greyed-out form field */
@@ -203,9 +214,10 @@
 
 .headerShopSelect:global(.ant-select),
 .headerShopSelect :global(.ant-select-selector) {
-  background: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 8px !important;
+  background: var(--header-control-bg) !important;
+  border: 1px solid var(--header-control-border) !important;
+  border-radius: var(--ui-radius-md) !important;
+  color: var(--header-fg) !important;
   box-shadow: none !important;
   font-size: 13px;
   font-weight: 500;
@@ -242,7 +254,7 @@
 }
 
 .breadcrumbShop {
-  color: var(--text-muted);
+  color: var(--header-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -252,11 +264,11 @@
   width: 14px;
   height: 14px;
   flex-shrink: 0;
-  color: var(--bistre-300);
+  color: var(--header-muted);
+  opacity: 0.7;
 }
-
 .breadcrumbPage {
-  color: var(--text-primary);
+  color: var(--header-fg);
   font-weight: 500;
   white-space: nowrap;
 }
@@ -264,11 +276,14 @@
 .headerShopSelect:global(.ant-select-focused) :global(.ant-select-selector),
 .headerShopSelect:global(.ant-select-open) :global(.ant-select-selector) {
   border-color: var(--ochre-400) !important;
-  box-shadow: 0 0 0 2px rgba(168, 79, 28, 0.12) !important;
+  box-shadow: var(--ring) !important;
 }
 
 .content {
+  /* Positioning context for antd popups rendered inside the scroll area */
+  position: relative;
   background: var(--linen) !important;
+  outline: none;
   max-height: calc(
     100dvh - 64px - env(safe-area-inset-top, 0px) -
       env(safe-area-inset-bottom, 0px)
@@ -287,7 +302,7 @@
  * everywhere (pages previously mixed text-xl / text-2xl / 24px).
  */
 .content :global(h1) {
-  font-family: var(--font-sans), system-ui, sans-serif !important;
+  font-family: var(--font-heading) !important;
   font-size: 24px !important;
   font-weight: 600 !important;
   letter-spacing: -0.02em;
@@ -318,7 +333,7 @@
 }
 
 .mobileDrawer :global(.ant-drawer-content) {
-  background: var(--surface) !important;
+  background: var(--sidebar-bg) !important;
 }
 
 .mobileDrawer :global(.ant-drawer-body) {
@@ -337,7 +352,7 @@
 
 .mobileDrawerShopSwitcher {
   padding: 16px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--sidebar-border);
   margin-top: auto;
 }
 
@@ -345,7 +360,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: var(--surface);
+  background: var(--sidebar-bg);
 }
 
 .mobileDrawerHeader {
@@ -353,8 +368,8 @@
   align-items: center;
   padding: 8px 16px;
   height: 64px;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  border-bottom: 1px solid var(--sidebar-border);
+  background: var(--sidebar-bg);
   gap: 12px;
 }
 
@@ -365,19 +380,16 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border: 1px solid var(--border) !important;
-  background: var(--surface) !important;
+  border: 1px solid var(--sidebar-border) !important;
+  background: transparent !important;
   border-radius: 50% !important;
-  color: var(--bistre-700) !important;
-  transition: all 0.2s ease !important;
-  box-shadow: 0 2px 4px rgba(24, 24, 27, 0.04) !important;
+  color: var(--sidebar-fg) !important;
+  transition: background 0.15s ease, color 0.15s ease !important;
+  box-shadow: none !important;
 }
-
 .closeButton:hover {
-  background: var(--linen-90) !important;
-  border-color: var(--border-strong) !important;
-  color: var(--bistre-950) !important;
-  transform: scale(1.05);
+  background: var(--sidebar-hover-bg) !important;
+  color: var(--sidebar-hover-fg) !important;
 }
 
 .drawerLogo {
@@ -386,11 +398,11 @@
   flex: 1;
 }
 
-.drawerLogo img {
-  max-height: 44px;
-  width: auto;
-  transform: scaleX(1.14);
-  transform-origin: left center;
+.drawerLogoFrame {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  max-width: 150px;
 }
 
 .profileSection {
@@ -401,8 +413,9 @@
   padding: 4px 8px 4px 6px;
   margin-right: -8px;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--ui-radius-md);
   background: transparent;
+  color: var(--header-fg);
   cursor: pointer;
   user-select: none;
   line-height: normal;
@@ -411,11 +424,18 @@
 
 .profileSection:hover,
 .profileSection:global(.ant-dropdown-open) {
-  background: var(--linen);
+  background: var(--header-control-hover);
+}
+.profileSection:focus-visible {
+  outline: 2px solid var(--ochre-400);
+  outline-offset: 2px;
 }
 
 .mobileMenuButton {
   display: flex !important;
+  background: var(--header-control-bg) !important;
+  border-color: var(--header-control-border) !important;
+  color: var(--header-fg) !important;
 }
 
 @media (min-width: 1024px) {
@@ -445,23 +465,21 @@
 /* Signed-in footer inside the rail */
 .siderFooter {
   padding: 14px 22px 18px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--sidebar-border);
 }
-
 .siderFooterShop {
   font-size: 12px;
-  color: var(--bistre-400);
+  color: var(--sidebar-muted);
 }
-
 .siderFooterName {
   font-size: 13px;
   font-weight: 600;
-  color: var(--bistre-950);
+  color: var(--sidebar-hover-fg);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .mobileDrawerShopSwitcher p {
-  color: var(--bistre-400) !important;
+  color: var(--sidebar-muted) !important;
 }

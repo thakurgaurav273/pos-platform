@@ -1271,7 +1271,7 @@ export function BillingBillPanel({
           ref={receiptIframeRef}
           title="Receipt preview"
           srcDoc={receiptPreviewHtml ?? ''}
-          className="block h-[min(70vh,640px)] w-full border-0 bg-[#ebe4d8]"
+          className="block h-[min(70vh,640px)] w-full border-0 bg-[var(--linen-80)]"
         />
       </Modal>
 
@@ -1344,7 +1344,7 @@ export function BillingBillPanel({
           </p>
           <input
             type="datetime-local"
-            className="w-full rounded-lg border border-[var(--pearl-bush)] bg-white px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--ochre-400)]"
+            className="w-full rounded-lg border border-[var(--pearl-bush)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--ochre-400)]"
             value={tempSaleDateTime}
             max={toDatetimeLocalValue(new Date())}
             onChange={(e) => setTempSaleDateTime(e.target.value)}

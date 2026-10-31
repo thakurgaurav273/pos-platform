@@ -20,7 +20,7 @@
   align-items: flex-start;
   gap: 0.75rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(24, 24, 27, 0.08);
+  border-bottom: 1px solid var(--border);
 }
 
 .headerCopy {
@@ -52,12 +52,10 @@
 
 .collapse :global(.ant-collapse-item) {
   width: 100%;
-  border-radius: 14px !important;
-  border: 1px solid rgba(24, 24, 27, 0.08) !important;
-  background: rgba(255, 254, 249, 0.92) !important;
-  box-shadow:
-    0 1px 2px rgba(24, 24, 27, 0.04),
-    0 6px 20px rgba(24, 24, 27, 0.05) !important;
+  border-radius: var(--ui-radius-lg) !important;
+  border: 1px solid var(--border) !important;
+  background: var(--surface) !important;
+  box-shadow: var(--shadow-sm) !important;
   overflow: hidden;
 }
 
@@ -72,11 +70,7 @@
   font-weight: 700 !important;
   letter-spacing: 0.005em !important;
   color: var(--bistre-700) !important;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 252, 245, 0.98) 0%,
-    rgba(255, 254, 249, 0.88) 100%
-  ) !important;
+  background: var(--surface-subtle) !important;
 }
 
 .collapse :global(.ant-collapse-content) {
@@ -101,8 +95,8 @@
 .formBlock :global(.ant-input),
 .formBlock :global(.ant-input-affix-wrapper),
 .formBlock :global(.ant-select-selector) {
-  border-radius: 10px !important;
-  border-color: rgba(24, 24, 27, 0.12) !important;
+  border-radius: var(--ui-radius-md) !important;
+  border-color: var(--border-strong) !important;
 }
 
 .formBlock :global(.ant-input-affix-wrapper:hover),
@@ -117,9 +111,9 @@
   font-size: 13px;
   line-height: 1.55;
   color: var(--text-secondary);
-  background: rgba(250, 235, 205, 0.22);
-  border: 1px solid rgba(143, 66, 24, 0.15);
-  border-radius: 10px;
+  background: var(--ochre-50);
+  border: 1px solid rgba(var(--ochre-rgb), 0.15);
+  border-radius: var(--ui-radius-md);
 }
 
 .permHint strong {
@@ -135,7 +129,7 @@
 }
 
 .permToolbar :global(.ant-btn) {
-  border-radius: 10px;
+  border-radius: var(--ui-radius-md);
   font-weight: 600;
   font-size: 12px;
 }
@@ -144,10 +138,10 @@
 .permTableWrap {
   width: 100%;
   max-width: 100%;
-  border-radius: 12px;
-  border: 1px solid rgba(232, 226, 217, 0.95);
+  border-radius: var(--ui-radius-lg);
+  border: 1px solid var(--border);
   overflow: hidden;
-  background: #ffffff;
+  background: var(--surface);
 }
 
 .permTable {
@@ -161,7 +155,7 @@
 .permTable td {
   padding: 11px 14px;
   text-align: left;
-  border-bottom: 1px solid rgba(232, 226, 217, 0.85);
+  border-bottom: 1px solid var(--border);
   vertical-align: middle;
 }
 
@@ -170,7 +164,7 @@
 }
 
 .permTable tbody tr:hover {
-  background: rgba(168, 79, 28, 0.06);
+  background: rgba(var(--ochre-rgb), 0.06);
 }
 
 .permTable th {
@@ -178,11 +172,7 @@
   font-weight: 700;
   letter-spacing: 0.005em;
   color: var(--bistre-700);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 244, 214, 0.75) 0%,
-    rgba(250, 235, 205, 0.45) 100%
-  );
+  background: var(--ochre-50);
 }
 
 .permTable th:first-child,
@@ -208,14 +198,14 @@
 }
 
 .permCheckCell :global(.ant-checkbox-disabled .ant-checkbox-inner) {
-  background-color: #ffffff !important;
+  background-color: var(--surface) !important;
   border-color: var(--bistre-300) !important;
   opacity: 1 !important;
 }
 
 .permCheckCell
   :global(.ant-checkbox-disabled.ant-checkbox-checked .ant-checkbox-inner) {
-  background-color: rgba(168, 79, 28, 0.35) !important;
+  background-color: rgba(var(--ochre-rgb), 0.35) !important;
   border-color: var(--ochre-500) !important;
 }
 
@@ -235,18 +225,18 @@
   gap: 0.5rem;
   margin-top: 1.25rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(232, 226, 217, 0.9);
+  border-top: 1px solid var(--border);
 }
 
 .sectionSaveRow :global(.ant-btn-primary) {
   min-width: 7.5rem;
   height: 40px;
-  border-radius: 10px;
+  border-radius: var(--ui-radius-md);
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(168, 79, 28, 0.2);
+  box-shadow: 0 2px 8px rgba(var(--ochre-rgb), 0.2);
 }
 
 .backBtn {
-  border-radius: 10px !important;
+  border-radius: var(--ui-radius-md) !important;
   font-weight: 600 !important;
 }

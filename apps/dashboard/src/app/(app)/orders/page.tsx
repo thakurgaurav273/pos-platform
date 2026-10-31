@@ -1,4 +1,5 @@
 import OrdersTable from "@/components/OrdersTable/OrdersTable";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
 
 export default async function OrdersPage({
   searchParams,
@@ -8,15 +9,10 @@ export default async function OrdersPage({
   const { q } = await searchParams;
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col gap-4">
-      <div className="shrink-0">
-        <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
-          Orders
-        </h1>
-        <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-          Sales saved from Billing POS appear here with payment mode and totals.
-          Stock is reduced when a bill is generated.
-        </p>
-      </div>
+      <PageHeader
+        title="Orders"
+        description="Sales saved from Billing POS appear here with payment mode and totals. Stock is reduced when a bill is generated."
+      />
       <div className="min-h-0 flex-1">
         <OrdersTable initialSearch={typeof q === "string" ? q : ""} />
       </div>

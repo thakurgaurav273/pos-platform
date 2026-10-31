@@ -17,6 +17,7 @@ import { ProductCatalogRow } from "./ProductCatalogRow";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { PackageSearch, Inbox } from "lucide-react";
 import { ContentSkeleton } from "@/components/ContentSkeleton/ContentSkeleton";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
 import { LoadingDots } from "@/components/LoadingDots/LoadingDots";
 import styles from "./ProductsPageContent.module.css";
 import { useAuth } from "@/contexts/AuthContext";
@@ -226,17 +227,15 @@ export function ProductsPageContent({
 
   return (
     <div className={styles.root}>
-      <header className={styles.header}>
-        <div>
-          <h1>Products</h1>
-          <p className={styles.subtitle}>
-            {hasMore
-              ? `Showing ${items.length} of ${total} products`
-              : `${total} ${total === 1 ? "product" : "products"}`}
-          </p>
-        </div>
-
-        <div className={styles.headerActions}>
+      <PageHeader
+        title="Products"
+        description={
+          hasMore
+            ? `Showing ${items.length} of ${total} products`
+            : `${total} ${total === 1 ? "product" : "products"}`
+        }
+        actions={
+          <>
           <Input
             allowClear
             placeholder="Search products, variants, barcodes"
@@ -260,8 +259,9 @@ export function ProductsPageContent({
               New product
             </Button>
           )}
-        </div>
-      </header>
+          </>
+        }
+      />
 
       {loadError ? (
         <p className={styles.errorBanner} role="alert">

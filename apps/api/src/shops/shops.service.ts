@@ -10,6 +10,8 @@ import { PrismaService } from '../prisma.service';
 import { CreateShopDto } from './dto/create-shop.dto';
 import { CreateShopWithInventoryDto } from './dto/create-shop-with-inventory.dto';
 import { UpdateShopDto } from './dto/update-shop.dto';
+import { UpdateShopBrandingDto } from './dto/shop-theme.dto';
+import { normalizeLogoUrl, normalizeThemeConfig } from './theme/shop-theme';
 import { deleteShopAndDependencies } from './shop-delete';
 import { Prisma } from '@calcutta/database';
 import { qty } from '../common/money';
@@ -33,11 +35,16 @@ export class ShopsService {
   }
 
   async create(createShopDto: CreateShopDto) {
+    const { themeConfig, ...rest } = createShopDto;
     return this.prisma.$transaction(async (tx) => {
       const shopCode = await this.generateShopCode(tx);
       return tx.shop.create({
         data: {
-          ...createShopDto,
+          ...rest,
+          logoUrl: normalizeLogoUrl(rest.logoUrl) ?? undefined,
+          ...(themeConfig
+            ? { themeConfig: normalizeThemeConfig(themeConfig) }
+            : {}),
           shopCode,
         },
       });
@@ -45,6 +52,11 @@ export class ShopsService {
   }
 
   async createWithInitialInventory(dto: CreateShopWithInventoryDto) {
+    // Validate branding before opening the transaction so bad input fails fast.
+    const logoUrl = normalizeLogoUrl(dto.logoUrl) ?? undefined;
+    const themeConfig = dto.themeConfig
+      ? normalizeThemeConfig(dto.themeConfig)
+      : undefined;
     return this.prisma.$transaction(async (tx) => {
       const shopCode = dto.shopCode || (await this.generateShopCode(tx));
       const factory = await tx.shop.findFirst({
@@ -58,6 +70,8 @@ export class ShopsService {
           name: dto.name,
           shopCode,
           currency: dto.currency || 'INR',
+          logoUrl,
+          ...(themeConfig ? { themeConfig } : {}),
         },
       });
 
@@ -189,6 +203,35 @@ export class ShopsService {
       where: { id },
       data,
     });
+  }
+
+  /**
+   * Logo + theme for the caller's effective shop. The controller limits this to
+   * SUPER_ADMIN / ADMIN and ShopScopeGuard pins non-super-admins to their own shop,
+   * so the shop is never taken from the request body.
+   */
+  async updateBranding(shopCode: string, dto: UpdateShopBrandingDto) {
+    const shop = await this.prisma.shop.findUnique({
+      where: { shopCode },
+      select: { id: true },
+    });
+    if (!shop) {
+      throw new NotFoundException(`Shop ${shopCode} not found`);
+    }
+    const data: Prisma.ShopUpdateInput = {};
+    const logoUrl = normalizeLogoUrl(dto.logoUrl);
+    if (logoUrl !== undefined) data.logoUrl = logoUrl;
+    if (dto.themeConfig === null) {
+      data.themeConfig = Prisma.DbNull;
+    } else if (dto.themeConfig !== undefined) {
+      data.themeConfig = normalizeThemeConfig(dto.themeConfig);
+    }
+    if (Object.keys(data).length === 0) {
+      throw new BadRequestException(
+        'Nothing to update: send logoUrl or themeConfig',
+      );
+    }
+    return this.prisma.shop.update({ where: { id: shop.id }, data });
   }
 
   private pickTaxOnlyUpdate(dto: UpdateShopDto): UpdateShopDto {

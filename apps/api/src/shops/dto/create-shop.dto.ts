@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {
+  ValidateNested,
   IsBoolean,
   IsNumber,
   Max,
@@ -14,6 +15,7 @@ import {
   GSTIN_OR_EMPTY,
   PINCODE_OR_EMPTY,
 } from '../../common/gstin';
+import { ShopThemeConfigDto } from './shop-theme.dto';
 
 export class CreateShopDto {
   @IsString()
@@ -113,4 +115,10 @@ export class CreateShopDto {
   @Min(0)
   @Max(20)
   sgstRate?: number;
+
+  /** Optional appearance chosen during onboarding; omitted = default theme. */
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ShopThemeConfigDto)
+  themeConfig?: ShopThemeConfigDto;
 }

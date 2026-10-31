@@ -6,8 +6,11 @@ import {
   ValidateNested,
   IsNumber,
   Min,
+  MaxLength,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ShopThemeConfigDto } from './shop-theme.dto';
+import { LOGO_URL_MAX_LENGTH } from '../theme/shop-theme';
 
 class InventoryItemDto {
   @IsString()
@@ -41,4 +44,15 @@ export class CreateShopWithInventoryDto {
   @Type(() => InventoryItemDto)
   @IsOptional()
   initialInventory?: InventoryItemDto[];
+
+  /** Branding step of the onboarding wizard (optional; skipped = default theme). */
+  @IsOptional()
+  @IsString()
+  @MaxLength(LOGO_URL_MAX_LENGTH)
+  logoUrl?: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ShopThemeConfigDto)
+  themeConfig?: ShopThemeConfigDto;
 }

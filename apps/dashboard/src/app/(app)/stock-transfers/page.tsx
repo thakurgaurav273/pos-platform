@@ -5,6 +5,7 @@ import { Truck } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DataTable, type AppTableColumn } from "@/components/DataTable/DataTable";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
 import { useShop } from "@/contexts/ShopContext";
 import { apiFetch } from "@/lib/api";
 import pageStyles from "./StockTransfersPage.module.css";
@@ -302,16 +303,15 @@ export default function StockTransfersPage() {
   return (
     <div className={pageStyles.page}>
       <div className={pageStyles.surface}>
-        <header className={pageStyles.surfaceHeader}>
-          <div className={pageStyles.surfaceHeaderLead}>
-            <h1 className={pageStyles.title}>Stock Transfers</h1>
-            <p className={pageStyles.subtitle}>
-              {currentShop
-                ? `Viewing transfers for ${currentShop.name}.`
-                : "Manage stock transfer requests between shops and factory."}
-            </p>
-          </div>
-          <div className={pageStyles.surfaceHeaderFilter}>
+        <PageHeader
+          className={pageStyles.surfaceHeader}
+          title="Stock Transfers"
+          description={
+            currentShop
+              ? `Viewing transfers for ${currentShop.name}.`
+              : "Manage stock transfer requests between shops and factory."
+          }
+          actions={
             <div className={pageStyles.filterGroup}>
               <span className={pageStyles.filterLabel}>Status</span>
               <Select
@@ -330,8 +330,8 @@ export default function StockTransfersPage() {
                 ]}
               />
             </div>
-          </div>
-        </header>
+          }
+        />
 
         {requests.length === 0 && !loading ? (
           <EmptyState

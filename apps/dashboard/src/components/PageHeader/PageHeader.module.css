@@ -1,0 +1,45 @@
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-4);
+  flex-shrink: 0;
+}
+
+.text {
+  min-width: 0;
+  flex: 1 1 22rem;
+}
+
+.leading {
+  margin-bottom: var(--space-2);
+}
+
+/* Size/weight/colour come from the shared h1 rule in AppLayout.module.css */
+.title {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  margin: var(--space-2) 0 0;
+  max-width: 68ch;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+}
+
+@media (max-width: 639px) {
+  .actions {
+    width: 100%;
+  }
+}

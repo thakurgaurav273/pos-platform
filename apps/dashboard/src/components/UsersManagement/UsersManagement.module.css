@@ -58,17 +58,17 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.005em;
   color: var(--bistre-700);
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid var(--pearl-bush);
-  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--ui-radius-md);
 }
 
 .addBtn {
   height: auto !important;
   padding: 0.55rem 1.15rem !important;
   font-weight: 600 !important;
-  border-radius: 10px !important;
-  box-shadow: 0 2px 8px rgba(143, 66, 24, 0.25);
+  border-radius: var(--ui-radius-md) !important;
+  box-shadow: 0 2px 8px rgba(var(--ochre-rgb), 0.25);
 }
 
 .addBtn :global(.ant-btn-icon) {
@@ -95,12 +95,10 @@
   width: 100%;
   min-height: 360px;
   padding: 2rem 1rem;
-  border-radius: 12px;
+  border-radius: var(--ui-radius-lg);
   border: 1px solid var(--pearl-bush);
-  background: linear-gradient(180deg, #ffffff 0%, #fff 45%);
-  box-shadow:
-    0 1px 2px rgba(24, 24, 27, 0.04),
-    0 10px 32px rgba(24, 24, 27, 0.07);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
 }
 
 /* Sort chevrons - higher contrast */
@@ -120,9 +118,9 @@
 }
 
 .wrap :global(.users-pill--super_admin) {
-  color: #7a5a0a;
-  background: linear-gradient(180deg, #fff6d9 0%, var(--ochre-100) 100%);
-  border-color: var(--ochre-300);
+  color: var(--warning);
+  background: var(--warning-bg);
+  border-color: color-mix(in srgb, var(--warning) 35%, transparent);
 }
 
 .wrap :global(.users-pill--admin) {
@@ -132,20 +130,20 @@
 }
 
 .wrap :global(.users-pill--manager) {
-  color: #4a3420;
-  background: rgba(168, 79, 28, 0.12);
-  border-color: rgba(168, 79, 28, 0.35);
+  color: var(--text-primary);
+  background: rgba(var(--ochre-rgb), 0.12);
+  border-color: rgba(var(--ochre-rgb), 0.35);
 }
 
 .wrap :global(.users-pill--cashier) {
-  color: #3d5538;
-  background: rgba(90, 120, 80, 0.12);
-  border-color: rgba(90, 120, 80, 0.28);
+  color: var(--success);
+  background: var(--success-bg);
+  border-color: color-mix(in srgb, var(--success) 30%, transparent);
 }
 
 .wrap :global(.users-pill--staff) {
   color: var(--bistre-600);
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--surface);
   border-color: var(--pearl-bush);
 }
 
@@ -167,14 +165,14 @@
   font-weight: 600;
   letter-spacing: 0.005em;
   color: var(--bistre-700);
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--surface);
   border-color: var(--pearl-bush);
 }
 
 .wrap :global(.users-pill--active) {
-  color: #2d5a3a;
-  background: rgba(80, 140, 90, 0.14);
-  border-color: rgba(80, 140, 90, 0.35);
+  color: var(--success);
+  background: var(--success-bg);
+  border-color: color-mix(in srgb, var(--success) 35%, transparent);
 }
 
 .wrap :global(.users-pill--inactive) {

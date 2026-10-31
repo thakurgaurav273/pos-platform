@@ -50,3 +50,4 @@ android-app
 # Database dumps / backups (contain production customer data)
 *.dump
 *backup*.sql
+.kiro

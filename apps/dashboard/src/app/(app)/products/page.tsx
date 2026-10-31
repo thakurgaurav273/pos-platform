@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ContentSkeleton } from "@/components/ContentSkeleton/ContentSkeleton";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
 import { ProductsPageContent } from "@/components/ProductsPage/ProductsPageContent";
 import { useShop } from "@/contexts/ShopContext";
 
@@ -17,12 +18,10 @@ export default function ProductsPage() {
   if (!shopCode) {
     return (
       <div className="flex min-h-0 flex-1 flex-col gap-4 p-4">
-        <header>
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">Products</h1>
-          <p className="mt-0.5 text-sm text-[var(--text-muted)]">
-            Select a shop in the header to load the catalog.
-          </p>
-        </header>
+        <PageHeader
+          title="Products"
+          description="Select a shop in the header to load the catalog."
+        />
         <ContentSkeleton variant="rows" rowCount={8} />
       </div>
     );

@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 import { DataTable, type AppTableColumn } from "@/components/DataTable/DataTable";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
 import {
   BarcodePrintModal,
   type BarcodePrintItem,
@@ -555,9 +556,10 @@ export default function InventoryTable({
   return (
     <div className={styles.root}>
       {/* Row 1: title + everyday actions; rare/destructive shop actions live under "More". */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="m-0 text-2xl font-bold leading-none text-[var(--bistre-950)]">Inventory</h1>
-
+      <PageHeader
+        className="mb-4"
+        title="Inventory"
+        actions={
         <div className="flex flex-wrap items-center gap-2">
           <Button
             className="rounded-lg"
@@ -623,7 +625,8 @@ export default function InventoryTable({
             </>
           )}
         </div>
-      </div>
+        }
+      />
 
       {/* Row 2: filters on the left; bulk delete appears only once rows are selected. */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--pearl-bush)] pb-4">

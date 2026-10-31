@@ -44,10 +44,10 @@ export type GstSummaryPanelProps = {
 };
 
 const thCls =
-  "bg-[var(--bistre-800)] px-3 py-2 text-left text-xs font-semibold text-white";
+  "bg-[var(--bistre-800)] px-3 py-2 text-left text-xs font-semibold text-[var(--surface)]";
 const cellRight = "px-3 py-2 text-right text-sm tabular-nums text-[var(--bistre-800)]";
 const cellLeft = "px-3 py-2 text-sm text-[var(--bistre-800)]";
-const rowAlt = "bg-[rgba(255,254,249,0.6)]";
+const rowAlt = "bg-[var(--surface-subtle)]";
 
 /** GST-style monthly matrix from POS bills (shop CGST/SGST; IGST not tracked). */
 export default function GstSummaryPanel({
@@ -156,7 +156,7 @@ export default function GstSummaryPanel({
               type="month"
               value={month}
               onChange={(e) => setMonth(e.target.value)}
-              className="h-8 rounded-md border border-[var(--pearl-bush)] bg-white px-2 text-sm text-[var(--bistre-800)]"
+              className="h-8 rounded-md border border-[var(--pearl-bush)] bg-[var(--surface)] px-2 text-sm text-[var(--bistre-800)]"
             />
           </div>
           <Button type="primary" onClick={() => void load()} loading={loading}>

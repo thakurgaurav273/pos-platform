@@ -26,7 +26,8 @@ import { Drawer, Button, Dropdown, Layout, Menu, Select, Space, Tag } from 'antd
 import Image from 'next/image';
 import Link from 'next/link';
 
-import logo from '@/assets/logo.svg';
+import { BrandLogo } from '@/components/BrandLogo/BrandLogo';
+import { ColorModeToggle } from '@/components/ColorModeToggle/ColorModeToggle';
 import { ActivityNotificationsBell } from '@/components/ActivityNotificationsBell/ActivityNotificationsBell';
 import { useAuth } from '@/contexts/AuthContext';
 import { useShop } from '@/contexts/ShopContext';
@@ -194,14 +195,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         className={`flex h-16 shrink-0 items-center justify-center px-4 ${styles.logoLink}`}
         scroll={false}
       >
-        <Image
-          src={logo}
-          alt="Calcutta Sweets"
-          width={240}
-          height={95}
-          className={`h-[54px] w-auto max-w-[236px] object-contain object-center ${styles.logoImage}`}
-          priority
-        />
+        <span className={styles.logoFrame}>
+          <BrandLogo shopName={activeShopName} className={styles.logoImage} priority />
+        </span>
       </Link>
       {MainMenu}
       {activeShopName && (
@@ -219,8 +215,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <Layout className={`min-h-screen flex ${styles.layout}`}>
+      <a href="#main-content" className="cs-skip-link">
+        Skip to content
+      </a>
       <Sider
         width={240}
+        aria-label="Main navigation"
         theme="light"
         className={`flex min-h-screen flex-col sticky top-0 h-screen z-10 ${styles.sider}`}
       >
@@ -246,13 +246,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               icon={<X className="size-5" />}
             />
             <Link href="/dashboard" className={styles.drawerLogo} scroll={false}>
-              <Image
-                src={logo}
-                alt="Calcutta Sweets"
-                width={200}
-                height={80}
-                className={`max-h-11 w-auto object-contain ${styles.drawerLogoImage}`}
-              />
+              <span className={styles.drawerLogoFrame}>
+                <BrandLogo shopName={activeShopName} />
+              </span>
             </Link>
           </div>
           
@@ -284,9 +280,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         >
           <div className={`flex min-w-0 flex-1 items-center gap-3 ${styles.headerTitleCluster}`}>
             <Button
-              className={`${styles.mobileMenuButton} flex shrink-0 items-center justify-center size-9 p-0 border-[var(--border)] shadow-sm bg-[var(--surface)]`}
+              className={`${styles.mobileMenuButton} flex shrink-0 items-center justify-center size-9 p-0`}
               onClick={() => setIsMobileMenuOpen(true)}
-              icon={<MenuIcon className="size-5 text-[var(--bistre-800)]" />}
+              icon={<MenuIcon className="size-5" />}
+              aria-label="Open navigation menu"
             />
             {/* Context breadcrumb (shop / section); the page itself owns the big title */}
             <nav aria-label="Breadcrumb" className={styles.breadcrumb}>
@@ -322,6 +319,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               </div>
             )}
 
+            <ColorModeToggle />
             <ActivityNotificationsBell />
 
             <div className={styles.headerToolbarDivider} aria-hidden="true" />
@@ -360,12 +358,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               trigger={['click']}
               placement="bottomRight"
             >
-              <button type="button" className={styles.profileSection}>
+              <button type="button" className={styles.profileSection} aria-label="Account menu">
                 <div className="hidden flex-col items-start justify-center text-left sm:flex">
-                  <span className="text-[13px] font-medium text-[var(--bistre-950)] leading-tight">
+                  <span className="text-[13px] font-medium text-[var(--header-fg)] leading-tight">
                     {user?.name || 'User'}
                   </span>
-                  <span className="mt-0.5 text-[11.5px] text-[var(--bistre-400)] leading-tight">
+                  <span className="mt-0.5 text-[11.5px] text-[var(--header-muted)] leading-tight">
                     {formatRole(user?.role)}
                   </span>
                 </div>
@@ -379,17 +377,19 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                       className="rounded-full object-cover"
                     />
                   ) : (
-                    <div className="h-8 w-8 rounded-full bg-[var(--ochre-100)] flex items-center justify-center text-[var(--ochre-600)] font-semibold text-sm">
+                    <div className="h-8 w-8 rounded-full bg-[var(--ochre-500)] flex items-center justify-center text-[var(--on-primary)] font-semibold text-sm">
                       {(user?.name || 'U').charAt(0).toUpperCase()}
                     </div>
                   )}
                 </div>
-                <ChevronDown className="hidden size-4 text-[var(--bistre-400)] sm:block" aria-hidden />
+                <ChevronDown className="hidden size-4 text-[var(--header-muted)] sm:block" aria-hidden />
               </button>
             </Dropdown>
           </div>
         </Header>
         <Content
+          id="main-content"
+          tabIndex={-1}
           className={`flex min-h-0 flex-1 flex-col p-4 sm:p-6 lg:px-8 lg:py-7 ${styles.content} ${isInventoryListPage ? styles.contentInventoryList : ""}`}
         >
           {children}

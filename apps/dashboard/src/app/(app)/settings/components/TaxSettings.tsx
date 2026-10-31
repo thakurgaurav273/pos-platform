@@ -108,7 +108,7 @@ export function TaxSettings() {
                           max={100}
                           step={0.1}
                           size="large"
-                          className={`w-full !bg-white ${styles.inputNumber}`}
+                          className={`w-full !bg-[var(--surface)] ${styles.inputNumber}`}
                         />
                     </Form.Item>
 
@@ -125,7 +125,7 @@ export function TaxSettings() {
                           max={100}
                           step={0.1}
                           size="large"
-                          className={`w-full !bg-white ${styles.inputNumber}`}
+                          className={`w-full !bg-[var(--surface)] ${styles.inputNumber}`}
                         />
                     </Form.Item>
                 </div>

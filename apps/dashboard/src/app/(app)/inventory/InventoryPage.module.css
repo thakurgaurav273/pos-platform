@@ -23,7 +23,7 @@
   border-radius: 999px;
   background: linear-gradient(90deg,
       var(--ochre-500) 0%,
-      rgba(168, 79, 28, 0.35) 100%);
+      rgba(var(--ochre-rgb), 0.35) 100%);
 }
 
 .kicker {
@@ -62,15 +62,10 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border-radius: 16px;
-  border: 1px solid rgba(232, 226, 217, 0.85);
-  background: linear-gradient(165deg,
-      rgba(255, 254, 249, 0.92) 0%,
-      rgba(249, 246, 240, 0.55) 48%,
-      rgba(245, 235, 224, 0.35) 100%);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.85) inset,
-    0 12px 40px -24px rgba(24, 24, 27, 0.18);
+  border-radius: var(--ui-radius-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
   padding: 1.25rem 1.25rem 1.125rem;
 }
 

@@ -11,17 +11,10 @@
   max-width: 440px;
   text-align: center;
   padding: 2.25rem 1.75rem 2rem;
-  border-radius: 20px;
+  border-radius: var(--ui-radius-xl);
   border: 1px solid var(--pearl-bush);
-  background: linear-gradient(
-    165deg,
-    #ffffff 0%,
-    var(--parchment) 45%,
-    rgba(168, 79, 28, 0.06) 100%
-  );
-  box-shadow:
-    0 1px 2px rgba(24, 24, 27, 0.05),
-    0 16px 40px -20px rgba(24, 24, 27, 0.18);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
 }
 
 .iconWrap {
@@ -31,9 +24,9 @@
   margin: 0 auto 1.25rem;
   width: 4.5rem;
   height: 4.5rem;
-  border-radius: 16px;
-  background: rgba(168, 79, 28, 0.14);
-  border: 1px solid rgba(166, 124, 0, 0.28);
+  border-radius: var(--ui-radius-xl);
+  background: rgba(var(--ochre-rgb), 0.14);
+  border: 1px solid rgba(var(--ochre-rgb), 0.28);
 }
 
 .icon {
@@ -65,29 +58,29 @@
 
 .primaryBtn:global(.ant-btn.ant-btn-primary) {
   font-weight: 600 !important;
-  border-radius: 12px !important;
+  border-radius: var(--ui-radius-lg) !important;
   height: auto !important;
   padding: 0.55rem 1.35rem !important;
-  color: #fff !important;
+  color: var(--on-primary) !important;
   background: var(--ochre-600) !important;
   border-color: var(--ochre-600) !important;
-  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.12) !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
 .primaryBtn:global(.ant-btn.ant-btn-primary:not(:disabled):hover) {
-  color: #fff !important;
+  color: var(--on-primary) !important;
   background: var(--ochre-700) !important;
   border-color: var(--ochre-700) !important;
 }
 
 .primaryBtn:global(.ant-btn.ant-btn-primary:not(:disabled):active) {
-  color: #fff !important;
-  background: #74360f !important;
-  border-color: #74360f !important;
+  color: var(--on-primary) !important;
+  background: var(--ochre-700) !important;
+  border-color: var(--ochre-700) !important;
 }
 
 .primaryBtn:global(.ant-btn.ant-btn-primary:focus-visible) {
-  color: #fff !important;
+  color: var(--on-primary) !important;
   outline: 2px solid var(--ochre-500) !important;
   outline-offset: 2px !important;
 }

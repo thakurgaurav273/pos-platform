@@ -229,7 +229,7 @@ export default function ForgotPasswordPage() {
                 {step === 1 && (
                     <Card className={styles.card}>
                         <div className="flex justify-center items-center rounded-full p-2">
-                            <RotateCcwKey className="w-10 h-10 text-[var(--bistre-500)] bg-[var(--linen-95)] rounded-[10px] p-1" />
+                            <RotateCcwKey className="w-10 h-10 text-[var(--bistre-500)] bg-[var(--linen-95)] rounded-[var(--ui-radius-md)] p-1" />
                         </div>
                         <p className="font-bold text-lg text-[var(--bistre-500)] text-center mt-2">
                             FORGOT PASSWORD?
@@ -330,7 +330,7 @@ export default function ForgotPasswordPage() {
                 {step === 3 && (
                     <Card className={styles.card}>
                         <div className="flex justify-center items-center rounded-full p-2">
-                            <LockKeyhole className="w-10 h-10 text-[var(--bistre-500)] bg-[var(--linen-95)] rounded-[10px] p-1" />
+                            <LockKeyhole className="w-10 h-10 text-[var(--bistre-500)] bg-[var(--linen-95)] rounded-[var(--ui-radius-md)] p-1" />
                         </div>
                         <p className="font-bold text-lg text-[var(--bistre-500)] text-center mt-2">
                             SET NEW PASSWORD
@@ -381,7 +381,7 @@ export default function ForgotPasswordPage() {
                 {step === 4 && (
                     <Card className={styles.card}>
                         <div className="flex justify-center items-center rounded-full p-2">
-                            <CheckCircle className="w-10 h-10 text-green-500" />
+                            <CheckCircle className="w-10 h-10 text-[var(--success)]" />
                         </div>
                         <p className="font-bold text-lg text-[var(--bistre-500)] text-center mt-2">
                             PASSWORD RESET SUCCESSFULLY

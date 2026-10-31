@@ -306,7 +306,7 @@ export function RefillRequestModal({
                   <button
                     type="button"
                     onClick={() => handleRemoveLine(line.barcode)}
-                    className="rounded-lg p-1.5 text-red-500 transition-colors hover:bg-red-50 hover:text-red-700"
+                    className="rounded-lg p-1.5 text-[var(--danger)] transition-colors hover:bg-[var(--danger-bg)] hover:text-[var(--danger)]"
                     aria-label={`Remove ${line.productName}`}
                   >
                     <svg

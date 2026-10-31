@@ -5,6 +5,7 @@ import { Building2, UserPlus, Pencil, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DataTable, type AppTableColumn } from "@/components/DataTable/DataTable";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
 import { useAuth } from "@/contexts/AuthContext";
 import { useShop } from "@/contexts/ShopContext";
 import { apiFetch, getApiBaseUrl, getAuthHeaders } from "@/lib/api";
@@ -362,10 +363,10 @@ export default function UsersManagement() {
 
   return (
     <div className={styles.root}>
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--pearl-bush)] pb-4 mb-4">
-        <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-[var(--bistre-950)] m-0 leading-none">Users</h1>
-        </div>
+      <PageHeader
+        className="border-b border-[var(--pearl-bush)] pb-4 mb-4"
+        title="Users"
+        actions={
         <Button
           type="primary"
           size="large"
@@ -376,7 +377,8 @@ export default function UsersManagement() {
         >
           Add user
         </Button>
-      </div>
+        }
+      />
 
       <div className={`${styles.tableSlot} ${styles.wrap}`}>
         {fetchFn && (

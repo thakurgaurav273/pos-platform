@@ -51,9 +51,9 @@
 }
 
 .content {
-  background: white;
-  border-radius: 16px;
-  border: 1px solid rgba(24, 24, 27, 0.08);
+  background: var(--surface);
+  border-radius: var(--ui-radius-xl);
+  border: 1px solid var(--border);
   overflow: hidden;
   padding: 1rem 1.25rem 1.25rem;
   display: flex;

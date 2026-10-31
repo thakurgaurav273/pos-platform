@@ -22,7 +22,7 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: var(--ui-radius-md);
   background: var(--ochre-100);
   color: var(--ochre-600);
   font-size: 15px;
@@ -63,7 +63,7 @@
 .statusOff {
   flex-shrink: 0;
   padding: 1px 7px;
-  border-radius: 4px;
+  border-radius: var(--ui-radius-sm);
   font-size: 12px;
   font-weight: 500;
   color: var(--bistre-600);
@@ -95,7 +95,7 @@
   gap: 6px;
   padding: 2px 8px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--ui-radius-sm);
   background: var(--surface);
   font-size: 12.5px;
   font-variant-numeric: tabular-nums;
@@ -163,7 +163,7 @@
   height: 32px;
   padding: 0 12px;
   border: 1px solid var(--border-strong);
-  border-radius: 6px;
+  border-radius: var(--ui-radius-sm);
   background: var(--surface);
   font-size: 13px;
   font-weight: 500;
@@ -191,7 +191,7 @@
   width: 32px;
   height: 32px;
   border: 1px solid transparent;
-  border-radius: 6px;
+  border-radius: var(--ui-radius-sm);
   background: transparent;
   color: var(--bistre-400);
   cursor: pointer;

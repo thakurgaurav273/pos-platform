@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { paymentLabel } from "@/lib/payments";
 import { billRefOf } from "@/lib/printInvoice";
 import { DataTable, type AppTableColumn } from "@/components/DataTable/DataTable";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
 import { useAuth } from "@/contexts/AuthContext";
 import { useShop } from "@/contexts/ShopContext";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
@@ -131,7 +132,7 @@ function RecentBills({
                   <span className="block text-sm font-medium text-[var(--text-primary)]">
                     #{billRefOf(b)}
                     {b.status === "CANCELLED" ? (
-                      <span className="ml-2 text-xs font-normal text-[var(--danger,#b42318)]">Cancelled</span>
+                      <span className="ml-2 text-xs font-normal text-[var(--danger)]">Cancelled</span>
                     ) : null}
                   </span>
                   <span className="block text-xs text-[var(--text-muted)]">
@@ -340,15 +341,15 @@ export default function CustomersManager() {
 
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col gap-4">
-      <div className="flex shrink-0 flex-wrap items-end justify-between gap-3">
-        {/* Fixed bases so the row wraps the controls below the text instead of overflowing */}
-        <div className="min-w-0 flex-1 basis-[24rem]">
-          <h1 className="text-2xl font-semibold text-[var(--text-primary)]">Customers</h1>
-          <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+      <PageHeader
+        title="Customers"
+        description={
+          <>
             Saved customers of this shop. Customers are also saved automatically when a
             bill is generated with a phone number.
-          </p>
-        </div>
+          </>
+        }
+        actions={
         <div className="flex w-full max-w-full items-center gap-2 sm:w-[30rem]">
           <Input
             allowClear
@@ -368,7 +369,8 @@ export default function CustomersManager() {
             Add customer
           </Button>
         </div>
-      </div>
+        }
+      />
 
       <div className="min-h-0 flex-1">
         <DataTable

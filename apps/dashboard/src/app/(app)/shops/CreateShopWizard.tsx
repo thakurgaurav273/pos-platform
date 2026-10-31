@@ -4,7 +4,19 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Form, Input, Button, Table, InputNumber, message, Steps, Divider, Space } from 'antd';
 import { Search } from 'lucide-react';
 import { antTableOverflowComponents } from '@/components/AntTableOverflowCell/AntTableOverflowCell';
+import {
+  ThemeConfigurator,
+  type BrandingValue,
+} from '@/components/ThemeConfigurator/ThemeConfigurator';
 import { apiFetch, getApiBaseUrl, getAuthHeaders } from '@/lib/api';
+import { DEFAULT_THEME, themeConfigEquals } from '@/lib/theme/presets';
+
+const DEFAULT_BRANDING: BrandingValue = { config: DEFAULT_THEME, logoUrl: null };
+
+/** Step indexes: info -> branding (optional) -> inventory. */
+const STEP_INFO = 0;
+const STEP_BRANDING = 1;
+const STEP_INVENTORY = 2;
 
 interface Variant {
   id: string;
@@ -29,10 +41,12 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
   const [selectedVariants, setSelectedVariants] = useState<Record<string, number>>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [tableLoading, setTableLoading] = useState(false);
+  const [branding, setBranding] = useState<BrandingValue>(DEFAULT_BRANDING);
+  const [shopName, setShopName] = useState('');
 
-  // Fetch variants from Factory shop when step 1 is complete
+  // Fetch variants from Factory shop when the inventory step opens
   useEffect(() => {
-    if (currentStep === 1 && variants.length === 0) {
+    if (currentStep === STEP_INVENTORY && variants.length === 0) {
       fetchFactoryVariants();
     }
   }, [currentStep]);
@@ -59,8 +73,9 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
 
   const handleNext = async () => {
     try {
-      await form.validateFields(['name']);
-      setCurrentStep(1);
+      const values = await form.validateFields(['name']);
+      setShopName(String(values.name ?? ''));
+      setCurrentStep(STEP_BRANDING);
     } catch (err) {
       // Validation failed
     }
@@ -69,7 +84,14 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
   const handleCreate = async () => {
     setLoading(true);
     try {
-      const formData = form.getFieldsValue();
+      const formData = form.getFieldsValue(true);
+      // Skipped or untouched branding means "use the default": send nothing.
+      const brandingPayload = {
+        ...(themeConfigEquals(branding.config, DEFAULT_THEME)
+          ? {}
+          : { themeConfig: branding.config }),
+        ...(branding.logoUrl ? { logoUrl: branding.logoUrl } : {}),
+      };
       const initialInventory = Object.entries(selectedVariants)
         .filter(([_, qty]) => qty > 0)
         .map(([variantId, quantity]) => ({ variantId, quantity }));
@@ -82,6 +104,7 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
         },
         body: JSON.stringify({
           ...formData,
+          ...brandingPayload,
           sourceShopCode: 'FACTORY01',
           initialInventory,
         }),
@@ -104,7 +127,9 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
 
   const reset = () => {
     form.resetFields();
-    setCurrentStep(0);
+    setCurrentStep(STEP_INFO);
+    setBranding(DEFAULT_BRANDING);
+    setShopName('');
     setSelectedVariants({});
     setSearchQuery('');
     onCancel();
@@ -160,18 +185,20 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
       open={open}
       onCancel={reset}
       footer={null}
-      width={800}
+      width={currentStep === STEP_BRANDING ? 920 : 800}
     >
       <Steps
         current={currentStep}
         items={[
           { title: 'Shop Info' },
+          { title: 'Branding', content: 'Optional' },
           { title: 'Initial Inventory' },
         ]}
         style={{ marginBottom: 24 }}
       />
 
-      {currentStep === 0 && (
+      {/* Kept mounted (hidden) so values survive moving between steps */}
+      <div hidden={currentStep !== STEP_INFO}>
         <Form form={form} layout="vertical">
           <Form.Item
             name="name"
@@ -191,13 +218,44 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
 
           <div style={{ marginTop: 24, textAlign: 'right' }}>
             <Button type="primary" size="large" onClick={handleNext}>
-              Next: Select Inventory
+              Next: Branding
             </Button>
           </div>
         </Form>
+      </div>
+      {currentStep === STEP_BRANDING && (
+        <div>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginBottom: 16 }}>
+            Choose how this shop&apos;s portal looks for its staff. You can skip this and use
+            the default Calcutta Sweets theme; the shop owner can change it later in
+            Settings &rarr; Appearance &amp; branding.
+          </p>
+          <ThemeConfigurator
+            value={branding}
+            onChange={setBranding}
+            shopName={shopName}
+            compact
+          />
+          <Divider />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+            <Button onClick={() => setCurrentStep(STEP_INFO)}>Back</Button>
+            <Space wrap>
+              <Button
+                onClick={() => {
+                  setBranding(DEFAULT_BRANDING);
+                  setCurrentStep(STEP_INVENTORY);
+                }}
+              >
+                Skip, use default
+              </Button>
+              <Button type="primary" size="large" onClick={() => setCurrentStep(STEP_INVENTORY)}>
+                Next: Select Inventory
+              </Button>
+            </Space>
+          </div>
+        </div>
       )}
-
-      {currentStep === 1 && (
+      {currentStep === STEP_INVENTORY && (
         <div>
           <div style={{ marginBottom: 16 }}>
             <p style={{ color: 'var(--bistre-500)', fontSize: '13px', marginBottom: 12 }}>
@@ -226,7 +284,7 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
           <Divider />
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button onClick={() => setCurrentStep(0)}>Back</Button>
+            <Button onClick={() => setCurrentStep(STEP_BRANDING)}>Back</Button>
             <Space>
               <span style={{ fontSize: '12px', color: 'var(--bistre-400)' }}>
                 {Object.values(selectedVariants).filter(q => q > 0).length} items selected

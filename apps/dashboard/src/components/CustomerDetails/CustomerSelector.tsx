@@ -147,7 +147,7 @@ export default function CustomerSelector({
               <button
                 type="button"
                 onClick={() => setCustomer(null)}
-                className="rounded-lg p-1.5 text-[var(--text-muted)] transition-colors hover:bg-red-50 hover:text-red-600"
+                className="rounded-lg p-1.5 text-[var(--text-muted)] transition-colors hover:bg-[var(--danger-bg)] hover:text-[var(--danger)]"
                 aria-label="Remove customer from sale"
               >
                 <X className="h-4 w-4" aria-hidden />
@@ -209,7 +209,7 @@ export default function CustomerSelector({
               loading ? (
                 <Spin size="small" />
               ) : error ? (
-                <span className="text-xs text-red-600">{error}</span>
+                <span className="text-xs text-[var(--danger)]">{error}</span>
               ) : (
                 <span className="text-xs text-[var(--text-muted)]">
                   No matching customers

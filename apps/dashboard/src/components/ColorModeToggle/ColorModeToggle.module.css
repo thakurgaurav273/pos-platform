@@ -1,0 +1,32 @@
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid transparent;
+  border-radius: var(--ui-radius-md);
+  background: transparent;
+  color: var(--header-muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.trigger:hover,
+.trigger:global(.ant-dropdown-open) {
+  background: var(--header-control-hover);
+  color: var(--header-fg);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--ochre-400);
+  outline-offset: 2px;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 120px;
+}

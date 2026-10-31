@@ -176,7 +176,7 @@ export function ProductCard({ product, badge, onAdd }: PosProps) {
         <button
           type="button"
           onClick={() => onAdd(line)}
-          className="w-full rounded-lg bg-[var(--ochre-500)] py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[var(--ochre-600)]"
+          className="w-full rounded-lg bg-[var(--ochre-500)] py-2.5 text-sm font-semibold text-[var(--on-primary)] transition-colors hover:bg-[var(--ochre-600)]"
         >
           Add
         </button>

@@ -43,7 +43,7 @@
   font-size: 1.875rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: var(--bistre-950);
+  color: var(--text-primary);
   line-height: 1.15;
 }
 
@@ -61,9 +61,9 @@
   align-items: flex-end;
   gap: 0.15rem;
   padding: 0.5rem 0.75rem;
-  border-radius: 12px;
-  background: rgba(168, 79, 28, 0.04);
-  border: 1px solid rgba(168, 79, 28, 0.12);
+  border-radius: var(--ui-radius-lg);
+  background: rgba(var(--ochre-rgb), 0.04);
+  border: 1px solid rgba(var(--ochre-rgb), 0.12);
   min-width: 6.5rem;
 }
 
@@ -96,9 +96,9 @@
   font-weight: 700;
   letter-spacing: 0.005em;
   padding: 0.2rem 0.5rem;
-  border-radius: 8px;
+  border-radius: var(--ui-radius-md);
   color: var(--ochre-600);
-  background: rgba(168, 79, 28, 0.14);
+  background: rgba(var(--ochre-rgb), 0.14);
   border: 1px solid var(--ochre-200);
 }
 
@@ -112,21 +112,17 @@
 }
 
 .searchFrame {
-  border-radius: 12px;
-  background: #ffffff;
-  border: 1px solid rgba(24, 24, 27, 0.08);
-  box-shadow: 
-    0 2px 4px rgba(24, 24, 27, 0.02),
-    0 1px 2px rgba(24, 24, 27, 0.04);
+  border-radius: var(--ui-radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
 
 .searchFrame:focus-within {
   border-color: var(--ochre-400);
-  box-shadow: 
-    0 4px 12px rgba(168, 79, 28, 0.05),
-    0 0 0 4px rgba(168, 79, 28, 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--ochre-rgb), 0.15);
 }
 
 .search :global(.ant-input-affix-wrapper) {
@@ -139,7 +135,7 @@
 
 .search :global(.ant-input) {
   font-size: 14.5px;
-  color: var(--bistre-950);
+  color: var(--text-primary);
   background: transparent !important;
 }
 
@@ -165,22 +161,22 @@
 }
 
 .segmentedWrap :global(.ant-segmented) {
-  background: rgba(24, 24, 27, 0.03) !important;
+  background: var(--linen-90) !important;
   padding: 4px !important;
-  border-radius: 10px !important;
-  border: 1px solid rgba(24, 24, 27, 0.05);
+  border-radius: var(--ui-radius-md) !important;
+  border: 1px solid var(--border);
 }
 
 .segmentedWrap :global(.ant-segmented-item) {
   color: var(--bistre-600) !important;
   font-weight: 600 !important;
-  border-radius: 10px !important;
+  border-radius: var(--ui-radius-md) !important;
 }
 
 .segmentedWrap :global(.ant-segmented-item-selected) {
-  background: #ffffff !important;
+  background: var(--surface) !important;
   color: var(--bistre-900) !important;
-  box-shadow: 0 1px 3px rgba(24, 24, 27, 0.1) !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
 .segmentedWrap
@@ -198,9 +194,9 @@
   border-color: var(--ochre-300) !important;
   color: var(--ochre-600) !important;
   font-weight: 600 !important;
-  background: linear-gradient(180deg, #ffffff 0%, var(--ochre-10) 100%) !important;
-  border-radius: 10px !important;
-  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.06);
+  background: var(--surface) !important;
+  border-radius: var(--ui-radius-md) !important;
+  box-shadow: var(--shadow-sm);
 }
 
 .expandBtns :global(.ant-btn-default:hover) {
@@ -222,13 +218,9 @@
   text-align: center;
   font-size: 0.9375rem;
   color: var(--bistre-600);
-  border-radius: 16px;
-  border: 1px dashed var(--ochre-200);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 254, 249, 0.9) 0%,
-    var(--ochre-2) 100%
-  );
+  border-radius: var(--ui-radius-xl);
+  border: 1px dashed var(--border);
+  background: var(--surface);
 }
 
 .collapse {
@@ -238,32 +230,22 @@
 .collapse :global(.ant-collapse-item) {
   margin-bottom: 10px;
   border: 1px solid var(--pearl-bush) !important;
-  border-radius: 14px !important;
+  border-radius: var(--ui-radius-lg) !important;
   overflow: hidden;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 254, 249, 0.85) 0%,
-    var(--linen-100) 100%
-  ) !important;
-  box-shadow:
-    0 1px 3px rgba(24, 24, 27, 0.05),
-    0 1px 0 rgba(255, 255, 255, 0.7) inset;
+  background: var(--surface) !important;
+  box-shadow: var(--shadow-sm);
 }
 
 .collapse :global(.ant-collapse-header) {
   font-weight: 600 !important;
   color: var(--bistre-800) !important;
-  background: linear-gradient(
-    180deg,
-    var(--linen-95) 0%,
-    rgba(245, 230, 196, 0.35) 100%
-  ) !important;
+  background: var(--surface-subtle) !important;
   align-items: center !important;
 }
 
 .collapse :global(.ant-collapse-content-box) {
   padding: 12px 12px 14px !important;
-  background: rgba(255, 254, 249, 0.4);
+  background: var(--surface);
 }
 
 .panelLabel {
@@ -277,7 +259,7 @@
   font-size: 0.9375rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: var(--bistre-950);
+  color: var(--text-primary);
 }
 
 .panelBadge {
@@ -286,7 +268,7 @@
   letter-spacing: 0.005em;
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
-  background: linear-gradient(180deg, var(--ochre-100) 0%, #ffffff 100%);
+  background: var(--ochre-100);
   color: var(--ochre-600);
   border: 1px solid var(--ochre-200);
   font-variant-numeric: tabular-nums;
@@ -297,7 +279,7 @@
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--ui-radius-md);
   background: var(--surface);
   overflow: hidden;
 }
@@ -331,35 +313,11 @@
 .errorBanner {
   margin: 0;
   padding: 0.65rem 1rem;
-  border-radius: 10px;
-  background: rgba(185, 60, 60, 0.08);
-  border: 1px solid rgba(185, 60, 60, 0.25);
-  color: var(--bistre-800);
+  border-radius: var(--ui-radius-md);
+  background: var(--danger-bg);
+  border: 1px solid color-mix(in srgb, var(--danger) 25%, transparent);
+  color: var(--text-primary);
   font-size: 0.875rem;
-}
-
-
-/* ── Page header ── */
-.header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
-  flex-shrink: 0;
-}
-
-.subtitle {
-  margin: 6px 0 0;
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.headerActions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
 }
 
 .search {
@@ -368,7 +326,6 @@
 }
 
 @media (max-width: 639px) {
-  .headerActions,
   .search {
     width: 100%;
   }

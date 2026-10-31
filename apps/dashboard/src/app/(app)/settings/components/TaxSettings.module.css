@@ -6,7 +6,7 @@
 }
 
 .notice {
-  border-radius: 10px !important;
+  border-radius: var(--ui-radius-md) !important;
   border: 1px solid var(--ochre-200) !important;
   background: var(--surface-subtle) !important;
 }
@@ -55,7 +55,7 @@
   display: grid;
   gap: 1.25rem;
   padding: 1.25rem 1.25rem 1.25rem 1.4rem;
-  border-radius: 10px;
+  border-radius: var(--ui-radius-md);
   border: 1px solid var(--pearl-bush);
   background: var(--surface-subtle);
   box-shadow: none;
@@ -69,7 +69,7 @@
   top: 14px;
   bottom: 14px;
   width: 4px;
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 var(--ui-radius-sm) var(--ui-radius-sm) 0;
   background: var(--surface-subtle);
   box-shadow: none;
 }
@@ -132,7 +132,7 @@
   gap: 0.4rem;
   padding: 0.35rem 0.65rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--surface);
   border: 1px solid var(--ochre-200);
   box-shadow: none;
 }
@@ -188,7 +188,7 @@
 
 .inputNumber :global(.ant-input-number) {
   width: 100%;
-  border-radius: 10px;
+  border-radius: var(--ui-radius-md);
   border-color: var(--pearl-bush);
   box-shadow: none;
 }
@@ -212,7 +212,7 @@
   text-align: center;
   font-size: 0.875rem;
   color: var(--bistre-400);
-  border-radius: 10px;
+  border-radius: var(--ui-radius-md);
   border: 1px dashed var(--pearl-bush);
   background: var(--linen-100);
 }
@@ -231,7 +231,7 @@
   padding: 14px 24px;
   border-top: 1px solid var(--border);
   background: var(--surface);
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 var(--ui-radius-lg) var(--ui-radius-lg);
 }
 
 .stickyFooterNote {

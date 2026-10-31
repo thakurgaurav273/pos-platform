@@ -59,7 +59,7 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.25;
-  color: #3c2a21;
+  color: var(--text-primary);
 }
 
 .manualFilters {
@@ -102,28 +102,26 @@
   padding-left: 14px !important;
   padding-right: 14px !important;
   border-radius: 999px !important;
-  border: 1px solid rgba(60, 42, 33, 0.09) !important;
-  box-shadow:
-    0 1px 3px rgba(24, 24, 27, 0.045),
-    0 1px 1px rgba(24, 24, 27, 0.025) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
 .manualSearch:global(.ant-input-affix-wrapper-focused),
 .manualSearch:global(.ant-input-affix-wrapper:focus-within) {
-  border-color: rgba(166, 124, 0, 0.45) !important;
+  border-color: rgba(var(--ochre-rgb), 0.45) !important;
   box-shadow:
-    0 2px 10px rgba(166, 124, 0, 0.08),
-    0 0 0 3px rgba(166, 124, 0, 0.12) !important;
+    0 2px 10px rgba(var(--ochre-rgb), 0.08),
+    0 0 0 3px rgba(var(--ochre-rgb), 0.12) !important;
 }
 
 .manualSearch :global(.ant-input) {
   font-size: 0.8125rem !important;
   line-height: 1.25 !important;
-  color: #3c2a21 !important;
+  color: var(--text-primary) !important;
 }
 
 .manualSearch :global(input::placeholder) {
-  color: rgba(60, 42, 33, 0.42) !important;
+  color: var(--text-muted) !important;
 }
 
 .manualCategoryWrap {
@@ -133,7 +131,7 @@
 }
 
 .manualCategoryWrap :global(.ant-select-selection-item) {
-  color: #3c2a21 !important;
+  color: var(--text-primary) !important;
   font-weight: 500 !important;
   font-size: 0.875rem !important;
 }
@@ -141,8 +139,8 @@
 .manualCategoryWrap :global(.ant-select-selector.categorySelect) {
   height: 36px !important;
   min-height: 36px !important;
-  border-radius: 12px !important;
-  border: 1px solid rgba(60, 42, 33, 0.09) !important;
+  border-radius: var(--ui-radius-lg) !important;
+  border: 1px solid var(--border) !important;
 }
 
 .manualCategoryWrap :global(.categorySelect .ant-select-selection-item),
@@ -169,23 +167,21 @@
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border-radius: 12px !important;
-  border: 1px solid rgba(60, 42, 33, 0.1) !important;
-  color: #3c2a21 !important;
-  background: #ffffff !important;
-  box-shadow:
-    0 1px 3px rgba(24, 24, 27, 0.04),
-    0 1px 1px rgba(24, 24, 27, 0.02);
+  border-radius: var(--ui-radius-lg) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  background: var(--surface) !important;
+  box-shadow: var(--shadow-sm);
 }
 
 .customerIconBtn:global(.ant-btn):hover {
-  border-color: rgba(166, 124, 0, 0.35) !important;
-  color: #a67c00 !important;
-  background: #ffffff !important;
+  border-color: rgba(var(--ochre-rgb), 0.35) !important;
+  color: var(--ochre-600) !important;
+  background: var(--surface) !important;
 }
 
 .wrap {
-  border-radius: 12px;
+  border-radius: var(--ui-radius-lg);
   border: 1px solid var(--pearl-bush);
   background: var(--linen-100);
   flex: 0 0 auto;
@@ -318,7 +314,7 @@
   height: 1.5rem;
   padding: 0;
   border: 0;
-  border-radius: 6px;
+  border-radius: var(--ui-radius-sm);
   background: transparent;
   color: var(--bistre-400);
   cursor: pointer;
@@ -359,7 +355,7 @@
 .wrap :global(.billing-pos-add-btn) {
   padding: 0.3rem 0.65rem;
   white-space: nowrap;
-  border-radius: 6px;
+  border-radius: var(--ui-radius-sm);
   font-size: 12.5px;
   font-weight: 500;
   background: var(--surface);
@@ -374,7 +370,7 @@
 .wrap :global(.billing-pos-add-btn:hover) {
   background: var(--ochre-500);
   border-color: var(--ochre-500);
-  color: #fff;
+  color: var(--on-primary);
 }
 
 .wrap :global(.billing-pos-add-btn:active) {

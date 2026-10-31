@@ -5,19 +5,15 @@
   justify-content: center;
   text-align: center;
   padding: 3rem 1.5rem;
-  border-radius: 16px;
-  border: 1px dashed var(--ochre-200);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 254, 249, 0.9) 0%,
-    var(--ochre-2) 100%
-  );
+  border-radius: var(--ui-radius-xl);
+  border: 1px dashed var(--border);
+  background: var(--surface);
   margin: 1rem 0;
 }
 
 .icon {
   margin-bottom: 1.25rem;
-  color: var(--ochre-400);
+  color: var(--ochre-500);
   display: flex;
   justify-content: center;
 }
@@ -26,14 +22,14 @@
   margin: 0;
   font-size: 1.0625rem;
   font-weight: 700;
-  color: var(--bistre-950);
+  color: var(--text-primary);
   line-height: 1.4;
 }
 
 .description {
   margin: 0.5rem 0 0;
   font-size: 0.9375rem;
-  color: var(--bistre-500);
+  color: var(--text-secondary);
   max-width: 320px;
   margin-left: auto;
   margin-right: auto;

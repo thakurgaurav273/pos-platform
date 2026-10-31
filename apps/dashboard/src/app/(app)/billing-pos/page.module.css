@@ -28,10 +28,8 @@
   font: inherit;
   text-align: left;
   color: inherit;
-  background: linear-gradient(180deg,
-      var(--linen-95) 0%,
-      var(--parchment) 100%);
-  box-shadow: 0 -8px 28px -12px rgba(24, 24, 27, 0.2);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
 }
 
 .mobileBillBar:focus-visible {
@@ -82,7 +80,7 @@
   background: var(--ochre-100);
   border: 1px solid var(--ochre-300);
   padding: 0.45rem 0.85rem;
-  border-radius: 10px;
+  border-radius: var(--ui-radius-md);
 }
 
 .billDrawer :global(.ant-drawer-header) {
@@ -183,38 +181,29 @@
 }
 
 .scanSection {
-  border-radius: 16px;
+  border-radius: var(--ui-radius-xl);
   border: 1px solid var(--pearl-bush);
-  background: linear-gradient(165deg,
-      var(--linen-100) 0%,
-      var(--parchment) 48%,
-      var(--ochre-10) 100%);
-  box-shadow:
-    0 1px 2px rgba(26, 17, 12, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  background: var(--surface-subtle);
+  box-shadow: var(--shadow-sm);
 }
 
 :global(.ant-input-affix-wrapper).scanInput {
   min-height: 52px;
-  border-radius: 12px;
-  border: 1px solid rgba(24, 24, 27, 0.1);
-  background: #ffffff !important;
+  border-radius: var(--ui-radius-lg);
+  border: 1px solid var(--border);
+  background: var(--surface) !important;
   font-size: 1.125rem;
   font-weight: 500;
   letter-spacing: 0.005em;
-  box-shadow:
-    0 2px 4px rgba(24, 24, 27, 0.02),
-    0 1px 2px rgba(24, 24, 27, 0.04);
+  box-shadow: var(--shadow-xs);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 :global(.ant-input-affix-wrapper-focused).scanInput,
 :global(.ant-input-affix-wrapper:focus-within).scanInput {
   border-color: var(--ochre-400) !important;
-  background: #ffffff !important;
-  box-shadow:
-    0 4px 16px rgba(168, 79, 28, 0.08),
-    0 0 0 4px rgba(168, 79, 28, 0.15) !important;
+  background: var(--surface) !important;
+  box-shadow: var(--ring) !important;
 }
 
 .scanInput :global(.ant-input) {
@@ -225,12 +214,10 @@
 :global(.ant-input-affix-wrapper).searchInput {
   min-height: 44px;
   height: 44px;
-  border-radius: 12px;
-  border: 1px solid rgba(24, 24, 27, 0.08);
-  background: #ffffff !important;
-  box-shadow:
-    0 2px 8px rgba(24, 24, 27, 0.03),
-    0 1px 2px rgba(24, 24, 27, 0.02);
+  border-radius: var(--ui-radius-lg);
+  border: 1px solid var(--border);
+  background: var(--surface) !important;
+  box-shadow: var(--shadow-xs);
   padding-left: 18px;
   padding-right: 18px;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -239,10 +226,8 @@
 :global(.ant-input-affix-wrapper-focused).searchInput,
 :global(.ant-input-affix-wrapper:focus-within).searchInput {
   border-color: var(--ochre-400) !important;
-  background: #ffffff !important;
-  box-shadow:
-    0 4px 16px rgba(168, 79, 28, 0.06),
-    0 0 0 4px rgba(168, 79, 28, 0.1) !important;
+  background: var(--surface) !important;
+  box-shadow: var(--ring) !important;
 }
 
 .categorySelect {
@@ -253,24 +238,20 @@
 :global(.ant-select-selector).categorySelect {
   height: 44px !important;
   min-height: 44px !important;
-  border-radius: 12px !important;
-  border: 1px solid rgba(24, 24, 27, 0.08) !important;
-  background: #ffffff !important;
+  border-radius: var(--ui-radius-lg) !important;
+  border: 1px solid var(--border) !important;
+  background: var(--surface) !important;
   display: flex !important;
   align-items: center !important;
-  box-shadow:
-    0 2px 8px rgba(24, 24, 27, 0.03),
-    0 1px 2px rgba(24, 24, 27, 0.02);
+  box-shadow: var(--shadow-xs);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 :global(.ant-select-focused).categorySelect :global(.ant-select-selector),
 :global(.ant-select-open).categorySelect :global(.ant-select-selector) {
   border-color: var(--ochre-400) !important;
-  background: #ffffff !important;
-  box-shadow:
-    0 4px 12px rgba(168, 79, 28, 0.06),
-    0 0 0 4px rgba(168, 79, 28, 0.1) !important;
+  background: var(--surface) !important;
+  box-shadow: var(--ring) !important;
 }
 
 .categorySelectDropdown :global(.ant-select-item-option-selected) {
@@ -278,8 +259,7 @@
 }
 
 .categorySelectDropdown {
-  color-scheme: light;
-  border-radius: 10px;
+  border-radius: var(--ui-radius-md);
 }
 
 .categorySelectDropdown :global(*) {
@@ -291,7 +271,7 @@
 }
 
 .tableWrap {
-  border-radius: 12px;
+  border-radius: var(--ui-radius-lg);
   border: 1px solid var(--pearl-bush);
   background: var(--linen-100);
 }
@@ -313,12 +293,12 @@
 
 .tableScroll::-webkit-scrollbar-track {
   background: var(--linen-95);
-  border-radius: 4px;
+  border-radius: var(--ui-radius-sm);
 }
 
 .tableScroll::-webkit-scrollbar-thumb {
   background: var(--bistre-200);
-  border-radius: 4px;
+  border-radius: var(--ui-radius-sm);
 }
 
 .tableScroll::-webkit-scrollbar-thumb:hover {
@@ -339,7 +319,7 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  background: linear-gradient(180deg, var(--linen-95) 0%, var(--parchment) 100%);
+  background: var(--surface-subtle);
   border-bottom: 1px solid var(--pearl-bush);
 }
 
@@ -375,11 +355,11 @@
 
 .addBtn {
   padding: 0.35rem 0.75rem;
-  border-radius: 8px;
+  border-radius: var(--ui-radius-md);
   font-size: 0.75rem;
   font-weight: 600;
   background: var(--ochre-500);
-  color: #fff;
+  color: var(--on-primary);
   border: none;
   cursor: pointer;
   transition:
@@ -403,7 +383,7 @@
   min-height: min(22rem, 55vh);
   max-height: none;
   align-self: stretch;
-  border-radius: 12px;
+  border-radius: var(--ui-radius-lg);
   border: 1px solid var(--border);
   background: var(--surface);
   overflow: hidden;
@@ -437,7 +417,7 @@
   font-weight: 600;
   font-size: 0.8125rem;
   color: var(--bistre-500);
-  border-radius: 10px 10px 0 0;
+  border-radius: var(--ui-radius-md) var(--ui-radius-md) 0 0;
 }
 
 .billingModeTabs :global(.ant-tabs-tab-active .ant-tabs-tab-btn) {

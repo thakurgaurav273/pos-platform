@@ -100,10 +100,10 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1.5rem 2rem;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(24, 24, 27, 0.08);
-  box-shadow: 0 8px 28px rgba(24, 24, 27, 0.06);
+  border-radius: var(--ui-radius-lg);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
 }
 
 .loadingLabel {

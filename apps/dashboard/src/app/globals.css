@@ -1,20 +1,19 @@
 @import "tailwindcss";
 
-/* Calcutta Sweets - Brand Color Palette */
 /*
- * Calcutta Sweets - "Espresso, Gold & Burgundy" palette
- * Dark espresso chrome carries the gold logo; burgundy is the action colour;
- * neutrals are a warm ink scale over an ivory canvas so white cards lift off.
- * Variable names are kept from the earlier bistre/linen/ochre palette so every
- * module that references them picks up the new look automatically.
+ * Calcutta Sweets design tokens.
+ *
+ * These :root values are the light "Classic" theme, i.e. what the server renders.
+ * At runtime the ThemeProvider (src/contexts/ThemeContext.tsx) overwrites them on
+ * <html> from the active shop's theme via src/lib/theme/*, including dark mode.
+ * Variable names are kept from the original bistre/linen/ochre palette so every
+ * module that references them follows the shop theme automatically:
+ *   --bistre-*   ink scale (text, icons)        --linen-*  canvas / subtle fills
+ *   --ochre-*    PRIMARY brand scale            --secondary-*, --accent-*  brand scales
+ *   --surface*, --border*, --shadow-*           status: --success/--warning/--danger/--info
+ * Use rgba(var(--ochre-rgb), a) / rgba(var(--ink-rgb), a) for translucent tints.
  */
 :root {
-  /*
-   * Calcutta Sweets - operations palette.
-   * Clean neutrals for long working sessions, one brand accent (deep copper from the
-   * logo) for actions/selection, and status colours that never compete with it.
-   */
-
   /* Ink - neutral scale (text, icons, borders) */
   --bistre-950: #18181b;
   --bistre-900: #27272a;
@@ -30,15 +29,16 @@
   --bistre-80: rgba(24, 24, 27, 0.8);
   --bistre-60: rgba(24, 24, 27, 0.6);
   --bistre-50: rgba(24, 24, 27, 0.5);
+  --ink-rgb: 24, 24, 27;
 
-  /* Canvas & subtle fills (neutral stone, a touch warm) */
+  /* Canvas & subtle fills */
   --linen: #f7f7f6;
   --linen-100: #fbfbfa;
   --linen-95: #f7f7f6;
   --linen-90: #f0f0ee;
   --linen-80: #e7e7e4;
 
-  /* Copper - brand accent from the logo: CTA, links, selection (500 on white = 5.5:1) */
+  /* Primary brand scale (Classic: copper from the logo; 500 on white = 5.5:1) */
   --ochre-800: #5c2b0c;
   --ochre-700: #74360f;
   --ochre-600: #8f4218;
@@ -51,19 +51,48 @@
   --ochre-20: rgba(168, 79, 28, 0.2);
   --ochre-10: rgba(168, 79, 28, 0.1);
   --ochre-2: rgba(168, 79, 28, 0.02);
+  --ochre-rgb: 168, 79, 28;
+  --on-ochre: #ffffff;
+  --on-primary: #ffffff;
   --ochre: var(--ochre-500);
   --ochre-light: var(--ochre-400);
   --ochre-dark: var(--ochre-600);
 
-  /* Highlight aliases (previously gold) now follow the brand accent */
-  --gold-300: var(--ochre-300);
-  --gold-400: var(--ochre-400);
-  --gold-500: var(--ochre-500);
-  --gold-700: var(--ochre-600);
-  --gold-100: var(--ochre-100);
-  --gold-50: var(--ochre-50);
+  /* Secondary brand scale (charts, secondary highlights) */
+  --secondary-50: #f5faf9;
+  --secondary-100: #ecf4f3;
+  --secondary-200: #c1dbd9;
+  --secondary-300: #82b8b4;
+  --secondary-400: #3f918b;
+  --secondary-500: #0f766e;
+  --secondary-600: #0d645e;
+  --secondary-700: #0a504b;
+  --secondary-800: #083e3a;
+  --secondary-rgb: 15, 118, 110;
+  --on-secondary: #ffffff;
 
-  /* Ink aliases (previously the dark espresso chrome) */
+  /* Accent scale (badges, highlights, notification dots) */
+  --accent-50: #fdfaf5;
+  --accent-100: #fbf6eb;
+  --accent-200: #f1e1be;
+  --accent-300: #e3c27c;
+  --accent-400: #d5a136;
+  --accent-500: #ca8a04;
+  --accent-600: #9b6903;
+  --accent-700: #7c5402;
+  --accent-800: #604102;
+  --accent-rgb: 202, 138, 4;
+  --on-accent: #18181b;
+
+  /* Legacy highlight aliases now follow the accent */
+  --gold-300: var(--accent-300);
+  --gold-400: var(--accent-400);
+  --gold-500: var(--accent-500);
+  --gold-700: var(--accent-700);
+  --gold-100: var(--accent-100);
+  --gold-50: var(--accent-50);
+
+  /* Ink aliases */
   --espresso-950: var(--bistre-950);
   --espresso-900: var(--bistre-900);
   --espresso-800: var(--bistre-800);
@@ -77,13 +106,18 @@
 
   /* Surfaces & elevation */
   --surface: #ffffff;
+  --surface-rgb: 255, 255, 255;
   --surface-subtle: #fbfbfa;
+  --surface-raised: #ffffff;
   --border: #e6e6e3;
   --border-strong: #d4d4d1;
+  --overlay: rgba(24, 24, 27, 0.55);
+
   /* Flat by default: borders do the separating, shadow only for overlays */
   --shadow-xs: 0 1px 0 rgba(24, 24, 27, 0.03);
-  --shadow-sm: 0 1px 2px rgba(24, 24, 27, 0.04);
+  --shadow-sm: 0 1px 2px rgba(24, 24, 27, 0.05);
   --shadow-md: 0 1px 2px rgba(24, 24, 27, 0.06), 0 10px 24px -14px rgba(24, 24, 27, 0.2);
+  --shadow-lg: 0 2px 4px rgba(24, 24, 27, 0.04), 0 18px 40px -18px rgba(24, 24, 27, 0.25);
   --ring: 0 0 0 3px rgba(168, 79, 28, 0.18);
 
   /* Status (paid / in stock, low stock, cancelled / out of stock, informational) */
@@ -111,6 +145,53 @@
   /* Semantic - Backgrounds */
   --background: var(--linen);
   --foreground: var(--bistre-950);
+
+  /*
+   * Shape: one corner-radius scale for cards, controls, tables and modals.
+   * The shop's component appearance sets the multiplier (sharp 0.5, default 1, rounded 1.5).
+   */
+  --ui-radius-scale: 1;
+  --ui-radius-sm: calc(4px * var(--ui-radius-scale));
+  --ui-radius-md: calc(8px * var(--ui-radius-scale));
+  --ui-radius-lg: calc(12px * var(--ui-radius-scale));
+  --ui-radius-xl: calc(16px * var(--ui-radius-scale));
+
+  /* Spacing scale for page sections (4px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Typography (the theme can switch body / heading families) */
+  --font-body: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-body);
+
+  /* App chrome (sidebar + header), driven by the theme's sidebar / header style */
+  --sidebar-bg: var(--surface);
+  --sidebar-fg: var(--bistre-700);
+  --sidebar-muted: var(--bistre-400);
+  --sidebar-hover-bg: var(--linen-90);
+  --sidebar-hover-fg: var(--bistre-950);
+  --sidebar-active-bg: var(--ochre-100);
+  --sidebar-active-fg: var(--ochre-600);
+  --sidebar-border: var(--border);
+  --sidebar-indicator: var(--ochre-500);
+  --header-bg: var(--surface);
+  --header-fg: var(--text-primary);
+  --header-muted: var(--text-muted);
+  --header-border: var(--border);
+  --header-control-bg: var(--surface);
+  --header-control-border: var(--border);
+  --header-control-hover: var(--linen);
+
+  color-scheme: light;
+}
+
+html[data-theme-mode="dark"] {
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -128,12 +209,15 @@
   --color-bistre: var(--bistre);
   --color-bistre-80: var(--bistre-80);
   --color-bistre-60: var(--bistre-60);
+
   /* Linen */
   --color-linen: var(--linen);
   --color-linen-95: var(--linen-95);
   --color-linen-90: var(--linen-90);
   --color-linen-80: var(--linen-80);
-  /* Ochre scale */
+
+  /* Ochre (primary) scale */
+  --color-ochre-700: var(--ochre-700);
   --color-ochre-600: var(--ochre-600);
   --color-ochre-500: var(--ochre-500);
   --color-ochre-400: var(--ochre-400);
@@ -146,9 +230,15 @@
   --color-ochre: var(--ochre);
   --color-ochre-light: var(--ochre-light);
   --color-ochre-dark: var(--ochre-dark);
+  --color-secondary-500: var(--secondary-500);
+  --color-secondary-100: var(--secondary-100);
+  --color-accent-500: var(--accent-500);
+  --color-accent-100: var(--accent-100);
+
   /* Parchment / Pearl Bush */
   --color-parchment: var(--parchment);
   --color-pearl-bush: var(--pearl-bush);
+
   /* Semantic */
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
@@ -164,8 +254,17 @@
   --color-surface-subtle: var(--surface-subtle);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body);
   --font-mono: var(--font-geist-mono);
+
+  /* Tailwind rounded-* utilities follow the shop's corner-radius setting */
+  --radius-xs: calc(2px * var(--ui-radius-scale));
+  --radius-sm: calc(4px * var(--ui-radius-scale));
+  --radius-md: calc(6px * var(--ui-radius-scale));
+  --radius-lg: calc(8px * var(--ui-radius-scale));
+  --radius-xl: calc(12px * var(--ui-radius-scale));
+  --radius-2xl: calc(16px * var(--ui-radius-scale));
+  --radius-3xl: calc(24px * var(--ui-radius-scale));
 }
 
 html {
@@ -178,7 +277,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-body);
   min-height: 100vh;
   min-height: 100dvh;
   overflow-x: hidden;
@@ -208,15 +307,6 @@ a:where(:any-link):hover {
 
 a:where(:any-link):active {
   color: var(--ochre-600);
-}
-
-/* Force light theme - prevent system dark mode from affecting layout */
-@media (prefers-color-scheme: dark) {
-
-  html.light,
-  html.light body {
-    color-scheme: light;
-  }
 }
 
 /* Custom scrollbars - slim, cream/gold aesthetic */
@@ -308,6 +398,75 @@ body {
 }
 
 .ant-tag {
-  border-radius: 4px;
+  border-radius: var(--ui-radius-sm);
   font-weight: 500;
+}
+
+/* Headings follow the shop's heading typeface (e.g. serif for the Elegant theme) */
+h1,
+h2,
+h3,
+.ant-typography:where(h1, h2, h3, h4),
+.ant-modal-title,
+.ant-card-head-title {
+  font-family: var(--font-heading);
+}
+
+/* Shared surface: one card treatment for panels across pages */
+.cs-surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--ui-radius-lg);
+}
+
+/* Skip link for keyboard users (rendered by the app shell) */
+.cs-skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 1000;
+  padding: 8px 14px;
+  border-radius: var(--ui-radius-md);
+  background: var(--ochre-500);
+  color: var(--on-primary) !important;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.cs-skip-link:focus {
+  top: 12px;
+}
+
+/*
+ * Reduced motion: our own CSS animations/transitions are cut short. antd components
+ * are excluded (they manage this themselves: ThemeProvider sets antd's motion token to
+ * false), because antd positions popups during their opening animation and a
+ * near-zero animation would leave dropdowns and pickers off screen.
+ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  :where(*:not([class*="ant-"])),
+  :where(*:not([class*="ant-"]))::before,
+  :where(*:not([class*="ant-"]))::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* Printed bills and reports always use light colours, whatever the screen mode */
+@media print {
+  html[data-theme-mode="dark"] {
+    color-scheme: light;
+    --surface: #ffffff !important;
+    --surface-subtle: #fbfbfa !important;
+    --linen: #ffffff !important;
+    --border: #e6e6e3 !important;
+    --bistre-950: #18181b !important;
+    --bistre-700: #52525b !important;
+    --bistre-400: #71717a !important;
+  }
 }

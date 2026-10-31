@@ -21,6 +21,10 @@ type ShopContextValue = {
   shops: Shop[];
   shopsLoading: boolean;
   shopSwitcherEnabled: boolean;
+  /** The shop record for `effectiveShopCode`, once loaded. */
+  activeShop: Shop | undefined;
+  /** Replace a shop in the loaded list after a successful save (no page reload). */
+  updateShop: (shop: Shop) => void;
 };
 
 const ShopContext = createContext<ShopContextValue | null>(null);
@@ -37,6 +41,17 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
   const requestIdRef = useRef(0);
   const role = user?.role;
   const userShopCode = user?.shopCode;
+
+  // Signing out drops the loaded shops, so the next account on this tab never sees
+  // the previous account's shop (or its branding) while its own shops load.
+  const [wasAuthenticated, setWasAuthenticated] = useState(isAuthenticated);
+  if (wasAuthenticated !== isAuthenticated) {
+    setWasAuthenticated(isAuthenticated);
+    if (!isAuthenticated) {
+      setShops([]);
+      setEffectiveShopCodeState("");
+    }
+  }
 
   useEffect(() => {
     if (!isAuthenticated || !user) return;
@@ -133,6 +148,15 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     return current?.allowShopSwitcher !== false;
   }, [shops, effectiveShopCode]);
 
+  const activeShop = useMemo(
+    () => shops.find((s) => s.shopCode === effectiveShopCode),
+    [shops, effectiveShopCode],
+  );
+
+  const updateShop = useCallback((shop: Shop) => {
+    setShops((prev) => prev.map((s) => (s.id === shop.id ? { ...s, ...shop } : s)));
+  }, []);
+
   const value = useMemo<ShopContextValue>(
     () => ({
       effectiveShopCode,
@@ -140,8 +164,18 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       shops,
       shopsLoading,
       shopSwitcherEnabled,
+      activeShop,
+      updateShop,
     }),
-    [effectiveShopCode, setEffectiveShopCode, shops, shopsLoading, shopSwitcherEnabled],
+    [
+      effectiveShopCode,
+      setEffectiveShopCode,
+      shops,
+      shopsLoading,
+      shopSwitcherEnabled,
+      activeShop,
+      updateShop,
+    ],
   );
 
   return (

@@ -5,7 +5,7 @@
 }
 
 .animate {
-  background: linear-gradient(90deg, #f0ece6 25%, #faf8f5 50%, #f0ece6 75%);
+  background: linear-gradient(90deg, var(--linen-90) 25%, var(--linen-100) 50%, var(--linen-90) 75%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }
@@ -27,9 +27,9 @@
 
 .cardCell {
   min-height: 7.5rem;
-  border-radius: 16px;
-  border: 1px solid rgba(220, 210, 196, 0.5);
-  background: rgba(255, 255, 255, 0.45);
+  border-radius: var(--ui-radius-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -46,20 +46,20 @@
 .cardLine {
   height: 14px;
   width: 72%;
-  border-radius: 8px;
+  border-radius: var(--ui-radius-md);
 }
 
 .cardLineShort {
   height: 12px;
   width: 48%;
-  border-radius: 8px;
+  border-radius: var(--ui-radius-md);
 }
 
 .table {
   width: 100%;
-  border-radius: 16px;
-  border: 1px solid rgba(24, 24, 27, 0.06);
-  background: #ffffff;
+  border-radius: var(--ui-radius-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -67,8 +67,8 @@
 
 .tableHeader {
   height: 52px;
-  background: rgba(250, 249, 248, 0.85);
-  border-bottom: 1px solid rgba(24, 24, 27, 0.08);
+  background: var(--surface-subtle);
+  border-bottom: 1px solid var(--border);
 }
 
 .tableBody {
@@ -80,7 +80,7 @@
 
 .tableRow {
   height: 32px;
-  border-radius: 6px;
+  border-radius: var(--ui-radius-sm);
 }
 
 .rows {
@@ -91,7 +91,7 @@
 
 .rowBar {
   height: 4.5rem;
-  border-radius: 12px;
+  border-radius: var(--ui-radius-lg);
 }
 
 .detail {
@@ -103,19 +103,19 @@
 .detailHeroLine {
   height: 12px;
   max-width: 8rem;
-  border-radius: 6px;
+  border-radius: var(--ui-radius-sm);
 }
 
 .detailTitle {
   height: 2rem;
   max-width: 18rem;
-  border-radius: 8px;
+  border-radius: var(--ui-radius-md);
 }
 
 .detailMeta {
   height: 14px;
   max-width: 14rem;
-  border-radius: 6px;
+  border-radius: var(--ui-radius-sm);
 }
 
 .detailToolbar {
@@ -127,10 +127,10 @@
 .detailToolbarBtn {
   height: 2rem;
   width: 5rem;
-  border-radius: 10px;
+  border-radius: var(--ui-radius-md);
 }
 
 .detailPanel {
   min-height: 12rem;
-  border-radius: 12px;
+  border-radius: var(--ui-radius-lg);
 }

@@ -31,6 +31,7 @@ import {
 import { antTableOverflowComponents } from "@/components/AntTableOverflowCell/AntTableOverflowCell";
 import RevenueExplorer from "@/components/DashboardHome/RevenueExplorer";
 import { useShop } from "@/contexts/ShopContext";
+import { useChartPalette } from "@/contexts/ThemeContext";
 import { apiFetch } from "@/lib/api";
 import { chartDayLabel, formatInrFull } from "@/lib/chartFormat";
 import { billRefOf } from "@/lib/printInvoice";
@@ -81,8 +82,6 @@ function formatWhen(iso: string) {
   }
 }
 
-const chartStroke = "var(--ochre-500)";
-
 function Metric({
   label,
   value,
@@ -127,7 +126,7 @@ function DashboardSkeleton() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[1, 2, 3, 4].map((i) => (
-          <Card key={i} variant="borderless" className="h-32 rounded-xl border border-[var(--pearl-bush)] bg-white shadow-sm" />
+          <Card key={i} variant="borderless" className="h-32 rounded-xl border border-[var(--pearl-bush)] bg-[var(--surface)] shadow-sm" />
         ))}
       </div>
 
@@ -149,6 +148,7 @@ function DashboardSkeleton() {
 export default function DashboardHome() {
   const router = useRouter();
   const { effectiveShopCode } = useShop();
+  const palette = useChartPalette();
   const defaultShop = process.env.NEXT_PUBLIC_API_DEFAULT_SHOP_CODE ?? "";
   const shopKey = effectiveShopCode || defaultShop;
 
@@ -211,7 +211,7 @@ export default function DashboardHome() {
       {/* One metrics strip (hairline dividers) instead of four floating cards */}
       <section
         aria-label="Key figures"
-        className="grid shrink-0 grid-cols-1 overflow-hidden rounded-[10px] border border-[var(--border)] bg-[var(--surface)] sm:grid-cols-2 xl:grid-cols-4 [&>div]:border-[var(--border)] max-sm:[&>div+div]:border-t sm:max-xl:[&>div:nth-child(n+3)]:border-t sm:max-xl:[&>div:nth-child(even)]:border-l xl:[&>div+div]:border-l"
+        className="grid shrink-0 grid-cols-1 overflow-hidden rounded-[var(--ui-radius-md)] border border-[var(--border)] bg-[var(--surface)] sm:grid-cols-2 xl:grid-cols-4 [&>div]:border-[var(--border)] max-sm:[&>div+div]:border-t sm:max-xl:[&>div:nth-child(n+3)]:border-t sm:max-xl:[&>div:nth-child(even)]:border-l xl:[&>div+div]:border-l"
       >
         <Metric
           label="Today's revenue"
@@ -279,26 +279,27 @@ export default function DashboardHome() {
               >
                 <defs>
                   <linearGradient id="dashRev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={chartStroke} stopOpacity={0.35} />
-                    <stop offset="100%" stopColor={chartStroke} stopOpacity={0} />
+                    <stop offset="0%" stopColor={palette.primary} stopOpacity={0.35} />
+                    <stop offset="100%" stopColor={palette.primary} stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid vertical={false} stroke="var(--pearl-bush)" />
+                <CartesianGrid vertical={false} stroke={palette.grid} />
                 <XAxis
                   dataKey="label"
-                  tick={{ fontSize: 11, fill: "var(--bistre-500)" }}
-                  axisLine={{ stroke: "var(--bistre-200)" }}
+                  tick={{ fontSize: 11, fill: palette.axis }}
+                  axisLine={{ stroke: palette.grid }}
                 />
                 <YAxis
-                  tick={{ fontSize: 11, fill: "var(--bistre-500)" }}
+                  tick={{ fontSize: 11, fill: palette.axis }}
                   axisLine={false}
                   tickFormatter={(v) => `₹${Number(v) >= 1000 ? `${(Number(v) / 1000).toFixed(1)}k` : v}`}
                 />
                 <Tooltip
                   contentStyle={{
-                    borderRadius: 10,
-                    borderColor: "var(--pearl-bush)",
-                    background: "#ffffff",
+                    borderRadius: "var(--ui-radius-md)",
+                    borderColor: palette.tooltipBorder,
+                    background: palette.tooltipBg,
+                    color: palette.text,
                   }}
                   formatter={(value) => [
                     formatInrFull(Number(value ?? 0)),
@@ -313,7 +314,7 @@ export default function DashboardHome() {
                 <Area
                   type="monotone"
                   dataKey="revenue"
-                  stroke={chartStroke}
+                  stroke={palette.primary}
                   strokeWidth={2}
                   fill="url(#dashRev)"
                 />

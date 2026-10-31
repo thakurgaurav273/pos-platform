@@ -69,9 +69,9 @@ const OtpInput = ({
           onPaste={onPaste}
           className={[
             "w-10 h-11 sm:w-11 sm:h-12 text-center text-lg sm:text-xl font-bold rounded-lg border-2 outline-none transition-all",
-            "text-[var(--bistre-800)] bg-white",
+            "text-[var(--bistre-800)] bg-[var(--surface)]",
             digits[i]
-              ? "border-[var(--ochre-500)] shadow-[0_0_0_3px_rgba(168, 79, 28,0.12)]"
+              ? "border-[var(--ochre-500)] shadow-[var(--ring)]"
               : "border-[var(--pearl-bush)]",
             "focus:border-[var(--ochre-500)] focus:shadow-[0_0_0_3px_var(--ochre-10)]",
             disabled ? "opacity-50 cursor-not-allowed" : "",

@@ -48,6 +48,10 @@ model Shop {
   cgstRate Decimal @default(2.5) @db.Decimal(5, 2)
   sgstRate Decimal @default(2.5) @db.Decimal(5, 2)
 
+  /// Portal appearance for this shop (preset, brand colours, mode, layout style).
+  /// NULL means the default "Classic" theme. Shape: apps/api/src/shops/theme/shop-theme.ts
+  themeConfig Json?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 

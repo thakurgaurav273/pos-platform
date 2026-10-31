@@ -65,7 +65,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(22, 17, 14, 0.5);
+  background: var(--overlay);
   color: #fff;
   opacity: 0;
   transition: opacity 0.15s ease;
@@ -130,7 +130,7 @@
   padding: 14px 24px;
   border-top: 1px solid var(--border);
   background: var(--surface-subtle);
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 var(--ui-radius-lg) var(--ui-radius-lg);
 }
 
 .footerNote {
