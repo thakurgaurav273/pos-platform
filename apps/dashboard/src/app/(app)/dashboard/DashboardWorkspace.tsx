@@ -85,7 +85,8 @@ export default function DashboardWorkspace() {
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-4">
       {showSwitcher ? (
-        <div className="flex shrink-0 justify-center sm:justify-start">
+        // Scrolls sideways on phones instead of overflowing off both edges.
+        <div className="flex max-w-full shrink-0 overflow-x-auto [scrollbar-width:none]">
           <Segmented
             size="large"
             value={activeView}

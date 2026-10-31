@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
+import { Metric, MetricStrip } from "@/components/MetricStrip/MetricStrip";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
 import { useAuth } from "@/contexts/AuthContext";
 import { useShop } from "@/contexts/ShopContext";
@@ -66,16 +67,17 @@ function ReportSkeleton() {
   return (
     <div className={styles.report} role="status" aria-label="Loading GST summary">
       <span className={`${styles.skeletonBar} ${styles.skeletonMeta}`} />
-      <div className={styles.metrics}>
+      <MetricStrip label="Loading GST totals">
         {[0, 1, 2, 3].map((i) => (
-          <div key={i} className={styles.metric}>
-            <span className={`${styles.skeletonBar} ${styles.skeletonLabel}`} />
-            <span className={`${styles.skeletonBar} ${styles.skeletonValue}`} />
-          </div>
+          <Metric
+            key={i}
+            label={<span className={`${styles.skeletonBar} ${styles.skeletonLabel}`} />}
+            value={<span className={`${styles.skeletonBar} ${styles.skeletonValue}`} />}
+          />
         ))}
-      </div>
-      <div className={styles.card}>
-        <div className={styles.cardHeader}>
+      </MetricStrip>
+      <div className={styles.skeletonCard}>
+        <div className={styles.skeletonCardHeader}>
           <span className={`${styles.skeletonBar} ${styles.skeletonTitle}`} />
         </div>
         {[0, 1].map((i) => (

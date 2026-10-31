@@ -1,0 +1,433 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  /* Fill the tab, but grow with the content so the page scrolls instead of squeezing it */
+  flex: 1 0 auto;
+  padding-bottom: var(--space-6);
+  /* Columns respond to the space the dashboard gets, not the viewport */
+  container-type: inline-size;
+}
+
+/* Recent bills on the left; today's payments and restock on the right */
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@container (min-width: 900px) {
+  .columns {
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  }
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+/* ── Lists inside cards ── */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list > li + li {
+  border-top: 1px solid var(--linen-90);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 11px var(--space-5);
+  color: inherit;
+}
+
+a.row {
+  transition: background 0.12s ease;
+}
+
+a.row:hover {
+  background: var(--surface-subtle);
+  color: inherit;
+}
+
+a.row:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--ochre-400);
+}
+
+.rowMain {
+  min-width: 0;
+}
+
+.rowTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Block-level so long names end in an ellipsis (a flex row can't) */
+.rowName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.billRef {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+
+.rowMeta {
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.rowEnd {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.amount {
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.amountCancelled {
+  font-weight: 500;
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.pill {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.pillDanger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.pillWarning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+/* Empty or "all good" message inside a card */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-5);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.noticeIcon {
+  flex-shrink: 0;
+  color: var(--success);
+}
+
+/* ── Today's payments ── */
+.payRow {
+  padding: 12px var(--space-5);
+}
+
+.payTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.payLabel {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.payBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.track {
+  flex: 1;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--linen-90);
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ochre-500);
+}
+
+.payMeta {
+  /* Same width on every row so the bars line up */
+  min-width: 96px;
+  text-align: right;
+  white-space: nowrap;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* ── Revenue ── */
+.presets {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.presets::-webkit-scrollbar {
+  display: none;
+}
+
+.revenueBody {
+  padding: var(--space-4) var(--space-5) var(--space-5);
+}
+
+.revenueContent {
+  transition: opacity 0.15s ease;
+}
+
+/* The last period stays visible, dimmed, while the next one loads */
+.refreshing {
+  opacity: 0.55;
+}
+
+.inlineLink {
+  color: var(--ochre-600);
+}
+
+.inlineLink:hover {
+  color: var(--ochre-500);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.customRange {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.dateField {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.dateInput {
+  width: 156px !important;
+}
+
+.figures {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+}
+
+@container (min-width: 560px) {
+  .figures {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .figure + .figure {
+    padding-left: var(--space-5);
+    border-left: 1px solid var(--border);
+  }
+
+  .figure:not(:last-child) {
+    padding-right: var(--space-5);
+  }
+}
+
+.figure {
+  min-width: 0;
+}
+
+.figureLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.figureValue {
+  margin-top: var(--space-1);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.figureNote {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.chart {
+  height: 240px;
+  margin-top: var(--space-5);
+}
+
+.chartEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+  margin: var(--space-5) 0 0;
+  border: 1px dashed var(--border);
+  border-radius: var(--ui-radius-md);
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+.chartCaption {
+  margin: var(--space-2) 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.tooltip {
+  min-width: 132px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--ui-radius-md);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-md);
+}
+
+.tooltipTitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.tooltipValue {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.tooltipNote {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.inlineMessage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+
+.inlineWarning {
+  color: var(--warning);
+}
+
+/* ── First-load placeholders ── */
+.skeletonBar {
+  display: block;
+  height: 12px;
+  border-radius: var(--ui-radius-sm);
+  background: linear-gradient(90deg, var(--linen-90) 25%, var(--linen-100) 50%, var(--linen-90) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeletonLabel {
+  width: 45%;
+}
+
+.skeletonValue {
+  width: 60%;
+  height: 22px;
+  margin-top: 10px;
+}
+
+.skeletonChart {
+  height: 240px;
+  margin-top: var(--space-5);
+  border-radius: var(--ui-radius-md);
+}
+
+.skeletonRow {
+  padding: 15px var(--space-5);
+}
+
+.skeletonRow + .skeletonRow {
+  border-top: 1px solid var(--linen-90);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonBar {
+    animation: none;
+  }
+
+  .revenueContent,
+  a.row {
+    transition: none;
+  }
+}

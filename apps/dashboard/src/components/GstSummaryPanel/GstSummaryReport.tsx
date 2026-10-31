@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Metric, MetricStrip } from "@/components/MetricStrip/MetricStrip";
+import { SectionCard } from "@/components/SectionCard/SectionCard";
 import { formatInrFull } from "@/lib/chartFormat";
 import type { GstSummaryPayload } from "./GstSummaryPanel";
 import { monthLabel, monthRangeLabel } from "./gstMonths";
@@ -14,26 +16,6 @@ function inr(n: number): string {
 
 function percent(n: number): string {
   return `${rateFormat.format(n)}%`;
-}
-
-function Metric({
-  label,
-  value,
-  note,
-  accent = false,
-}: {
-  label: string;
-  value: string;
-  note: string;
-  accent?: boolean;
-}) {
-  return (
-    <div className={`${styles.metric} ${accent ? styles.metricAccent : ""}`.trim()}>
-      <div className={styles.metricLabel}>{label}</div>
-      <div className={styles.metricValue}>{value}</div>
-      <div className={styles.metricNote}>{note}</div>
-    </div>
-  );
 }
 
 type GstSummaryReportProps = {
@@ -87,7 +69,7 @@ export function GstSummaryReport({
         {data.discountTotal > 0 ? <span>{inr(data.discountTotal)} in discounts</span> : null}
       </p>
 
-      <section aria-label="GST totals" className={styles.metrics}>
+      <MetricStrip label="GST totals">
         <Metric
           accent
           label="GST collected"
@@ -101,18 +83,13 @@ export function GstSummaryReport({
           value={inr(data.taxableValue)}
           note={`From ${inr(data.grossInclusive)} sales incl. GST`}
         />
-      </section>
+      </MetricStrip>
 
       {rates.length > 0 ? (
-        <section className={styles.card} aria-labelledby="gst-by-rate-title">
-          <header className={styles.cardHeader}>
-            <h2 id="gst-by-rate-title" className={styles.cardTitle}>
-              Tax by GST rate
-            </h2>
-            <p className={styles.cardDescription}>
-              Uses the rate saved on each bill line at the time of sale.
-            </p>
-          </header>
+        <SectionCard
+          title="Tax by GST rate"
+          description="Uses the rate saved on each bill line at the time of sale."
+        >
           <div className={styles.tableScroll}>
             <table className={styles.table}>
               <thead>
@@ -153,7 +130,7 @@ export function GstSummaryReport({
               </tbody>
             </table>
           </div>
-        </section>
+        </SectionCard>
       ) : null}
 
       <p className={styles.footnote}>

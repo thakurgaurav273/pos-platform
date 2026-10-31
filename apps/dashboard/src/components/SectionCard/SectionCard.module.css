@@ -1,0 +1,66 @@
+.card {
+  min-width: 0;
+  /* overflow: hidden lets a flex column shrink this card to nothing; never shrink it */
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--ui-radius-md);
+  background: var(--surface);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  min-height: 56px;
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.heading {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.description {
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.link {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--ochre-600);
+}
+
+.link:hover {
+  color: var(--ochre-500);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.link:focus-visible {
+  outline: none;
+  border-radius: var(--ui-radius-sm);
+  box-shadow: var(--ring);
+}
