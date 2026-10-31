@@ -292,9 +292,17 @@
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/*
+ * Products and Stock lists fill the screen and scroll inside their own panel. The page
+ * scrolls only on short windows, where a list would otherwise be squeezed below its
+ * minimum height.
+ */
 .contentInventoryList {
-  overflow: hidden;
+  overflow-y: auto;
   min-height: 0;
+  /* These lists fill the screen, so keep a gap under the table and its pagination.
+     (.content's safe-area padding otherwise replaces the bottom padding with 0.) */
+  padding-bottom: max(var(--space-6), env(safe-area-inset-bottom, 0px));
 }
 
 /*

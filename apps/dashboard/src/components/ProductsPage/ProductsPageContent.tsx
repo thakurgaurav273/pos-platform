@@ -13,7 +13,7 @@ import {
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 import type { ProductWithRelations } from "@/components/ProductCard/ProductCard";
-import { ProductCatalogRow } from "./ProductCatalogRow";
+import { ProductCatalogHeader, ProductCatalogRow } from "./ProductCatalogRow";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { PackageSearch, Inbox } from "lucide-react";
 import { ContentSkeleton } from "@/components/ContentSkeleton/ContentSkeleton";
@@ -289,6 +289,7 @@ export function ProductsPageContent({
         ) : (
           <>
             <div className={styles.rowStack}>
+              <ProductCatalogHeader />
               {items.map((p) => (
                 <ProductCatalogRow
                   key={p.id}

@@ -1,11 +1,12 @@
 "use client";
 
-import { Segmented } from "antd";
+import { ChartColumn, LayoutDashboard, ReceiptIndianRupee } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import DashboardHome from "@/components/DashboardHome/DashboardHome";
 import GstSummaryPanel from "@/components/GstSummaryPanel/GstSummaryPanel";
+import { PageTabs, type PageTab } from "@/components/PageTabs/PageTabs";
 import ReportsHome from "@/components/ReportsHome/ReportsHome";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -31,10 +32,6 @@ export default function DashboardWorkspace() {
     [searchParams],
   );
 
-  const visibleTabCount = useMemo(() => {
-    return (canOverview ? 1 : 0) + (canAnalytics ? 2 : 0);
-  }, [canOverview, canAnalytics]);
-
   const activeView: WorkspaceTab = useMemo(() => {
     if (canAnalytics && tabFromUrl === "gst") return "gst";
     if (tabFromUrl === "analytics" && canAnalytics) return "analytics";
@@ -54,54 +51,30 @@ export default function DashboardWorkspace() {
     }
   }, [permissions, tabFromUrl, canAnalytics, canOverview, router]);
 
-  const showSwitcher = visibleTabCount > 1;
-
-  const onTabChange = useCallback(
-    (v: string | number) => {
-      const s = String(v);
-      if (s === "analytics") {
-        router.replace("/dashboard?tab=analytics", { scroll: false });
-      } else if (s === "gst") {
-        router.replace("/dashboard?tab=gst", { scroll: false });
-      } else {
-        router.replace("/dashboard?tab=overview", { scroll: false });
-      }
-    },
-    [router],
-  );
-
-  const segmentedOptions = useMemo(() => {
-    const opts: { label: string; value: WorkspaceTab }[] = [];
+  const tabs = useMemo(() => {
+    const list: PageTab[] = [];
     if (canOverview) {
-      opts.push({ label: "Overview", value: "overview" });
+      list.push({ key: "overview", label: "Overview", href: "/dashboard?tab=overview", icon: LayoutDashboard });
     }
     if (canAnalytics) {
-      opts.push({ label: "Analytics & reports", value: "analytics" });
-      opts.push({ label: "GST summary", value: "gst" });
+      list.push(
+        { key: "analytics", label: "Analytics & reports", href: "/dashboard?tab=analytics", icon: ChartColumn },
+        { key: "gst", label: "GST summary", href: "/dashboard?tab=gst", icon: ReceiptIndianRupee },
+      );
     }
-    return opts;
+    return list;
   }, [canOverview, canAnalytics]);
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-4">
-      {showSwitcher ? (
-        // Scrolls sideways on phones instead of overflowing off both edges.
-        <div className="flex max-w-full shrink-0 overflow-x-auto [scrollbar-width:none]">
-          <Segmented
-            size="large"
-            value={activeView}
-            onChange={onTabChange}
-            options={segmentedOptions}
-          />
-        </div>
-      ) : null}
+    <div className="flex min-h-0 flex-1 flex-col gap-5">
+      {tabs.length > 1 ? <PageTabs label="Dashboard sections" tabs={tabs} active={activeView} /> : null}
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         {activeView === "overview" && canOverview ? (
           <DashboardHome />
         ) : null}
         {activeView === "analytics" && canAnalytics ? (
-          <ReportsHome variant="embedded" />
+          <ReportsHome />
         ) : null}
         {activeView === "gst" && canAnalytics ? (
           <GstSummaryPanel variant="embedded" />

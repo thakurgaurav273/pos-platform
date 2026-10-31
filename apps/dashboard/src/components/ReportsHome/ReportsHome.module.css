@@ -1,0 +1,280 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  /* Fill the tab, but grow with the content so the page scrolls instead of squeezing it */
+  flex: 1 0 auto;
+  padding-bottom: var(--space-6);
+  container-type: inline-size;
+}
+
+/* Period switch, plus the month or date boxes when those are picked */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+}
+
+.presets {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.presets::-webkit-scrollbar {
+  display: none;
+}
+
+.monthInput {
+  width: 164px !important;
+}
+
+.warning {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--warning);
+}
+
+/* ── Report ── */
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  transition: opacity 0.15s ease;
+}
+
+/* The last period stays visible, dimmed, while the next one loads */
+.refreshing {
+  opacity: 0.55;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: var(--space-1);
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.meta > * + *::before {
+  content: "·";
+  margin: 0 var(--space-2);
+  color: var(--text-muted);
+}
+
+.metaStrong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Top products on the left, payment modes on the right */
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@container (min-width: 900px) {
+  .columns {
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  }
+}
+
+/* ── Top products table ── */
+.tableScroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.table th {
+  padding: 9px var(--space-3);
+  background: var(--surface-subtle);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+.table td {
+  padding: 11px var(--space-3);
+  border-bottom: 1px solid var(--linen-90);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.table th:first-child,
+.table td:first-child {
+  padding-left: var(--space-5);
+}
+
+.table th:last-child,
+.table td:last-child {
+  padding-right: var(--space-5);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table .num {
+  text-align: right;
+}
+
+.table .rank {
+  width: 1%;
+  color: var(--text-muted);
+}
+
+/* Takes the remaining width; long names end in an ellipsis */
+.table .name {
+  width: 100%;
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.shareCol {
+  width: 26%;
+  min-width: 140px;
+}
+
+.share {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.track {
+  flex: 1;
+  min-width: 48px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--linen-90);
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ochre-500);
+}
+
+.shareValue {
+  min-width: 42px;
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Shown under the revenue on phones, where the share column is dropped */
+.shareInline {
+  display: none;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/*
+ * On a phone: no rank or share column, so the product name keeps enough width.
+ * Names wrap at spaces onto a second line rather than being cut to a few letters.
+ */
+@container (max-width: 559px) {
+  .table .rank,
+  .table .shareCell {
+    display: none;
+  }
+
+  .shareInline {
+    display: block;
+  }
+
+  .table .name {
+    width: auto;
+    max-width: none;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-1) var(--space-5);
+  border-top: 1px solid var(--border);
+}
+
+.notice {
+  margin: 0;
+  padding: var(--space-5);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* ── First-load placeholders ── */
+.skeletonBar {
+  display: block;
+  height: 12px;
+  border-radius: var(--ui-radius-sm);
+  background: linear-gradient(90deg, var(--linen-90) 25%, var(--linen-100) 50%, var(--linen-90) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeletonMeta {
+  width: 40%;
+  max-width: 280px;
+}
+
+.skeletonLabel {
+  width: 45%;
+}
+
+.skeletonValue {
+  width: 60%;
+  height: 22px;
+  margin-top: 10px;
+}
+
+.skeletonRow {
+  padding: 15px var(--space-5);
+}
+
+.skeletonRow + .skeletonRow {
+  border-top: 1px solid var(--linen-90);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonBar {
+    animation: none;
+  }
+
+  .report {
+    transition: none;
+  }
+}

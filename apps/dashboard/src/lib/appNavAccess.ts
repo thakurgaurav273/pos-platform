@@ -50,13 +50,14 @@ export const APP_NAV_ITEMS: AppNavItem[] = [
     anyPermissionKeys: ["canAccessBilling", "canAccessOrders"],
   },
   {
+    /** Products and Stock tabs; each tab shows only with its own permission. */
     prefix: "/products",
     sidebarLabel: "Products",
-    permissionKey: "canAccessProducts",
+    anyPermissionKeys: ["canAccessProducts", "canAccessInventory"],
   },
   {
+    /** Variant edit pages. The stock list itself is the Stock tab of /products. */
     prefix: "/inventory",
-    sidebarLabel: "Inventory",
     permissionKey: "canAccessInventory",
   },
   {

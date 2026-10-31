@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, Segmented } from "antd";
+import { Button, Segmented } from "antd";
 import { RotateCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
@@ -14,23 +14,31 @@ import {
   YAxis,
 } from "recharts";
 
+import { DateRangeFields } from "@/components/DateRangeFields/DateRangeFields";
 import { SectionCard } from "@/components/SectionCard/SectionCard";
 import { useShop } from "@/contexts/ShopContext";
 import { useChartPalette } from "@/contexts/ThemeContext";
 import { apiFetch } from "@/lib/api";
 import { formatInrFull, istDayOffset } from "@/lib/chartFormat";
+import {
+  dayCount,
+  dayRangeError,
+  formatDay,
+  formatDayRange,
+  formatWeekday,
+  shiftDay,
+  type DayRange,
+} from "@/lib/dayRange";
 import styles from "./DashboardHome.module.css";
 
 type DailyPoint = { date: string; revenue: number; orderCount: number };
 
 type RevenuePayload = {
   days: number;
-  range: { start: string; end: string };
+  range: DayRange;
   totals: { orderCount: number; revenue: number };
   daily: DailyPoint[];
 };
-
-type Range = { start: string; end: string };
 
 type Preset = "today" | "yesterday" | "7d" | "30d" | "custom";
 
@@ -46,44 +54,19 @@ const PRESETS: { label: string; value: Preset }[] = [
 const MAX_RANGE_DAYS = 366;
 /** Switching periods quickly sends one request, for the period you stop on. */
 const FETCH_DELAY_MS = 250;
-const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 /** The latest finished request, with the period that was selected when it was sent. */
 type LoadResult = {
   key: string;
-  selection: Range;
+  selection: DayRange;
   data: RevenuePayload | null;
   error: string | null;
 };
 
-const asDate = (day: string) => new Date(`${day}T00:00:00Z`);
-const shortDay = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", timeZone: "UTC" });
-const shortDayYear = new Intl.DateTimeFormat("en-IN", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-});
-const weekdayDay = new Intl.DateTimeFormat("en-IN", {
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-  timeZone: "UTC",
-});
 const compactInr = new Intl.NumberFormat("en-IN", { notation: "compact", maximumFractionDigits: 1 });
 const countFormat = new Intl.NumberFormat("en-IN");
 
-function shiftDay(day: string, delta: number): string {
-  const d = asDate(day);
-  d.setUTCDate(d.getUTCDate() + delta);
-  return d.toISOString().slice(0, 10);
-}
-
-function dayCount(start: string, end: string): number {
-  return Math.round((asDate(end).getTime() - asDate(start).getTime()) / 86_400_000) + 1;
-}
-
-function presetRange(preset: Exclude<Preset, "custom">, today: string): Range {
+function presetRange(preset: Exclude<Preset, "custom">, today: string): DayRange {
   switch (preset) {
     case "today":
       return { start: today, end: today };
@@ -96,20 +79,6 @@ function presetRange(preset: Exclude<Preset, "custom">, today: string): Range {
     case "30d":
       return { start: shiftDay(today, -29), end: today };
   }
-}
-
-function customRangeError({ start, end }: Range, today: string): string | null {
-  if (!DAY_RE.test(start) || !DAY_RE.test(end)) return "Pick a start and an end date.";
-  if (end < start) return "The end date must be on or after the start date.";
-  if (end > today) return "The end date can't be in the future.";
-  if (dayCount(start, end) > MAX_RANGE_DAYS) return `Pick a range of up to ${MAX_RANGE_DAYS} days.`;
-  return null;
-}
-
-function rangeLabel({ start, end }: Range): string {
-  if (start === end) return weekdayDay.format(asDate(start));
-  const format = start.slice(0, 4) === end.slice(0, 4) ? shortDay : shortDayYear;
-  return `${format.format(asDate(start))} – ${format.format(asDate(end))}`;
 }
 
 function inr(n: number): string {
@@ -127,7 +96,7 @@ function RevenueTooltip({
   if (!active || !point) return null;
   return (
     <div className={styles.tooltip}>
-      <div className={styles.tooltipTitle}>{weekdayDay.format(asDate(point.date))}</div>
+      <div className={styles.tooltipTitle}>{formatWeekday(point.date)}</div>
       <div className={styles.tooltipValue}>{inr(point.revenue)}</div>
       <div className={styles.tooltipNote}>
         {countFormat.format(point.orderCount)} {point.orderCount === 1 ? "bill" : "bills"}
@@ -152,7 +121,7 @@ function rupeeTicks(max: number): number[] {
 /** One bar per day. With `highlight`, that day is solid and the others are faded. */
 function RevenueChart({ points, highlight }: { points: DailyPoint[]; highlight: string | null }) {
   const palette = useChartPalette();
-  const chartData = points.map((d) => ({ ...d, label: shortDay.format(asDate(d.date)) }));
+  const chartData = points.map((d) => ({ ...d, label: formatDay(d.date) }));
   const ticks = rupeeTicks(Math.max(...points.map((d) => d.revenue)));
   return (
     <div className={styles.chart}>
@@ -219,12 +188,12 @@ export default function RevenueExplorer() {
 
   const today = istDayOffset(0);
   const [preset, setPreset] = useState<Preset>("7d");
-  const [custom, setCustom] = useState<Range>(() => presetRange("7d", istDayOffset(0)));
+  const [custom, setCustom] = useState<DayRange>(() => presetRange("7d", istDayOffset(0)));
   const [reloadKey, setReloadKey] = useState(0);
   const [result, setResult] = useState<LoadResult | null>(null);
 
   const selected = preset === "custom" ? custom : presetRange(preset, today);
-  const rangeError = preset === "custom" ? customRangeError(custom, today) : null;
+  const rangeError = preset === "custom" ? dayRangeError(custom, today, MAX_RANGE_DAYS) : null;
   const { start, end } = selected;
   const requestKey = rangeError ? null : `${shopKey}|${start}|${end}|${reloadKey}`;
   const loading = Boolean(shopKey) && requestKey !== null && result?.key !== requestKey;
@@ -296,7 +265,7 @@ export default function RevenueExplorer() {
       >
         <div className={styles.figures}>
           <div className={styles.figure}>
-            <div className={styles.figureLabel}>Revenue · {rangeLabel(selection)}</div>
+            <div className={styles.figureLabel}>Revenue · {formatDayRange(selection)}</div>
             <div className={styles.figureValue}>{inr(revenue)}</div>
             {perDay !== null ? (
               <div className={styles.figureNote}>{inr(perDay)} a day on average</div>
@@ -319,7 +288,7 @@ export default function RevenueExplorer() {
         )}
         {single && !noSales ? (
           <p className={styles.chartCaption}>
-            {rangeLabel(selection)} is highlighted next to the six days before it.
+            {formatDayRange(selection)} is highlighted next to the six days before it.
           </p>
         ) : null}
       </div>
@@ -342,29 +311,12 @@ export default function RevenueExplorer() {
     >
       <div className={styles.revenueBody}>
         {preset === "custom" ? (
-          <div className={styles.customRange}>
-            <label className={styles.dateField}>
-              From
-              <Input
-                type="date"
-                className={styles.dateInput}
-                value={custom.start}
-                max={custom.end || today}
-                onChange={(e) => setCustom((c) => ({ ...c, start: e.target.value }))}
-              />
-            </label>
-            <label className={styles.dateField}>
-              To
-              <Input
-                type="date"
-                className={styles.dateInput}
-                value={custom.end}
-                min={custom.start || undefined}
-                max={today}
-                onChange={(e) => setCustom((c) => ({ ...c, end: e.target.value }))}
-              />
-            </label>
-          </div>
+          <DateRangeFields
+            className={styles.customRange}
+            value={custom}
+            onChange={setCustom}
+            max={today}
+          />
         ) : null}
         {body}
       </div>

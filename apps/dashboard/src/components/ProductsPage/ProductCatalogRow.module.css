@@ -1,9 +1,26 @@
-.row {
+/* Header and rows share one grid, so the columns line up down the list */
+.grid {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  /* Product and variants share the free space; stock, price and actions stay fixed */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) 104px 104px 72px;
   align-items: center;
-  gap: 16px;
-  padding: 14px 16px;
+  column-gap: var(--space-4);
+  padding: 10px var(--space-4);
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding-block: 8px;
+  background: var(--surface-subtle);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.row {
   border-bottom: 1px solid var(--linen-90);
   transition: background 0.12s ease;
 }
@@ -16,175 +33,207 @@
   background: var(--surface-subtle);
 }
 
-.monogram {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--ui-radius-md);
-  background: var(--ochre-100);
-  color: var(--ochre-600);
-  font-size: 15px;
-  font-weight: 600;
-  align-self: start;
+.right {
+  text-align: right;
 }
 
-.rowInactive .monogram {
-  background: var(--linen-90);
-  color: var(--bistre-400);
-}
-
-.main {
+/* ── Product ── */
+.product {
   min-width: 0;
 }
 
 .nameLine {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   min-width: 0;
 }
 
 .name {
-  margin: 0;
-  font-size: 14.5px;
-  font-weight: 500;
-  color: var(--text-primary);
-  white-space: nowrap;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary) !important;
+}
+
+a.name:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .rowInactive .name {
-  color: var(--text-secondary);
+  color: var(--text-secondary) !important;
 }
 
-.statusOff {
+.inactive {
   flex-shrink: 0;
-  padding: 1px 7px;
-  border-radius: var(--ui-radius-sm);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--bistre-600);
+  padding: 0 7px;
+  border-radius: 999px;
   background: var(--linen-90);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 18px;
+  color: var(--bistre-600);
 }
 
 .meta {
-  margin: 2px 0 0;
+  margin-top: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 12.5px;
   color: var(--text-muted);
 }
 
-.metaCategory {
+.category {
   text-transform: capitalize;
 }
 
-.variantChips {
+/* ── Variant chips: each opens that variant ── */
+.variants {
+  min-width: 0;
+}
+
+.chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin: 8px 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .chip {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   gap: 6px;
-  padding: 2px 8px;
+  max-width: 100%;
+  height: 24px;
+  padding: 0 8px;
   border: 1px solid var(--border);
   border-radius: var(--ui-radius-sm);
   background: var(--surface);
   font-size: 12.5px;
   font-variant-numeric: tabular-nums;
+  color: var(--text-primary) !important;
+  white-space: nowrap;
+  transition: border-color 0.12s ease;
+}
+
+.chip:hover {
+  border-color: var(--bistre-300);
+}
+
+.chip:focus-visible,
+.iconBtn:focus-visible,
+a.name:focus-visible {
+  outline: none;
+  border-radius: var(--ui-radius-sm);
+  box-shadow: var(--ring);
 }
 
 .chipName {
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-weight: 500;
-  color: var(--text-primary);
 }
 
+/* Per-variant prices only when the list is wide; the Price column shows the range */
 .chipPrice {
-  color: var(--text-secondary);
-}
-
-.chipStock {
+  display: none;
   color: var(--text-muted);
 }
 
-.chipMore {
+.more {
   align-self: center;
+  white-space: nowrap;
   font-size: 12.5px;
   color: var(--text-muted);
 }
 
-/* ── Figures ── */
-.stats {
-  display: flex;
-  gap: 28px;
-  margin: 0;
+/* Two chips (and a "+N more" for the rest) on narrower lists, three on wide ones */
+.wideOnly {
+  display: none;
 }
 
-.statBlock {
-  min-width: 64px;
-  text-align: right;
+@container (min-width: 1100px) {
+  .wideOnly {
+    display: block;
+  }
+
+  .narrowOnly {
+    display: none;
+  }
+
+  .chipPrice {
+    display: inline;
+  }
 }
 
-.statLabel {
-  font-size: 12px;
-  color: var(--text-muted);
+.dot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
 }
 
-.statValue {
-  margin: 2px 0 0;
+.dot_ok {
+  background: var(--success);
+}
+
+.dot_low {
+  background: var(--warning);
+}
+
+.dot_out {
+  background: var(--danger);
+}
+
+/* ── Stock and price ── */
+.stock,
+.price {
+  min-width: 0;
+}
+
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 14px;
   font-weight: 500;
-  color: var(--text-primary);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--text-primary);
+}
+
+.status {
+  margin-top: 1px;
+  font-size: 12.5px;
   white-space: nowrap;
 }
 
-.statWarn {
+.status_ok {
+  color: var(--text-muted);
+}
+
+.status_low {
   color: var(--warning);
+}
+
+.status_out {
+  color: var(--danger);
 }
 
 /* ── Actions ── */
 .actions {
   display: flex;
-  align-items: center;
+  justify-content: flex-end;
   gap: 4px;
 }
 
-.manageLink {
-  display: inline-flex;
-  align-items: center;
-  height: 32px;
-  padding: 0 12px;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--ui-radius-sm);
-  background: var(--surface);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-primary) !important;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: border-color 0.12s ease, background 0.12s ease;
-}
-
-.manageLink:hover {
-  border-color: var(--bistre-300);
-  background: var(--linen);
-}
-
-.manageDisabled {
-  font-size: 12.5px;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-
-.removeBtn {
+.iconBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -193,45 +242,68 @@
   border: 1px solid transparent;
   border-radius: var(--ui-radius-sm);
   background: transparent;
-  color: var(--bistre-400);
+  color: var(--bistre-400) !important;
   cursor: pointer;
   transition: color 0.12s ease, background 0.12s ease;
 }
 
-.removeBtn:hover:not(:disabled) {
-  color: var(--danger);
+.iconBtn:hover:not(:disabled) {
+  background: var(--linen-90);
+  color: var(--text-primary) !important;
+}
+
+.iconDanger:hover:not(:disabled) {
   background: var(--danger-bg);
+  color: var(--danger) !important;
 }
 
-.removeBtn:focus-visible,
-.manageLink:focus-visible {
-  outline: none;
-  box-shadow: var(--ring);
-}
-
-.removeBtn:disabled {
+.iconBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Narrow screens: figures and actions drop below the name */
-@media (max-width: 767px) {
-  .row {
-    grid-template-columns: auto minmax(0, 1fr);
-    row-gap: 10px;
+/* Narrow lists: name and actions on top, variants below, then stock and price */
+@container (max-width: 719px) {
+  .header {
+    display: none;
   }
 
-  .stats,
-  .actions {
-    grid-column: 2;
+  .grid {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "product actions"
+      "variants variants"
+      "stock price";
+    row-gap: 8px;
+    padding: 12px var(--space-4);
   }
 
-  .stats {
-    gap: 20px;
+  .product {
+    grid-area: product;
   }
 
-  .statBlock {
+  .variants {
+    grid-area: variants;
+  }
+
+  .stock {
+    grid-area: stock;
     text-align: left;
-    min-width: 0;
+  }
+
+  .price {
+    grid-area: price;
+  }
+
+  .actions {
+    grid-area: actions;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row,
+  .chip,
+  .iconBtn {
+    transition: none;
   }
 }

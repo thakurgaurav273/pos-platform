@@ -281,7 +281,10 @@
   border: 1px solid var(--border);
   border-radius: var(--ui-radius-md);
   background: var(--surface);
-  overflow: hidden;
+  /* clip (not hidden) keeps the rounded corners without stopping the header from sticking */
+  overflow: clip;
+  /* Rows switch to a stacked layout based on the list's own width */
+  container-type: inline-size;
 }
 
 .initialLoad {

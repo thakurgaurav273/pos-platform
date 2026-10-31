@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   App,
   Button,
@@ -121,6 +121,12 @@ function InventoryVariantEditor({
   const canEditPricing = isAtLeastManager(user?.role);
   const managerOnlyNote = canEditPricing ? undefined : "Only a manager can change this.";
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // Back returns to the list the user came from: Products when it says so, else Stock.
+  const back =
+    searchParams.get("from") === "products"
+      ? { href: "/products", label: "Products" }
+      : { href: "/products?tab=stock", label: "Stock" };
   const [form] = Form.useForm<VariantFormValues>();
   const [saving, setSaving] = useState(false);
   const [categoryOptions, setCategoryOptions] = useState<
@@ -284,9 +290,9 @@ function InventoryVariantEditor({
 
       <header className={styles.header}>
         <div className={styles.headerText}>
-          <Link href="/inventory" className={styles.backLink} scroll={false}>
+          <Link href={back.href} className={styles.backLink} scroll={false}>
             <ArrowLeft className="h-4 w-4" aria-hidden />
-            Inventory
+            {back.label}
           </Link>
           <h1 className={styles.title}>{productLabel}</h1>
           <p className={styles.subtitle}>
@@ -527,7 +533,7 @@ function InventoryVariantEditor({
 
       {/* Save stays in reach on long screens */}
       <div className={styles.saveBar}>
-        <Button onClick={() => router.push("/inventory")}>Back</Button>
+        <Button onClick={() => router.push(back.href)}>Back</Button>
         <Button type="primary" htmlType="submit" loading={saving}>
           Save changes
         </Button>
@@ -554,7 +560,7 @@ export default function InventoryVariantDetailPage() {
       if (!res.ok) {
         if (res.status === 404) {
           message.error("Variant not found");
-          router.push("/inventory");
+          router.push("/products?tab=stock");
           return;
         }
         throw new Error(res.statusText);

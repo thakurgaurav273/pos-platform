@@ -10,6 +10,7 @@ import RevenueExplorer from "@/components/DashboardHome/RevenueExplorer";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { Metric, MetricStrip } from "@/components/MetricStrip/MetricStrip";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
+import { PaymentMixList } from "@/components/PaymentMixList/PaymentMixList";
 import { SectionCard, SectionLink } from "@/components/SectionCard/SectionCard";
 import { useAuth, type RolePermissions } from "@/contexts/AuthContext";
 import { useShop } from "@/contexts/ShopContext";
@@ -49,9 +50,11 @@ type DashboardPayload = {
   lowStockVariants: LowStockVariant[];
 };
 
+/** The Stock tab of Products, filtered to items at or below their alert level. */
+const LOW_STOCK_HREF = "/products?tab=stock&filter=low-stock";
+
 const countFormat = new Intl.NumberFormat("en-IN");
 const qtyFormat = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 3 });
-const shareFormat = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 });
 const istDay = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" });
 const istTime = new Intl.DateTimeFormat("en-IN", {
   timeZone: "Asia/Kolkata",
@@ -144,37 +147,6 @@ function RecentBills({ orders, canOpen }: { orders: RecentOrder[]; canOpen: bool
                 <div className={styles.rowMeta}>{paymentLabel(o.paymentMethod)}</div>
               </div>
             </RowLink>
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
-
-function PaymentsToday({ rows }: { rows: DashboardPayload["paymentToday"] }) {
-  if (rows.length === 0) {
-    return <p className={styles.notice}>No sales yet today.</p>;
-  }
-  const sorted = [...rows].sort((a, b) => b.revenue - a.revenue);
-  const total = sorted.reduce((sum, r) => sum + r.revenue, 0);
-  return (
-    <ul className={styles.list}>
-      {sorted.map((r) => {
-        const share = total > 0 ? (r.revenue / total) * 100 : 0;
-        return (
-          <li key={r.paymentMethod} className={styles.payRow}>
-            <div className={styles.payTop}>
-              <span className={styles.payLabel}>{paymentLabel(r.paymentMethod)}</span>
-              <span className={styles.amount}>{inr(r.revenue)}</span>
-            </div>
-            <div className={styles.payBar}>
-              <span className={styles.track} aria-hidden>
-                <span className={styles.fill} style={{ width: `${share}%` }} />
-              </span>
-              <span className={styles.payMeta}>
-                {shareFormat.format(share)}% · {bills(r.orderCount)}
-              </span>
-            </div>
           </li>
         );
       })}
@@ -359,7 +331,7 @@ export default function DashboardHome() {
                   {lowStock > 0 && allowed("canAccessInventory") ? (
                     <>
                       {" · "}
-                      <Link href="/inventory?filter=low-stock" className={styles.inlineLink}>
+                      <Link href={LOW_STOCK_HREF} className={styles.inlineLink}>
                         View
                       </Link>
                     </>
@@ -395,7 +367,11 @@ export default function DashboardHome() {
 
         <div className={styles.side}>
           <SectionCard title="Today's payments">
-            {data ? <PaymentsToday rows={data.paymentToday} /> : <SkeletonRows count={2} />}
+            {data ? (
+              <PaymentMixList rows={data.paymentToday} emptyText="No sales yet today." />
+            ) : (
+              <SkeletonRows count={2} />
+            )}
           </SectionCard>
 
           <SectionCard
@@ -407,7 +383,7 @@ export default function DashboardHome() {
             }
             action={
               lowStock > 0 && allowed("canAccessInventory") ? (
-                <SectionLink href="/inventory?filter=low-stock">View all</SectionLink>
+                <SectionLink href={LOW_STOCK_HREF}>View all</SectionLink>
               ) : null
             }
           >

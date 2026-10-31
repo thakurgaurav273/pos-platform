@@ -17,7 +17,7 @@ import {
   type BarcodePrintItem,
 } from "@/components/BarcodePrintModal/BarcodePrintModal";
 import { RefillRequestModal } from "@/components/RefillRequestModal/RefillRequestModal";
-import { VariantThumb } from "@/components/VariantThumb/VariantThumb";
+import { STOCK_STATE_LABEL, stockStateOf } from "@/lib/stockState";
 import {
   apiFetch,
   apiFetchLong,
@@ -56,11 +56,7 @@ type InventoryRow = {
   imageUrl?: string | null;
 };
 
-const inr = new Intl.NumberFormat("en-IN", {
-  style: "currency",
-  currency: "INR",
-  maximumFractionDigits: 0,
-});
+const qtyFormat = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 3 });
 
 const PAGE_SIZE = 40;
 const PAGE_SIZE_OPTIONS = [10, 25, 40, 50];
@@ -100,10 +96,13 @@ export default function InventoryTable({
   const changeStockFilter = useCallback(
     (next: StockFilter) => {
       setStockFilter(next);
-      // Keep the URL shareable / back-button friendly without a full navigation.
-      router.replace(next === "low" ? `${pathname}?filter=low-stock` : pathname, {
-        scroll: false,
-      });
+      // Keep the URL shareable / back-button friendly without a full navigation. Other
+      // params stay, so the Products page keeps ?tab=stock.
+      const params = new URLSearchParams(window.location.search);
+      if (next === "low") params.set("filter", "low-stock");
+      else params.delete("filter");
+      const qs = params.toString();
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     },
     [router, pathname],
   );
@@ -197,115 +196,77 @@ export default function InventoryTable({
         },
       },
       {
-        key: "imageUrl",
-        label: "Image",
-        field: "imageUrl",
-        width: 60,
-        align: "center",
-        render: (val, row) => {
+        key: "item",
+        label: "Item",
+        minWidth: 220,
+        render: (_, row) => {
           const r = row as InventoryRow;
-          const label = [r.productName, r.variantName].filter(Boolean).join(" · ") || "Product";
-          return <VariantThumb imageUrl={val as string | null} label={label} />;
-        },
-      },
-      {
-        key: "productName",
-        label: "Product",
-        field: "productName",
-        minWidth: 180,
-      },
-      {
-        key: "variantName",
-        label: "Variant",
-        field: "variantName",
-        minWidth: 110,
-      },
-      {
-        key: "category",
-        label: "Category",
-        field: "category",
-        minWidth: 120,
-        render: (val) => (
-          <span className="inventory-category-pill">
-            {String(val ?? "").trim() || "-"}
-          </span>
-        ),
-      },
-      {
-        key: "sku",
-        label: "SKU",
-        field: "sku",
-        minWidth: 92,
-        render: (val) => {
-          const raw = String(val ?? "").trim();
+          const detail = [r.variantName, r.category?.replace(/_/g, " ")].filter(Boolean).join(" · ");
           return (
-            <span className={`inventory-sku-cell${raw ? "" : " inventory-sku-empty"}`}>
-              {raw || "-"}
-            </span>
+            <div className={styles.item}>
+              <div className={styles.itemName} title={r.productName}>
+                {r.productName}
+              </div>
+              {detail ? <div className={styles.cellMeta}>{detail}</div> : null}
+            </div>
           );
         },
       },
       {
-        key: "barcode",
+        key: "codes",
         label: "Barcode",
-        field: "barcode",
-        minWidth: 160,
-        render: (val) => {
-          const v = String(val ?? "").trim();
+        minWidth: 150,
+        render: (_, row) => {
+          const r = row as InventoryRow;
+          const barcode = String(r.barcode ?? "").trim();
+          const sku = String(r.sku ?? "").trim();
           return (
-            <span
-              className={`inventory-barcode${v ? "" : " inventory-barcode-empty"}`}
-              title={v || undefined}
-            >
-              {v || "-"}
-            </span>
+            <div>
+              <div className={styles.barcode} title={barcode || undefined}>
+                {barcode || "–"}
+              </div>
+              {sku ? <div className={styles.cellMeta}>SKU {sku}</div> : null}
+            </div>
           );
         },
       },
       {
         key: "quantity",
-        label: "Qty",
-        field: "quantity",
-        width: 90,
+        label: "In stock",
+        width: 130,
         align: "right",
         render: (_, row) => {
           const r = row as InventoryRow;
-          const q = Number(r.quantity) || 0;
-          const low = r.minStock != null && r.minStock > 0 && q <= r.minStock;
+          const state = stockStateOf(r.quantity, r.minStock);
           return (
-            <span
-              className={`inventory-qty${low ? " inventory-qty-low" : ""}`}
-              title={low ? `At or below minimum (${r.minStock})` : undefined}
-            >
-              {q}
-            </span>
+            <div>
+              <div className={styles.qty}>
+                {qtyFormat.format(Number(r.quantity) || 0)} {r.unit ?? "PC"}
+              </div>
+              <div className={`${styles.cellMeta} ${styles[`state_${state}`]}`}>
+                {STOCK_STATE_LABEL[state]}
+              </div>
+            </div>
           );
         },
       },
       {
         key: "minStock",
-        label: "Min stock",
-        field: "minStock",
-        width: 92,
+        label: "Alert at",
+        width: 100,
         align: "right",
-        render: (val) => {
-          if (val == null) return <span className="inventory-min-stock inventory-min-stock-empty">-</span>;
-          return <span className="inventory-min-stock">{String(val)}</span>;
+        render: (_, row) => {
+          const r = row as InventoryRow;
+          return r.minStock == null ? (
+            <span className={styles.cellMeta} title="No low-stock alert set">
+              –
+            </span>
+          ) : (
+            <span className={styles.alertAt}>
+              {qtyFormat.format(Number(r.minStock))} {r.unit ?? "PC"}
+            </span>
+          );
         },
-      },
-      {
-        key: "unit",
-        label: "Unit",
-        field: "unit",
-        width: 72,
-      },
-      {
-        key: "price",
-        label: "Price",
-        field: "price",
-        width: 104,
-        align: "right",
-        render: (val) => inr.format(Number(val) || 0),
       },
       {
         key: "_edit",
@@ -558,7 +519,8 @@ export default function InventoryTable({
       {/* Row 1: title + everyday actions; rare/destructive shop actions live under "More". */}
       <PageHeader
         className="mb-4"
-        title="Inventory"
+        title="Stock"
+        description="One row per variant: quantities, low-stock alerts, barcodes and refills."
         actions={
         <div className="flex flex-wrap items-center gap-2">
           <Button

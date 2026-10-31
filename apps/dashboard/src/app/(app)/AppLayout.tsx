@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowLeftRight,
-  Boxes,
   ChevronDown,
   ChevronRight,
   ClipboardList,
@@ -50,6 +49,8 @@ function formatRole(role?: string): string {
 }
 
 function sidebarSelectedKey(pathname: string): string {
+  // Variant pages belong to Products (the stock list is its Stock tab).
+  if (pathname === '/inventory' || pathname.startsWith('/inventory/')) return '/products';
   const hit = SIDEBAR_ROUTE_PREFIXES.find(
     (base) => pathname === base || pathname.startsWith(`${base}/`),
   );
@@ -64,7 +65,6 @@ const navGroup: Record<string, number> = {
   '/orders': 1,
   '/customers': 1,
   '/products': 2,
-  '/inventory': 2,
   '/stock-transfers': 2,
   '/categories': 2,
   '/users': 3,
@@ -79,7 +79,6 @@ const navIcons: Record<string, LucideIcon> = {
   '/orders': ClipboardList,
   '/customers': Contact,
   '/products': Package,
-  '/inventory': Boxes,
   '/stock-transfers': ArrowLeftRight,
   '/categories': Tags,
   '/users': Users,
@@ -95,7 +94,6 @@ const pageTitles: Record<string, string> = {
   '/orders': 'Orders',
   '/customers': 'Customers',
   '/products': 'Products',
-  '/inventory': 'Inventory',
   '/stock-transfers': 'Stock Transfers',
   '/categories': 'Categories',
   '/users': 'Users',
@@ -153,7 +151,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   const pageTitle =
     pageTitles[pathname] ??
     (pathname.startsWith('/inventory/')
-      ? 'Inventory'
+      ? 'Products'
       : pathname.startsWith('/categories/')
         ? 'Categories'
         : pathname.startsWith('/orders/')
@@ -166,7 +164,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   const showShopSwitcher = user?.role === 'SUPER_ADMIN' && shops.length > 0;
 
-  const isInventoryListPage = pathname === "/inventory";
+  // The Products and Stock lists scroll inside their own panel, so the page itself doesn't.
+  const isInventoryListPage = pathname === "/products";
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

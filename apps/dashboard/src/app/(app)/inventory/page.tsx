@@ -1,16 +1,13 @@
-import InventoryTable from "@/components/InventoryTable/InventoryTable";
+import { redirect } from "next/navigation";
 
-import styles from "./InventoryPage.module.css";
-
+/** The inventory list is now the Stock tab of Products; old links and bookmarks land there. */
 export default async function InventoryPage({
   searchParams,
 }: {
   searchParams: Promise<{ filter?: string | string[] }>;
 }) {
   const { filter } = await searchParams;
-  return (
-    <div className={styles.page}>
-      <InventoryTable initialLowStock={filter === "low-stock"} />
-    </div>
+  redirect(
+    filter === "low-stock" ? "/products?tab=stock&filter=low-stock" : "/products?tab=stock",
   );
 }
