@@ -1,11 +1,29 @@
+/* Fills whatever height the page gives it; rows scroll inside the table. */
 .wrap {
+  flex: 1 1 auto;
   min-width: 0;
-  height: min(52vh, 520px);
-  min-height: clamp(220px, 32vh, 360px);
-  max-height: min(52vh, 520px);
+  min-height: 320px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 12px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* .toolbar prefix outranks antd's width:100% on the input wrapper. */
+.toolbar .search {
+  width: 320px;
+  max-width: 100%;
+}
+
+@media (max-width: 639px) {
+  .toolbar .search {
+    width: 100%;
+  }
 }
 
 .tableSlot {
@@ -13,6 +31,11 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
+}
+
+.table {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .wrap :global(.category-products-num) {

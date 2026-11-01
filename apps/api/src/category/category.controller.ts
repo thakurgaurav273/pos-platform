@@ -43,17 +43,20 @@ export class CategoryController {
     @Param('id') id: string,
     @Query('page') pageStr?: string,
     @Query('size') sizeStr?: string,
+    @Query('q') q?: string,
   ) {
     const page = Math.max(1, parseInt(pageStr ?? '1', 10) || 1);
     const size = Math.min(
       100,
       Math.max(1, parseInt(sizeStr ?? '20', 10) || 20),
     );
+    const search = typeof q === 'string' ? q.trim().slice(0, 100) : '';
     return this.categoryService.findProductsPage(
       id,
       req.effectiveShopCode!,
       page,
       size,
+      search,
     );
   }
 

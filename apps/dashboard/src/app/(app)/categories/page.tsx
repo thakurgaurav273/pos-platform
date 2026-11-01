@@ -129,7 +129,7 @@ export default function CategoriesPage() {
         }
         actions={
           (categories && categories.length > 0) || isAtLeastManager(user?.role) ? (
-            <>
+            <div className={styles.toolbar}>
               {categories && categories.length > 0 ? (
                 <Input
                   allowClear
@@ -150,7 +150,7 @@ export default function CategoriesPage() {
                   New category
                 </Button>
               )}
-            </>
+            </div>
           ) : null
         }
       />

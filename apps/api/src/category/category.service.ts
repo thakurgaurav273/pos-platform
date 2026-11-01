@@ -92,10 +92,17 @@ export class CategoryService {
     shopCode: string,
     page: number,
     size: number,
+    search = '',
   ) {
     await this.ensureCategoryExists(categoryId);
 
-    const where = { categoryId, shopCode };
+    const where: Prisma.ProductWhereInput = {
+      categoryId,
+      shopCode,
+      ...(search
+        ? { name: { contains: search, mode: 'insensitive' } }
+        : {}),
+    };
 
     const total = await this.prisma.product.count({ where });
     const lastPage = Math.max(1, Math.ceil(total / size));

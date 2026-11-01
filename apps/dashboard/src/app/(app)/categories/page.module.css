@@ -6,15 +6,34 @@
 }
 
 /* ── Header (layout from the shared PageHeader) ── */
-.search {
-  width: 240px;
+/* Search and button stay on one row; antd sets width:100% on the input wrapper,
+   so the width rule is scoped under .toolbar to outrank it. */
+.toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-2);
   max-width: 100%;
 }
 
+.toolbar .search {
+  width: 240px;
+  min-width: 0;
+  flex: 0 1 240px;
+}
+
+.toolbar :global(.ant-btn) {
+  flex-shrink: 0;
+}
+
 @media (max-width: 639px) {
-  .search {
+  .toolbar {
     width: 100%;
-    flex: 1;
+  }
+
+  .toolbar .search {
+    width: auto;
+    flex: 1 1 auto;
   }
 }
 

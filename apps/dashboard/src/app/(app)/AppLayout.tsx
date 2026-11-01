@@ -165,7 +165,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   const showShopSwitcher = user?.role === 'SUPER_ADMIN' && shops.length > 0;
 
   // The Products and Stock lists scroll inside their own panel, so the page itself doesn't.
-  const isInventoryListPage = pathname === "/products";
+  const isInventoryListPage =
+    pathname === "/products" || /^\/categories\/[^/]+$/.test(pathname);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

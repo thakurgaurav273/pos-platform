@@ -1,8 +1,10 @@
 "use client";
 
-import { memo, useMemo } from "react";
-import { LayoutGrid } from "lucide-react";
+import { memo, useMemo, useState } from "react";
+import { Input } from "antd";
+import { LayoutGrid, Search } from "lucide-react";
 import { DataTable, type AppTableColumn } from "@/components/DataTable/DataTable";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { dedupeInFlight, getApiBaseUrl, getAuthHeaders } from "@/lib/api";
 import styles from "./CategoryProductsTable.module.css";
 
@@ -49,7 +51,9 @@ function CategoryProductsTableInner({
   refreshKey,
   onOpenVariant,
 }: CategoryProductsTableProps) {
-  const filterKey = `${categoryId}|${refreshKey}`;
+  const [query, setQuery] = useState("");
+  const search = useDebouncedValue(query.trim(), 400);
+  const filterKey = `${categoryId}|${search}|${refreshKey}`;
 
   const columns: AppTableColumn[] = useMemo(
     () => [
@@ -120,7 +124,8 @@ function CategoryProductsTableInner({
         );
         u.searchParams.set("page", String(page));
         u.searchParams.set("size", String(pageSize));
-        const dedupeKey = `GET:/category/${categoryId}/products:p${page}:s${pageSize}`;
+        if (search) u.searchParams.set("q", search);
+        const dedupeKey = `GET:/category/${categoryId}/products:p${page}:s${pageSize}:q${search}`;
         return dedupeInFlight(dedupeKey, async () => {
           const r = await fetch(u.toString(), {
             headers: { ...getAuthHeaders(), Accept: "application/json" },
@@ -133,19 +138,34 @@ function CategoryProductsTableInner({
           };
         });
       },
-    [baseUrl, categoryId],
+    [baseUrl, categoryId, search],
   );
 
   return (
     <div className={styles.wrap}>
+      <div className={styles.toolbar}>
+        <Input
+          allowClear
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search products in this category"
+          prefix={<Search size={16} className="text-[var(--text-muted)]" aria-hidden />}
+          className={styles.search}
+          aria-label="Search products in this category"
+        />
+      </div>
       <div className={styles.tableSlot}>
         <DataTable
           columns={columns}
           fetchFn={fetchFn}
           filterKey={filterKey}
           pageSize={PAGE_SIZE}
-          maxBodyHeight={400}
-          emptyTitle="No products here"
+          maxBodyHeight="none"
+          className={styles.table}
+          emptyTitle={search ? "No products match" : "No products here"}
+          emptyDescription={
+            search ? `Nothing in this category matches “${search}”.` : undefined
+          }
           emptyIcon={<LayoutGrid size={28} strokeWidth={1.35} aria-hidden />}
         />
       </div>

@@ -3,7 +3,7 @@
 import {
   App,
   Button,
-  Collapse,
+  Drawer,
   Form,
   Input,
   InputNumber,
@@ -13,12 +13,13 @@ import {
   Switch,
 } from "antd";
 import Link from "next/link";
-import { Printer } from "lucide-react";
+import { ArrowLeft, Pencil, Plus, Printer, Trash2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 import { CategoryProductsTable } from "@/components/CategoryProductsTable/CategoryProductsTable";
 import { ContentSkeleton } from "@/components/ContentSkeleton/ContentSkeleton";
+import { PageHeader } from "@/components/PageHeader/PageHeader";
 import useFetch from "@/hooks/useFetch";
 import { apiFetch, getApiBaseUrl, getAuthHeaders } from "@/lib/api";
 import { openPrintableBarcodes } from "@/lib/printBarcodes";
@@ -69,6 +70,7 @@ export default function CategoryDetailPage() {
   );
 
   const [editOpen, setEditOpen] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
   const [editSubmitting, setEditSubmitting] = useState(false);
   const [addSubmitting, setAddSubmitting] = useState(false);
   const [deleteSubmitting, setDeleteSubmitting] = useState(false);
@@ -213,6 +215,7 @@ export default function CategoryDetailPage() {
       message.success("Product added");
       addForm.resetFields();
       addForm.setFieldValue("categoryId", categoryId);
+      setAddOpen(false);
       refresh();
     } finally {
       setAddSubmitting(false);
@@ -220,12 +223,6 @@ export default function CategoryDetailPage() {
   };
 
   const cat = isCategoryDetail(data) ? data : null;
-
-  useEffect(() => {
-    if (categoryId && cat) {
-      addForm.setFieldValue("categoryId", categoryId);
-    }
-  }, [categoryId, cat, addForm]);
 
   const onPrintCategoryBarcodes = useCallback(async () => {
     if (!shopCode || !cat) return;
@@ -297,184 +294,222 @@ export default function CategoryDetailPage() {
     }
   }, [shopCode, cat, message]);
 
+  const stockLabel = cat
+    ? `${cat.totalStock.toLocaleString("en-IN")} units in stock at this shop`
+    : null;
+
   return (
     <div className={styles.page}>
-      <Link href="/categories" className={styles.back} scroll={false}>
-        ← Back to categories
-      </Link>
-
       {!shopCode || !categoryId ? (
-        <p className="mt-4 text-[var(--text-secondary)]">
+        <p className={styles.notice}>
           Select a shop in the header and open a category from the list.
         </p>
       ) : loading ? (
-        <ContentSkeleton variant="detail" rowCount={8} className="mt-4" />
+        <ContentSkeleton variant="detail" rowCount={8} />
       ) : error ? (
-        <div className="mt-4 rounded-xl border border-[var(--pearl-bush)] bg-[var(--parchment)] p-8 text-[var(--text-secondary)]">
-          {String(error)}
-        </div>
+        <p className={styles.notice}>{String(error)}</p>
       ) : !cat ? (
-        <div className="mt-4 rounded-xl border border-[var(--pearl-bush)] bg-[var(--parchment)] p-8 text-[var(--text-secondary)]">
-          Category not found.
-        </div>
+        <p className={styles.notice}>Category not found.</p>
       ) : (
         <>
-      <header className={styles.hero}>
-        <div className={styles.heroText}>
-          <p className={styles.eyebrow}>Category</p>
-          <h1 className={styles.title}>{cat.name}</h1>
-          <p className={styles.meta}>
-            Total stock in this shop:{" "}
-            <span className={styles.metaStrong}>
-              {cat.totalStock.toLocaleString("en-IN")} units
-            </span>
-          </p>
-        </div>
-        <div className={styles.actions}>
-          <Button
-            type="default"
-            icon={<Printer className="h-4 w-4" aria-hidden />}
-            loading={categoryPrintLoading}
-            onClick={() => void onPrintCategoryBarcodes()}
-          >
-            Print barcodes
-          </Button>
-          {canEditCategory && (
-            <>
-              <Button onClick={openEdit}>Rename</Button>
-              <Popconfirm
-                title="Delete this category?"
-                description="Products will be uncategorized; they are not deleted."
-                onConfirm={onDelete}
-                okText="Delete"
-                cancelText="Cancel"
-                okButtonProps={{ loading: deleteSubmitting }}
-              >
-                <Button danger loading={deleteSubmitting}>
-                  Delete
+          <PageHeader
+            leading={
+              <Link href="/categories" className={styles.back} scroll={false}>
+                <ArrowLeft size={14} aria-hidden />
+                Categories
+              </Link>
+            }
+            title={cat.name}
+            description={stockLabel}
+            actions={
+              <>
+                <Button
+                  icon={<Printer size={16} aria-hidden />}
+                  loading={categoryPrintLoading}
+                  onClick={() => void onPrintCategoryBarcodes()}
+                >
+                  Print barcodes
                 </Button>
-              </Popconfirm>
-            </>
-          )}
-        </div>
-      </header>
+                {canEditCategory && (
+                  <>
+                    <Button
+                      icon={<Pencil size={15} aria-hidden />}
+                      onClick={openEdit}
+                      aria-label="Rename category"
+                      title="Rename category"
+                    />
+                    <Popconfirm
+                      title="Delete this category?"
+                      description="Products will be uncategorized; they are not deleted."
+                      onConfirm={onDelete}
+                      okText="Delete"
+                      cancelText="Cancel"
+                      okButtonProps={{ danger: true, loading: deleteSubmitting }}
+                    >
+                      <Button
+                        danger
+                        icon={<Trash2 size={15} aria-hidden />}
+                        loading={deleteSubmitting}
+                        aria-label="Delete category"
+                        title="Delete category"
+                      />
+                    </Popconfirm>
+                  </>
+                )}
+                {canAddProduct && (
+                  <Button
+                    type="primary"
+                    icon={<Plus size={16} strokeWidth={2.25} aria-hidden />}
+                    onClick={() => setAddOpen(true)}
+                  >
+                    Add product
+                  </Button>
+                )}
+              </>
+            }
+          />
+
+          <section aria-label="Products in category" className={styles.products}>
+            <CategoryProductsTable
+              categoryId={categoryId}
+              refreshKey={detailVersion}
+              onOpenVariant={onOpenVariant}
+            />
+          </section>
+        </>
+      )}
 
       {canAddProduct && (
-      <section className={styles.panel} aria-label="Add product">
-        <p className={styles.sectionLabel}>Add product</p>
-        <Form
-          form={addForm}
-          layout="vertical"
-          onFinish={onAddProduct}
-          className={styles.addForm}
-        >
-          <div className={styles.addFormGrid}>
-            <Form.Item
-              name="name"
-              label="Product name"
-              rules={[{ required: true, message: "Required" }]}
-            >
-              <Input placeholder="e.g. Kaju Katli" autoComplete="off" />
-            </Form.Item>
-            <Form.Item name="categoryId" label="Category">
-              <Select
-                placeholder="Uncategorized"
-                options={categoryOptions}
-                allowClear
-                showSearch
-                optionFilterProp="label"
-              />
-            </Form.Item>
-            <Form.Item name="variantName" label="Variant label">
-              <Input
-                placeholder="e.g. Regular, 500g (optional)"
-                autoComplete="off"
-              />
-            </Form.Item>
-            <Form.Item
-              name="price"
-              label="Price (INR)"
-              rules={[{ required: true, message: "Required" }]}
-            >
-              <InputNumber min={0} placeholder="0" style={{ width: "100%" }} />
-            </Form.Item>
-            <div className="flex items-end pb-6">
-              <Form.Item name="isListedOnWebsite" valuePropName="checked" label="Public on website" className="!mb-0">
-                <Switch size="small" />
-              </Form.Item>
+        <Drawer
+          title="Add product"
+          placement="right"
+          size="min(640px, 100vw)"
+          open={addOpen}
+          onClose={() => setAddOpen(false)}
+          forceRender
+          footer={
+            <div className={styles.drawerFooter}>
+              <Button onClick={() => setAddOpen(false)}>Cancel</Button>
+              <Button type="primary" loading={addSubmitting} onClick={() => addForm.submit()}>
+                Add product
+              </Button>
             </div>
-            <Form.Item
-              name="quantity"
-              label="Initial stock qty"
-              rules={[{ required: true, message: "Required" }]}
-            >
-              <InputNumber min={0} placeholder="0" style={{ width: "100%" }} />
-            </Form.Item>
-          </div>
+          }
+        >
+          <Form
+            form={addForm}
+            layout="vertical"
+            onFinish={onAddProduct}
+            initialValues={{ categoryId, isListedOnWebsite: false }}
+            requiredMark="optional"
+            className={styles.addForm}
+          >
+            <fieldset className={styles.group}>
+              <legend className={styles.groupTitle}>Basics</legend>
+              <Form.Item
+                name="name"
+                label="Product name"
+                rules={[{ required: true, message: "Enter a product name" }]}
+              >
+                <Input placeholder="e.g. Kaju Katli" autoComplete="off" />
+              </Form.Item>
+              <div className={styles.row}>
+                <Form.Item name="categoryId" label="Category">
+                  <Select
+                    placeholder="Uncategorized"
+                    options={categoryOptions}
+                    allowClear
+                    showSearch
+                    optionFilterProp="label"
+                  />
+                </Form.Item>
+                <Form.Item name="variantName" label="Variant label">
+                  <Input placeholder="e.g. Regular, 500g" autoComplete="off" />
+                </Form.Item>
+              </div>
+            </fieldset>
 
-          <Collapse
-            ghost
-            size="small"
-            items={[{
-              key: "more",
-              label: <span className={styles.moreLabel}>More details (optional)</span>,
-              children: (
-                <div className={styles.addFormGrid}>
-                  <Form.Item name="description" label="Website description" className={styles.span2}>
-                    <Input.TextArea rows={2} placeholder="Add a tempting description for the website..." />
-                  </Form.Item>
-                  <Form.Item name="costPrice" label="Cost price (INR)">
-                    <InputNumber min={0} placeholder="0" style={{ width: "100%" }} />
-                  </Form.Item>
-                  <Form.Item name="minStock" label="Min stock alert">
-                    <InputNumber min={0} placeholder="e.g. 10" style={{ width: "100%" }} />
-                  </Form.Item>
-                  <Form.Item name="unit" label="Unit">
-                    <Select placeholder="PC" options={[
+            <fieldset className={styles.group}>
+              <legend className={styles.groupTitle}>Price and stock</legend>
+              <div className={styles.row}>
+                <Form.Item
+                  name="price"
+                  label="Price (₹)"
+                  rules={[{ required: true, message: "Enter a price" }]}
+                >
+                  <InputNumber min={0} placeholder="0" style={{ width: "100%" }} />
+                </Form.Item>
+                <Form.Item name="costPrice" label="Cost price (₹)">
+                  <InputNumber min={0} placeholder="0" style={{ width: "100%" }} />
+                </Form.Item>
+              </div>
+              <div className={styles.row}>
+                <Form.Item
+                  name="quantity"
+                  label="Opening stock"
+                  rules={[{ required: true, message: "Enter opening stock" }]}
+                >
+                  <InputNumber min={0} placeholder="0" style={{ width: "100%" }} />
+                </Form.Item>
+                <Form.Item name="unit" label="Unit">
+                  <Select
+                    placeholder="PC"
+                    allowClear
+                    options={[
                       { value: "PC", label: "PC - Piece" },
                       { value: "KG", label: "KG - Kilogram" },
                       { value: "GM", label: "GM - Gram" },
                       { value: "LTR", label: "LTR - Litre" },
                       { value: "ML", label: "ML - Millilitre" },
-                    ]} allowClear />
-                  </Form.Item>
-                  <Form.Item name="sku" label="SKU">
-                    <Input placeholder="Custom SKU" autoComplete="off" />
-                  </Form.Item>
-                  <Form.Item name="hsnCode" label="HSN Code">
-                    <Input placeholder="e.g. 1704" autoComplete="off" />
-                  </Form.Item>
-                  <Form.Item name="barcode" label="Custom barcode">
-                    <Input placeholder="Auto-generated if blank" autoComplete="off" />
-                  </Form.Item>
-                </div>
-              ),
-            }]}
-          />
+                    ]}
+                  />
+                </Form.Item>
+              </div>
+              <Form.Item
+                name="minStock"
+                label="Low stock alert"
+                extra="Flag this product when stock drops to this level."
+              >
+                <InputNumber min={0} placeholder="e.g. 10" style={{ width: "100%" }} />
+              </Form.Item>
+            </fieldset>
 
-          <Form.Item className="!mb-0">
-            <Button type="primary" htmlType="submit" loading={addSubmitting}>
-              Add product
-            </Button>
-          </Form.Item>
-        </Form>
-      </section>
+            <fieldset className={styles.group}>
+              <legend className={styles.groupTitle}>Website</legend>
+              <div className={styles.switchRow}>
+                <div>
+                  <p className={styles.switchLabel}>Show on website</p>
+                  <p className={styles.switchHint}>Customers can see and order this product online.</p>
+                </div>
+                <Form.Item name="isListedOnWebsite" valuePropName="checked" noStyle>
+                  <Switch aria-label="Show on website" />
+                </Form.Item>
+              </div>
+              <Form.Item name="description" label="Description">
+                <Input.TextArea rows={3} placeholder="Add a tempting description for the website" />
+              </Form.Item>
+            </fieldset>
+
+            <fieldset className={styles.group}>
+              <legend className={styles.groupTitle}>Codes</legend>
+              <div className={styles.row}>
+                <Form.Item name="sku" label="SKU">
+                  <Input placeholder="Custom SKU" autoComplete="off" />
+                </Form.Item>
+                <Form.Item name="hsnCode" label="HSN code">
+                  <Input placeholder="e.g. 1704" autoComplete="off" />
+                </Form.Item>
+              </div>
+              <Form.Item name="barcode" label="Barcode" extra="Leave blank to auto-generate.">
+                <Input placeholder="Auto-generated" autoComplete="off" />
+              </Form.Item>
+            </fieldset>
+          </Form>
+        </Drawer>
       )}
 
-      <section
-        className={`${styles.panel} ${styles.panelProducts}`}
-        aria-label="Products in category"
-      >
-        <p className={styles.sectionLabel}>Products in this shop</p>
-        <CategoryProductsTable
-          categoryId={categoryId}
-          refreshKey={detailVersion}
-          onOpenVariant={onOpenVariant}
-        />
-      </section>
-
       <Modal
-        title={<span className={styles.modalTitle}>Rename category</span>}
+        title="Rename category"
         open={editOpen}
         onCancel={() => setEditOpen(false)}
         footer={null}
@@ -486,17 +521,16 @@ export default function CategoryDetailPage() {
             label="Name"
             rules={[{ required: true, message: "Enter a name" }]}
           >
-            <Input autoComplete="off" />
+            <Input autoComplete="off" autoFocus />
           </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={editSubmitting} block>
+          <div className={styles.modalFooter}>
+            <Button onClick={() => setEditOpen(false)}>Cancel</Button>
+            <Button type="primary" htmlType="submit" loading={editSubmitting}>
               Save
             </Button>
-          </Form.Item>
+          </div>
         </Form>
       </Modal>
-        </>
-      )}
     </div>
   );
 }

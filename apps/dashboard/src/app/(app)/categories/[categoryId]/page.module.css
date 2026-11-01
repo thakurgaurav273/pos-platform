@@ -1,125 +1,134 @@
+/* Fills the main area (AppLayout gives this route the fill-screen mode). */
 .page {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
+  min-height: 0;
 }
 
+.products {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ── Header ── */
 .back {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--ochre-600);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
   text-decoration: none;
-  text-decoration-color: var(--ochre-300);
   width: fit-content;
 }
 
 .back:visited,
 .back:active {
-  color: var(--ochre-600);
-}
-
-.back:hover {
-  color: var(--ochre-500);
-  text-decoration: underline;
-  text-decoration-color: var(--ochre-500);
-}
-
-.hero {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.heroText {
-  min-width: 0;
-}
-
-.eyebrow {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.005em;
-  color: var(--ochre-600);
-  margin: 0 0 0.35rem;
-}
-
-.title {
-  margin: 0;
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-  line-height: 1.2;
-}
-
-.meta {
-  margin: 0.5rem 0 0;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.metaStrong {
-  font-variant-numeric: tabular-nums;
-  font-weight: 600;
-  color: var(--bistre-700);
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.panel {
-  padding: 1.5rem 1.5rem 1.75rem;
-  border-radius: var(--ui-radius-xl);
-  border: 1px solid var(--pearl-bush);
-  background: var(--surface);
-  box-shadow: var(--shadow-md);
-}
-
-.panelProducts {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding-left: 0;
-  padding-right: 0;
-  padding-bottom: 0;
-}
-
-.sectionLabel {
-  margin: 0 0 1rem;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.005em;
   color: var(--text-muted);
 }
 
+.back:hover,
+.back:focus-visible {
+  color: var(--text-primary);
+}
+
+/* ── Messages ── */
+.notice {
+  margin: 0;
+  padding: 32px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--ui-radius-md);
+}
+
+/* ── Add product drawer ── */
 .addForm {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 20px;
 }
 
 .addForm :global(.ant-form-item) {
-  margin-bottom: 0;
+  margin-bottom: 14px;
 }
 
-.addFormGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.75rem 1rem;
+.group {
+  margin: 0;
+  padding: 0 0 6px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  min-width: 0;
 }
 
-.moreLabel {
-  font-size: 0.8125rem;
+.group:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* .addForm prefix outranks antd's form legend styles (16px text + underline). */
+.addForm .groupTitle {
+  width: auto;
+  padding: 0;
+  margin: 0 0 12px;
+  border: 0;
+  line-height: 1.4;
+  font-size: 12px;
   font-weight: 600;
-  color: var(--ochre-600);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
-.modalTitle {
-  font-size: 1.125rem;
-  font-weight: 700;
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 12px;
+}
+
+@media (max-width: 479px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.switchRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--ui-radius-md);
+  background: var(--surface-subtle);
+}
+
+.switchLabel {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--text-primary);
+}
+
+.switchHint {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.drawerFooter,
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.modalFooter {
+  margin-top: 8px;
 }
