@@ -695,7 +695,7 @@ function buildInvoiceHtml(
   
   <div class="eoe-powered">
     <span>E&amp;OE</span>
-    <span>Powered By Grovyn</span>
+    <span>Powered By RobinLabs</span>
   </div>
 
   </div>

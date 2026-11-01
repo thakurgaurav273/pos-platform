@@ -59,7 +59,7 @@ export const THERMAL_FALLBACK_FSSAI = '10522016000762';
 export const THERMAL_FALLBACK_BANK_AC = '72910200000019';
 export const THERMAL_FALLBACK_IFSC = 'BARB0DBTATI';
 
-export const THERMAL_POWERED_BY_LINE = 'Powered By Grovyn';
+export const THERMAL_POWERED_BY_LINE = 'Powered By RobinLabs';
 
 function utf8Encode(s: string): Uint8Array {
   if (typeof TextEncoder !== 'undefined') {
