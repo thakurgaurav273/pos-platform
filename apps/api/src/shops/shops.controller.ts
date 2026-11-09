@@ -23,6 +23,11 @@ import { CreateShopWithInventoryDto } from './dto/create-shop-with-inventory.dto
 import { UpdateShopDto } from './dto/update-shop.dto';
 import { UpdateShopBrandingDto } from './dto/shop-theme.dto';
 
+/** Organization of the signed-in user (JwtAuthGuard loads the user with its shop). */
+function orgIdOf(req: Request): string {
+  return (req.user as User & { shop: { orgId: string } }).shop.orgId;
+}
+
 @Controller('shops')
 @UseGuards(JwtAuthGuard, ShopScopeGuard)
 export class ShopsController {
@@ -37,7 +42,7 @@ export class ShopsController {
         'Shop management is only allowed from the Factory scope',
       );
     }
-    return this.shopsService.create(createShopDto);
+    return this.shopsService.create(createShopDto, orgIdOf(req));
   }
 
   @Post('bulk-create')
@@ -52,14 +57,14 @@ export class ShopsController {
         'Shop management is only allowed from the Factory scope',
       );
     }
-    return this.shopsService.createWithInitialInventory(dto);
+    return this.shopsService.createWithInitialInventory(dto, orgIdOf(req));
   }
 
   @Get()
   @Roles(UserRole.SUPER_ADMIN)
   @UseGuards(RolesGuard)
   async findAll(@Req() req: Request) {
-    return this.shopsService.findAll();
+    return this.shopsService.findAll(orgIdOf(req));
   }
 
   @Get('current')
@@ -77,7 +82,7 @@ export class ShopsController {
 
   @Get(':id')
   findOne(@Param('id') id: string, @Req() req: Request) {
-    return this.shopsService.findOne(id, req.user as User);
+    return this.shopsService.findOne(id, req.user as User, orgIdOf(req));
   }
 
   @Patch(':id')
@@ -86,13 +91,18 @@ export class ShopsController {
     @Body() updateShopDto: UpdateShopDto,
     @Req() req: Request,
   ) {
-    return this.shopsService.update(id, updateShopDto, req.user as User);
+    return this.shopsService.update(
+      id,
+      updateShopDto,
+      req.user as User,
+      orgIdOf(req),
+    );
   }
 
   @Delete(':id')
   @Roles(UserRole.SUPER_ADMIN)
   @UseGuards(RolesGuard)
   remove(@Param('id') id: string, @Req() req: Request) {
-    return this.shopsService.remove(id, req.effectiveShopCode!);
+    return this.shopsService.remove(id, req.effectiveShopCode!, orgIdOf(req));
   }
 }

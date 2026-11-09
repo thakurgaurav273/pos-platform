@@ -1,4 +1,4 @@
-/* Heritage login - split panel, olive & cream palette */
+/* Sign-in / sign-up split card */
 .page {
   --heritage-olive: var(--text-primary);
   --heritage-olive-muted: var(--text-secondary);
@@ -52,7 +52,7 @@
 
 .topTagline {
   margin: 0;
-  font-family: var(--font-login-display), "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
   font-size: clamp(0.95rem, 1.6vw, 1.125rem);
   font-weight: 400;
   font-style: italic;
@@ -107,7 +107,7 @@
 
 .visualQuote {
   margin: 0 0 0.65rem;
-  font-family: var(--font-login-display), "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
   font-size: clamp(1.05rem, 2.2vw, 1.35rem);
   font-weight: 400;
   font-style: italic;
@@ -142,7 +142,7 @@
 
 .formTitle {
   margin: 0;
-  font-family: var(--font-login-display), "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
   font-size: clamp(1.85rem, 4vw, 2.35rem);
   font-weight: 700;
   color: var(--heritage-olive);
@@ -256,7 +256,7 @@
 }
 
 .forgotLink {
-  font-family: var(--font-login-display), "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   font-style: normal;
@@ -274,48 +274,20 @@
 
 .loginButton {
   margin-top: 1.5rem;
-  height: 50px;
+  height: 48px;
   width: 100%;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.9375rem;
-  letter-spacing: 0.06em;
-  text-transform: none;
-  border-radius: var(--ui-radius-lg);
-  border: 1px solid var(--ochre-600) !important;
+  border-radius: 6px;
+  border: 1px solid var(--ochre-500) !important;
   color: var(--on-primary) !important;
-  background: linear-gradient(
-    180deg,
-    var(--ochre-400) 0%,
-    var(--ochre-500) 50%,
-    var(--ochre-600) 100%
-  ) !important;
-  box-shadow:
-    var(--shadow-sm),
-    0 8px 24px rgba(var(--ochre-rgb), 0.28);
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    filter 0.18s ease;
+  background: var(--ochre-500) !important;
+  box-shadow: none !important;
 }
 
 .loginButton:hover {
-  transform: translateY(-1px);
-  color: var(--on-primary) !important;
-  background: linear-gradient(
-    180deg,
-    var(--ochre-300) 0%,
-    var(--ochre-400) 38%,
-    var(--ochre-500) 72%,
-    var(--ochre-600) 100%
-  ) !important;
-  box-shadow:
-    var(--shadow-md),
-    0 12px 32px rgba(var(--ochre-rgb), 0.35);
-}
-
-.loginButton:active {
-  transform: translateY(0);
-  filter: brightness(0.98);
+  background: var(--ochre-600) !important;
+  border-color: var(--ochre-600) !important;
 }
 
 .joinRow {
@@ -327,7 +299,7 @@
 }
 
 .joinLink {
-  font-family: var(--font-login-display), "Cormorant Garamond", Georgia, serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
   font-weight: 700;
   color: var(--heritage-olive);
   text-decoration: none;
@@ -395,5 +367,103 @@
   .topBar {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+/* Fluxen type: tight, bold sans instead of the old serif display. */
+.formTitle { font-weight: 700; letter-spacing: -0.03em; }
+.visualQuote { font-style: normal; font-weight: 600; letter-spacing: -0.01em; font-size: clamp(1.1rem, 2vw, 1.4rem); }
+.topTagline { font-style: normal; font-size: 0.95rem; color: var(--text-secondary); text-decoration: none; }
+.topTagline:hover { color: var(--ochre-600); }
+.visualPane { min-height: 560px; }
+@media (max-width: 900px) { .visualPane { min-height: 220px; } }
+
+/* Ledger language: tight corners, hairline card, no soft shadow. */
+.splitCard {
+  border-radius: 6px;
+  box-shadow: none;
+  border: 1px solid var(--border-strong);
+}
+
+/* Plain panel: copy at the top, the real app cropped below it, flat buttons. */
+.visualCopy {
+  top: 0;
+  bottom: auto;
+}
+.visualQuote {
+  text-shadow: none;
+  max-width: 18em;
+}
+
+
+/* Use the whole screen: the card fills the height and is wide enough to breathe. */
+.page {
+  align-items: stretch;
+  min-height: 100dvh;
+}
+.layout {
+  max-width: 1200px;
+  flex: 1;
+}
+.splitCard {
+  flex: 1;
+  max-width: 1200px;
+}
+
+/* Full-screen split: indigo panel with the logo top-left, form on the right. */
+.page {
+  padding: 0;
+}
+.layout {
+  max-width: none;
+  width: 100%;
+  gap: 0;
+  position: relative;
+}
+.topBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  width: auto;
+  flex-wrap: nowrap;
+  padding: 1.5rem clamp(1.5rem, 3.5vw, 3rem);
+}
+.splitCard {
+  max-width: none;
+  width: 100%;
+  min-height: 100dvh;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+}
+.formPane {
+  padding-top: 5rem;
+}
+.footer {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0;
+  width: calc(100% * 6 / 11);
+}
+.logoMob {
+  display: none;
+}
+@media (max-width: 900px) {
+  .splitCard {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: none;
+  }
+  .logoDesk {
+    display: none;
+  }
+  .logoMob {
+    display: inline;
+  }
+  .footer {
+    position: static;
+    width: auto;
   }
 }

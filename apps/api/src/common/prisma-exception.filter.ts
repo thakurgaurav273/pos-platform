@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
-import { Prisma } from '@calcutta/database';
+import { Prisma } from '@fluxen/database';
 
 /**
  * Turns database constraint errors into 4xx responses instead of 500s, so races that

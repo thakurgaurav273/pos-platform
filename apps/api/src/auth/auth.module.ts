@@ -32,6 +32,8 @@ import { ShopScopeGuard } from './shop-scope.guard';
     PermissionsGuard,
   ],
   exports: [
+    AuthService,
+    RedisService,
     JwtModule,
     JwtAuthGuard,
     RolesGuard,

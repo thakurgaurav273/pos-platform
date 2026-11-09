@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { OrderStatus, Prisma } from '@calcutta/database';
+import { OrderStatus, Prisma } from '@fluxen/database';
 import { PrismaService } from '../prisma.service';
 import { dec, money, num } from '../common/money';
 import {

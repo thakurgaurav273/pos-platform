@@ -99,9 +99,7 @@ export class CategoryService {
     const where: Prisma.ProductWhereInput = {
       categoryId,
       shopCode,
-      ...(search
-        ? { name: { contains: search, mode: 'insensitive' } }
-        : {}),
+      ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
     };
 
     const total = await this.prisma.product.count({ where });
@@ -128,10 +126,14 @@ export class CategoryService {
   }
 
   /** The unique index is case-sensitive, so "sweets" would otherwise sit beside "Sweets". */
-  private async assertNameFree(name: string | undefined, exceptId?: string) {
+  private async assertNameFree(
+    name: string | undefined,
+    exceptId?: string,
+    db: Prisma.TransactionClient = this.prisma,
+  ) {
     const trimmed = name?.trim();
     if (!trimmed) return;
-    const clash = await this.prisma.category.findFirst({
+    const clash = await db.category.findFirst({
       where: {
         name: { equals: trimmed, mode: 'insensitive' },
         ...(exceptId ? { NOT: { id: exceptId } } : {}),
@@ -145,10 +147,14 @@ export class CategoryService {
     }
   }
 
-  async create(createCategoryDto: CreateCategoryDto) {
-    await this.assertNameFree(createCategoryDto.name);
+  /** Pass `db` to create inside the caller's transaction (the catalog import does). */
+  async create(
+    createCategoryDto: CreateCategoryDto,
+    db: Prisma.TransactionClient = this.prisma,
+  ) {
+    await this.assertNameFree(createCategoryDto.name, undefined, db);
     try {
-      return await this.prisma.category.create({ data: createCategoryDto });
+      return await db.category.create({ data: createCategoryDto });
     } catch (e) {
       if (
         e instanceof Prisma.PrismaClientKnownRequestError &&

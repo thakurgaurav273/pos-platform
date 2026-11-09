@@ -1,9 +1,9 @@
-# Calcutta Sweets - Developer Context Guide
+# Fluxen POS - Developer Context Guide
 
-This document provides comprehensive details about the Calcutta Sweets Inventory & Shop Management project, our architectural decisions, coding standards, preferences, and product capabilities. It serves as the ultimate context guide for writing optimal code in this repository.
+This document provides comprehensive details about the Fluxen POS Inventory & Shop Management project, our architectural decisions, coding standards, preferences, and product capabilities. It serves as the ultimate context guide for writing optimal code in this repository.
 
 ## 1. Project Overview
-Calcutta Sweets is a full-stack, multi-tenant(ish) inventory, point-of-sale (POS), and shop management system. It supports managing multiple sweet shops, processing POS orders, handling inventory/stock transfers, and visualizing sales data. 
+Fluxen POS is a full-stack, multi-tenant(ish) inventory, point-of-sale (POS), and shop management system. It supports managing multiple shops, processing POS orders, handling inventory/stock transfers, and visualizing sales data. 
 
 **Core Tech Stack:**
 - **Monorepo:** Turborepo + pnpm workspaces
@@ -81,7 +81,7 @@ We use `pnpm workspaces` and `Turborepo` to manage dependencies and build steps 
 
 ## 5. Development Workflow Context
 - **Run Everything:** `pnpm dev` from the root spins up the API and Dashboard concurrently using Turborepo.
-- **Database Commands:** Must be run via filter: `pnpm --filter @calcutta/database exec prisma [command]`.
+- **Database Commands:** Must be run via filter: `pnpm --filter @fluxen/database exec prisma [command]`.
 - **Ports:** API and Dashboard might both try to use port `3000` by default; usually, Turborepo or Next.js handles port incrementing, but prefer setting explicit ports in `.env`.
 
 When writing code for this project, always consider the multi-shop nature (always filter or associate by `shopCode`), respect the role-based access control, and maintain the clean separation between the frontend dashboard and the backend API.

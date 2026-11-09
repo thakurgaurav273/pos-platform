@@ -11,8 +11,26 @@ datasource db {
   provider = "postgresql"
 }
 
+/// A business (tenant). Owns one factory and any number of retail shops.
+/// Every cross-shop query (shop list, factory lookup, X-Shop switching) is scoped to this.
+model Organization {
+  id   String @id @default(uuid())
+  name String
+
+  /// Set when the owner finishes the first-run onboarding wizard.
+  onboardingCompletedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  shops Shop[]
+}
+
 model Shop {
   id      String  @id @default(uuid())
+
+  orgId        String
+  organization Organization @relation(fields: [orgId], references: [id])
   name    String
   address String?
   logoUrl String?
@@ -64,6 +82,8 @@ model Shop {
   transfersIn  StockTransferRequest[] @relation("TransfersIn")
   variants       ProductVariant[]
   stockMovements StockMovement[]
+
+  @@index([orgId])
 }
 
 model User {

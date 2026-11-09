@@ -1,4 +1,4 @@
-import type { Prisma } from '@calcutta/database';
+import type { Prisma } from '@fluxen/database';
 
 /**
  * Digits of a search term when it looks like (part of) a phone number, e.g.

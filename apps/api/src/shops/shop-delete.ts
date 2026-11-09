@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@calcutta/database';
+import type { PrismaClient } from '@fluxen/database';
 
 export type DeleteShopResult = {
   shopCode: string;

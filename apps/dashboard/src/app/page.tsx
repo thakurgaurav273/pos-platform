@@ -1,47 +1,23 @@
-"use client";
+import type { Metadata } from "next";
+import { AuthRedirect } from "@/components/Landing/AuthRedirect";
+import { Landing } from "@/components/Landing/Landing";
 
-import { useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import { PageBootstrapLoader } from "@/components/PageBootstrapLoader/PageBootstrapLoader";
-import { useAuth } from "@/contexts/AuthContext";
-import { useShop } from "@/contexts/ShopContext";
-import {
-  getFirstAllowedNavHref,
-  isDashboardNavAllowed,
-} from "@/lib/appNavAccess";
+export const metadata: Metadata = {
+  title: "Fluxen POS | Billing, inventory and multi-shop management",
+  description:
+    "Run your factory and every shop from one place: GST-ready billing, live inventory, stock transfers, staff roles and reports. Built for Indian food and retail businesses.",
+  openGraph: {
+    title: "Fluxen POS: run every counter from one place",
+    description: "POS, inventory, stock transfers and reports for businesses with one factory and many counters.",
+    type: "website",
+  },
+};
 
 export default function HomePage() {
-  const router = useRouter();
-  const { isAuthenticated, isLoading, user, permissions } = useAuth();
-  const { effectiveShopCode, shops } = useShop();
-
-  const isFactory = useMemo(() => {
-    const s = shops.find((x) => x.shopCode === effectiveShopCode);
-    return !!s?.isFactory;
-  }, [shops, effectiveShopCode]);
-
-  const navCtx = useMemo(
-    () => ({ user, permissions, isFactory }),
-    [user, permissions, isFactory],
+  return (
+    <>
+      <Landing />
+      <AuthRedirect />
+    </>
   );
-
-  useEffect(() => {
-    if (isLoading) return;
-    if (!isAuthenticated) {
-      router.replace("/login");
-      return;
-    }
-    if (!user || !permissions) {
-      router.replace("/dashboard");
-      return;
-    }
-    if (isDashboardNavAllowed(navCtx)) {
-      router.replace("/dashboard");
-      return;
-    }
-    const next = getFirstAllowedNavHref(navCtx);
-    router.replace(next ?? "/access-denied?reason=no-access");
-  }, [isAuthenticated, isLoading, user, permissions, navCtx, router]);
-
-  return <PageBootstrapLoader label="Loading" />;
 }

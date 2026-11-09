@@ -2,7 +2,7 @@ import { Injectable, HttpException, Logger } from '@nestjs/common';
 import * as PaytmChecksum from 'paytmchecksum';
 import axios from 'axios';
 import { PrismaService } from '../prisma.service';
-import { OrderSource, OrderStatus, PaymentMethod } from '@calcutta/database';
+import { OrderSource, OrderStatus, PaymentMethod } from '@fluxen/database';
 import { dec } from '../common/money';
 import { applyStockChange, LONG_TX } from '../common/stock';
 import { OrdersService } from '../orders/orders.service';

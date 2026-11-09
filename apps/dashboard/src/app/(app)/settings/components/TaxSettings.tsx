@@ -107,7 +107,6 @@ export function TaxSettings() {
                           min={0}
                           max={100}
                           step={0.1}
-                          size="large"
                           className={`w-full !bg-[var(--surface)] ${styles.inputNumber}`}
                         />
                     </Form.Item>
@@ -124,7 +123,6 @@ export function TaxSettings() {
                           min={0}
                           max={100}
                           step={0.1}
-                          size="large"
                           className={`w-full !bg-[var(--surface)] ${styles.inputNumber}`}
                         />
                     </Form.Item>
@@ -164,7 +162,6 @@ export function TaxSettings() {
                       type="primary"
                       htmlType="submit"
                       loading={loading}
-                      size="large"
                       className={styles.submit}
                     >
                       Save configuration

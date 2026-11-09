@@ -90,7 +90,6 @@ export function AccessDeniedContent() {
         <div className={styles.actions}>
           <Button
             type="primary"
-            size="large"
             className={styles.primaryBtn}
             icon={<Home className="size-4" aria-hidden />}
             onClick={() => router.push(homeHref)}

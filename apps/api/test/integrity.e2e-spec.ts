@@ -7,14 +7,14 @@ import { JwtService } from '@nestjs/jwt';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import request from 'supertest';
 import * as PaytmChecksum from 'paytmchecksum';
-import { Prisma, Unit, UserRole } from '@calcutta/database';
+import { Prisma, Unit, UserRole } from '@fluxen/database';
 import { AppModule } from '../src/app.module';
 import { configureApp } from '../src/app.setup';
 import { PrismaService } from '../src/prisma.service';
 import { RedisService } from '../src/redis.provider';
 
 const FACTORY = 'FACTORY01';
-const SHOP_A = 'calcutta-main';
+const SHOP_A = 'fluxen-main';
 const SHOP_B = 'shop-b';
 
 describe('Data integrity (e2e)', () => {

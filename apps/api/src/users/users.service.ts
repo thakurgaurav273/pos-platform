@@ -77,14 +77,14 @@ export class UsersService {
     return { data: rows, last_page };
   }
 
-  async create(dto: CreateUserDto) {
+  async create(dto: CreateUserDto, orgId: string) {
     const email = dto.email.toLowerCase().trim();
     const existing = await this.prisma.user.findUnique({ where: { email } });
     if (existing) {
       throw new ConflictException('Email already registered');
     }
-    const shop = await this.prisma.shop.findUnique({
-      where: { shopCode: dto.shopCode },
+    const shop = await this.prisma.shop.findFirst({
+      where: { shopCode: dto.shopCode, orgId },
     });
     if (!shop) {
       throw new BadRequestException(`Shop ${dto.shopCode} not found`);
@@ -158,11 +158,12 @@ export class UsersService {
     id: string,
     scopeShopCode: string | null,
     actor: { id: string; role: UserRole },
+    orgId: string,
   ) {
     if (id === actor.id) {
       throw new BadRequestException('You cannot delete your own account');
     }
-    const target = await this.findOneForShop(id, scopeShopCode);
+    const target = await this.findOneForShop(id, scopeShopCode, orgId);
     this.assertActorCanRemoveUser(actor.role, target.role);
 
     // Users who rang up sales, moved stock or handled transfers are deactivated, not
@@ -231,8 +232,9 @@ export class UsersService {
     dto: UpdateUserDto,
     scopeShopCode: string | null,
     actor: { id: string; role: UserRole },
+    orgId: string,
   ) {
-    const target = await this.findOneForShop(id, scopeShopCode);
+    const target = await this.findOneForShop(id, scopeShopCode, orgId);
     this.assertActorCanUpdateUser(
       actor,
       { id: target.id, role: target.role, shopCodeOrNull: target.shopCode },
@@ -240,8 +242,8 @@ export class UsersService {
     );
 
     if (dto.shopCode) {
-      const shop = await this.prisma.shop.findUnique({
-        where: { shopCode: dto.shopCode },
+      const shop = await this.prisma.shop.findFirst({
+        where: { shopCode: dto.shopCode, orgId },
       });
       if (!shop) {
         throw new BadRequestException(`Shop ${dto.shopCode} not found`);
@@ -285,9 +287,9 @@ export class UsersService {
   }
 
   /** `shopCode` null = any shop (super admin, who can create users in other shops). */
-  async findOneForShop(id: string, shopCode: string | null) {
+  async findOneForShop(id: string, shopCode: string | null, orgId: string) {
     const user = await this.prisma.user.findFirst({
-      where: { id, ...(shopCode ? { shopCode } : {}) },
+      where: { id, ...(shopCode ? { shopCode } : {}), shop: { orgId } },
       select: {
         id: true,
         email: true,

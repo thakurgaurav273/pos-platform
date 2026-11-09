@@ -303,7 +303,7 @@ function EditUserFormShell({ user, onUserUpdated }: EditUserFormShellProps) {
                   <Row gutter={[16, 0]}>
                     <Col xs={24} md={12}>
                       <Form.Item name="name" label="Name">
-                        <Input size="large" placeholder="Display name" />
+                        <Input placeholder="Display name" />
                       </Form.Item>
                     </Col>
                     <Col xs={24} md={12}>
@@ -324,7 +324,6 @@ function EditUserFormShell({ user, onUserUpdated }: EditUserFormShellProps) {
                         }
                       >
                         <Input.Password
-                          size="large"
                           autoComplete="new-password"
                           placeholder="Leave blank to keep current"
                         />
@@ -338,7 +337,7 @@ function EditUserFormShell({ user, onUserUpdated }: EditUserFormShellProps) {
                         label="Role"
                         rules={[{ required: true }]}
                       >
-                        <Select size="large" options={roleSelectOptions} />
+                        <Select options={roleSelectOptions} />
                       </Form.Item>
                     </Col>
                     <Col xs={24} md={12}>
@@ -348,7 +347,6 @@ function EditUserFormShell({ user, onUserUpdated }: EditUserFormShellProps) {
                         rules={[{ required: true }]}
                       >
                         <Select
-                          size="large"
                           options={shopOptions}
                           showSearch
                           optionFilterProp="label"

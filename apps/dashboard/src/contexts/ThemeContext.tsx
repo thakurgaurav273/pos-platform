@@ -36,7 +36,7 @@ type ThemeContextValue = {
   config: ShopThemeConfig;
   /** Theme saved on the active shop (or the default). */
   savedConfig: ShopThemeConfig;
-  /** Logo on screen: the shop's custom logo, or null for the built-in Calcutta Sweets logo. */
+  /** Logo on screen: the shop's custom logo, or null for the built-in Fluxen POS logo. */
   logoUrl: string | null;
   savedLogoUrl: string | null;
   /** Light or dark, after applying the device override and system preference. */

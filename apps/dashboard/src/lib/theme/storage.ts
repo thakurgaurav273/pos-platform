@@ -4,13 +4,13 @@ import { THEME_MODES, type ModePreference, type ShopThemeConfig } from "./types"
 
 /**
  * Device-local storage for the theme:
- * - `calcutta_color_mode`: the user's light/dark/system override on this device.
- * - `calcutta_theme_cache`: last applied theme per shop code, so the pre-paint script
+ * - `fluxen_color_mode`: the user's light/dark/system override on this device.
+ * - `fluxen_theme_cache`: last applied theme per shop code, so the pre-paint script
  *   can paint the right colours before React loads. Entries are keyed by shop code and
  *   the whole cache is cleared on logout, so one shop's branding never shows for another.
  */
-export const MODE_STORAGE_KEY = "calcutta_color_mode";
-export const THEME_CACHE_KEY = "calcutta_theme_cache";
+export const MODE_STORAGE_KEY = "fluxen_color_mode";
+export const THEME_CACHE_KEY = "fluxen_theme_cache";
 /** Cache slot used when no shop is active (login page, first load). */
 export const DEFAULT_CACHE_SLOT = "__default";
 
@@ -93,8 +93,8 @@ export function clearThemeCache(): void {
 export const THEME_PREPAINT_SCRIPT = `(function(){try{
 var d=document.documentElement,ls=window.localStorage;
 var cache=JSON.parse(ls.getItem(${JSON.stringify(THEME_CACHE_KEY)})||"{}")||{};
-var authed=!!ls.getItem("calcutta_auth");
-var shop=ls.getItem("calcutta_effective_shop");
+var authed=!!ls.getItem("fluxen_auth");
+var shop=ls.getItem("fluxen_effective_shop");
 var e=(authed&&shop&&cache[shop])||cache[${JSON.stringify(DEFAULT_CACHE_SLOT)}]||null;
 var pref=ls.getItem(${JSON.stringify(MODE_STORAGE_KEY)});
 var m=pref||(e&&e.config&&e.config.mode)||"light";

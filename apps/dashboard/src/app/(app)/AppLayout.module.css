@@ -37,16 +37,17 @@
   text-decoration: none;
 }
 
-/* Fixed-height frame so built-in and uploaded logos sit the same way */
+/* Fixed-height frame so built-in and uploaded logos sit the same way. The size is the
+   shop's logo setting (theme --logo-height / --logo-width); the logo keeps its shape. */
 .logoFrame {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 46px;
-  max-width: 200px;
+  height: var(--logo-height, 46px);
+  max-width: var(--logo-width, 200px);
 }
 .logoImage {
-  max-height: 46px;
+  max-height: var(--logo-height, 46px);
 }
 
 .logoLink:hover,
@@ -406,11 +407,12 @@
   flex: 1;
 }
 
+/* The mobile drawer header is smaller, so the logo setting is capped to fit it. */
 .drawerLogoFrame {
   display: flex;
   align-items: center;
-  height: 40px;
-  max-width: 150px;
+  height: min(var(--logo-height, 46px), 40px);
+  max-width: min(var(--logo-width, 200px), 150px);
 }
 
 .profileSection {

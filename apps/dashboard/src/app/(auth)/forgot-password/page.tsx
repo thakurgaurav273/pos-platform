@@ -1,5 +1,6 @@
 'use client';
 
+import { FluxenLogo } from '@/components/FluxenLogo/FluxenLogo';
 import { App, Button, Card, Form, Input } from 'antd';
 import {
     ArrowLeft,
@@ -218,9 +219,7 @@ export default function ForgotPasswordPage() {
     return (
         <div className="flex flex-col h-screen w-full">
             <div className="flex flex-col justify-center h-[80px]">
-                <h1 className="text-3xl font-bold text-[var(--bistre-500)] p-4 text-center">
-                    CALCUTTA SWEETS
-                </h1>
+                <h1 className="flex justify-center p-4"><FluxenLogo size={34} /></h1>
             </div>
 
             <div className="flex justify-center items-center h-full">

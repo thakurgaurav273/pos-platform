@@ -10,6 +10,7 @@ import { RedisService } from '../redis.provider';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { randomInt } from 'crypto';
 
 const SALT_ROUNDS = 10;
 
@@ -59,7 +60,11 @@ export class AuthService {
         'This account has been deactivated. Contact your shop admin.',
       );
     }
-    const { password, ...result } = user;
+    return this.issueSession(user);
+  }
+
+  /** Signs a session for an already-authenticated user (password stripped from the response). */
+  async issueSession<T extends { id: string; password: string }>(user: T) {
     const payload = { sub: user.id };
     const access_token = await this.jwtService.signAsync(payload, {
       expiresIn: '7d',
@@ -67,7 +72,17 @@ export class AuthService {
     const refresh_token = await this.jwtService.signAsync(payload, {
       expiresIn: '7d',
     });
-    return { user: result, access_token, refresh_token };
+    return { user: withoutPassword(user), access_token, refresh_token };
+  }
+
+  /** Stores a fresh one-time code at `key` (clearing its miss counter) and returns it. */
+  async issueOtp(key: string): Promise<string> {
+    const otp = randomInt(0, 10 ** OTP_LENGTH)
+      .toString()
+      .padStart(OTP_LENGTH, '0');
+    await this.redis.set(key, otp, 'EX', OTP_TTL_SECONDS);
+    await this.redis.del(`${key}:attempts`);
+    return otp;
   }
 
   async sendResetPasswordEmailOTP(
@@ -236,7 +251,7 @@ export class AuthService {
    * True when `otp` matches the code stored at `key`. Each miss is counted, and after
    * OTP_MAX_ATTEMPTS misses the code is deleted so the user has to request a new one.
    */
-  private async matchOtp(key: string, otp: string): Promise<boolean> {
+  async matchOtp(key: string, otp: string): Promise<boolean> {
     const storedOtp = await this.redis.get(key);
     if (storedOtp && storedOtp.trim() === String(otp ?? '').trim()) {
       await this.redis.del(`${key}:attempts`);

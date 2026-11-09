@@ -18,6 +18,8 @@ import { SettingsModule } from './settings/settings.module';
 import { PublicModule } from './public/public.module';
 import { PaymentModule } from './payment/payment.module';
 import { StockTransfersModule } from './stock-transfers/stock-transfers.module';
+import { OrganizationsModule } from './organizations/organizations.module';
+import { CatalogImportModule } from './catalog-import/catalog-import.module';
 import { validateEnv } from './common/env.validation';
 import { KeepWarmService } from './keep-warm.service';
 
@@ -44,6 +46,8 @@ import { KeepWarmService } from './keep-warm.service';
     PublicModule,
     PaymentModule,
     StockTransfersModule,
+    OrganizationsModule,
+    CatalogImportModule,
   ],
   controllers: [AppController],
   providers: [AppService, KeepWarmService],

@@ -18,7 +18,7 @@ import {
   RequirePermission,
 } from '../auth/permissions.decorator';
 import { ShopScopeGuard } from '../auth/shop-scope.guard';
-import { UserRole } from '@calcutta/database';
+import { UserRole } from '@fluxen/database';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { CategoryService } from './category.service';

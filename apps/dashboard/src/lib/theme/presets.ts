@@ -8,6 +8,8 @@ import {
   THEME_PRESET_IDS,
   type ShopThemeConfig,
   type ThemePresetId,
+  LOGO_HEIGHT,
+  LOGO_WIDTH,
 } from "./types";
 
 export type ThemePreset = {
@@ -17,20 +19,25 @@ export type ThemePreset = {
   config: ShopThemeConfig;
 };
 
-const base = { version: 1 as const, mode: "light" as const };
+const base = {
+  version: 1 as const,
+  mode: "light" as const,
+  logoHeight: LOGO_HEIGHT.default,
+  logoWidth: LOGO_WIDTH.default,
+};
 
-/** Curated, professional starting points. Classic is today's Calcutta Sweets look. */
+/** Curated, professional starting points. Fluxen is the default look. */
 export const THEME_PRESETS: ThemePreset[] = [
   {
     id: "CLASSIC",
-    name: "Classic",
-    description: "Warm copper from the Calcutta Sweets logo on clean neutrals.",
+    name: "Fluxen",
+    description: "Signature indigo and cyan on clean, cool neutrals.",
     config: {
       ...base,
       preset: "CLASSIC",
-      primaryColor: "#a84f1c",
-      secondaryColor: "#0f766e",
-      accentColor: "#ca8a04",
+      primaryColor: "#4f46e5",
+      secondaryColor: "#0891b2",
+      accentColor: "#8b5cf6",
       sidebarStyle: "light",
       headerStyle: "light",
       radius: "default",
@@ -40,13 +47,13 @@ export const THEME_PRESETS: ThemePreset[] = [
   {
     id: "MODERN",
     name: "Modern",
-    description: "Confident indigo with a dark navigation rail.",
+    description: "Confident blue with a dark navigation rail.",
     config: {
       ...base,
       preset: "MODERN",
-      primaryColor: "#4f46e5",
-      secondaryColor: "#0891b2",
-      accentColor: "#f59e0b",
+      primaryColor: "#2563eb",
+      secondaryColor: "#0d9488",
+      accentColor: "#ec4899",
       sidebarStyle: "dark",
       headerStyle: "light",
       radius: "rounded",
@@ -72,13 +79,13 @@ export const THEME_PRESETS: ThemePreset[] = [
   {
     id: "ELEGANT",
     name: "Elegant",
-    description: "Deep rosewood with gold details and serif headings.",
+    description: "Deep rosewood with plum details and serif headings.",
     config: {
       ...base,
       preset: "ELEGANT",
       primaryColor: "#8b2346",
-      secondaryColor: "#7c5e10",
-      accentColor: "#b08d57",
+      secondaryColor: "#5b21b6",
+      accentColor: "#0ea5e9",
       sidebarStyle: "light",
       headerStyle: "light",
       radius: "default",
@@ -88,13 +95,13 @@ export const THEME_PRESETS: ThemePreset[] = [
   {
     id: "PREMIUM",
     name: "Premium",
-    description: "Rich emerald brand rail with gold accents.",
+    description: "Rich emerald brand rail with cool blue accents.",
     config: {
       ...base,
       preset: "PREMIUM",
       primaryColor: "#047857",
       secondaryColor: "#1e3a8a",
-      accentColor: "#b7791f",
+      accentColor: "#0ea5e9",
       sidebarStyle: "brand",
       headerStyle: "light",
       radius: "rounded",
@@ -123,6 +130,12 @@ function oneOf<T extends readonly string[]>(
  * Turns whatever is stored on the shop (possibly NULL, partial or from an older
  * version) into a complete config. Unknown or invalid fields fall back to the default.
  */
+function logoSize(value: unknown, range: { min: number; max: number; default: number }) {
+  return typeof value === "number" && Number.isFinite(value)
+    ? Math.min(range.max, Math.max(range.min, Math.round(value)))
+    : range.default;
+}
+
 export function resolveThemeConfig(raw: unknown): ShopThemeConfig {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return DEFAULT_THEME;
   const o = raw as Record<string, unknown>;
@@ -140,6 +153,8 @@ export function resolveThemeConfig(raw: unknown): ShopThemeConfig {
     headerStyle: oneOf(HEADER_STYLES, o.headerStyle, d.headerStyle),
     radius: oneOf(RADIUS_STYLES, o.radius, d.radius),
     font: oneOf(FONT_STYLES, o.font, d.font),
+    logoHeight: logoSize(o.logoHeight, LOGO_HEIGHT),
+    logoWidth: logoSize(o.logoWidth, LOGO_WIDTH),
   };
 }
 
@@ -153,7 +168,11 @@ export function themeConfigEquals(a: ShopThemeConfig, b: ShopThemeConfig): boole
  */
 export function withPresetMatch(config: ShopThemeConfig): ShopThemeConfig {
   const match = THEME_PRESETS.find((p) =>
-    themeConfigEquals({ ...p.config, mode: config.mode }, { ...config, preset: p.id }),
+    themeConfigEquals(
+      // Presets set colours and chrome only; mode and logo size are the shop's own.
+      { ...p.config, mode: config.mode, logoHeight: config.logoHeight, logoWidth: config.logoWidth },
+      { ...config, preset: p.id },
+    ),
   );
   return { ...config, preset: match ? match.id : "CUSTOM" };
 }

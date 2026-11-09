@@ -18,10 +18,14 @@ export class StockTransfersService {
   /**
    * Find the factory shop. Throws if none exists.
    */
-  private async getFactoryShop() {
-    // One factory is assumed; oldest wins so the choice is deterministic.
+  private async getFactoryShop(shopCode: string) {
+    const requester = await this.prisma.shop.findUnique({
+      where: { shopCode },
+      select: { orgId: true },
+    });
+    // One factory per organization is assumed; oldest wins so the choice is deterministic.
     const factory = await this.prisma.shop.findFirst({
-      where: { isFactory: true },
+      where: { isFactory: true, orgId: requester?.orgId ?? '' },
       orderBy: { createdAt: 'asc' },
     });
     if (!factory) {
@@ -40,7 +44,7 @@ export class StockTransfersService {
       throw new BadRequestException('At least one item is required.');
     }
 
-    const factory = await this.getFactoryShop();
+    const factory = await this.getFactoryShop(shopCode);
 
     if (shopCode === factory.shopCode) {
       throw new BadRequestException(

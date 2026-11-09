@@ -130,10 +130,10 @@ export function ShopProfileSettings() {
             name="name"
             rules={[{ required: true, message: "Enter shop name" }]}
           >
-            <Input size="large" placeholder="Calcutta Sweets" />
+            <Input placeholder="Shop name" />
           </Form.Item>
           <Form.Item label="Shop code (read-only)">
-            <Input size="large" value={currentShop.shopCode} disabled />
+            <Input value={currentShop.shopCode} disabled />
           </Form.Item>
         </div>
         <Form.Item label="Address" name="address">

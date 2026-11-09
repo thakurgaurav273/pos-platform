@@ -84,7 +84,7 @@ export async function downloadOrdersExcel(
   search?: string,
 ) {
   const wb = new ExcelJS.Workbook();
-  wb.creator = "Calcutta Sweets";
+  wb.creator = "Fluxen POS";
   const ws = wb.addWorksheet("Orders");
   ws.addRow([
     "Bill no",
@@ -137,7 +137,7 @@ export async function downloadInventoryExcel(
   lowStockOnly: boolean,
 ) {
   const wb = new ExcelJS.Workbook();
-  wb.creator = "Calcutta Sweets";
+  wb.creator = "Fluxen POS";
   const ws = wb.addWorksheet(lowStockOnly ? "Low stock" : "Inventory");
   ws.addRow([
     "Product",
@@ -198,7 +198,7 @@ function gstSummaryRows(d: GstExport): [string, number | string][] {
 
 export async function downloadGstExcel(d: GstExport) {
   const wb = new ExcelJS.Workbook();
-  wb.creator = "Calcutta Sweets";
+  wb.creator = "Fluxen POS";
   const ws = wb.addWorksheet(`GST ${d.month}`);
   ws.addRow(["Field", "Value"]);
   ws.addRows([

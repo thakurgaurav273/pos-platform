@@ -247,7 +247,6 @@ export function SecuritySection() {
                 <Input.Password
                   prefix={lockPrefix}
                   placeholder="Enter current password"
-                  size="large"
                   autoComplete="current-password"
                 />
               </Form.Item>
@@ -262,7 +261,6 @@ export function SecuritySection() {
                 <Input.Password
                   prefix={shieldPrefix}
                   placeholder="At least 8 characters"
-                  size="large"
                   autoComplete="new-password"
                 />
               </Form.Item>
@@ -286,7 +284,6 @@ export function SecuritySection() {
                 <Input.Password
                   prefix={shieldPrefix}
                   placeholder="Same as new password"
-                  size="large"
                   autoComplete="new-password"
                 />
               </Form.Item>
@@ -295,7 +292,6 @@ export function SecuritySection() {
               type="primary"
               onClick={requestOtp}
               loading={loading}
-              size="large"
               className={styles.submit}
             >
               Send OTP &amp; continue
@@ -340,14 +336,13 @@ export function SecuritySection() {
             </div>
 
             <div className={styles.step2Actions}>
-              <Button onClick={() => setStep(1)} size="large">
+              <Button onClick={() => setStep(1)}>
                 Back
               </Button>
               <Button
                 type="primary"
                 onClick={submitPasswordChange}
                 loading={loading}
-                size="large"
               >
                 Verify &amp; update
               </Button>
@@ -367,7 +362,6 @@ export function SecuritySection() {
             <Button
               type="primary"
               onClick={reset}
-              size="large"
               className={styles.doneBtn}
             >
               Done

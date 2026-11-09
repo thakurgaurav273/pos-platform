@@ -4,7 +4,7 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { Prisma } from '@calcutta/database';
+import { Prisma } from '@fluxen/database';
 import { map, type Observable } from 'rxjs';
 
 /**

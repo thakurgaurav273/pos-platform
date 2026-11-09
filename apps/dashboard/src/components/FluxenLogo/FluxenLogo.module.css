@@ -1,0 +1,33 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  line-height: 1;
+  color: var(--text-primary, #18181b);
+  white-space: nowrap;
+}
+.light {
+  color: #fff;
+}
+.word {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28em;
+}
+.pos {
+  font-size: 0.62em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  opacity: 0.62;
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

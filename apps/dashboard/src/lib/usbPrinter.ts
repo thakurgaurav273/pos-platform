@@ -101,7 +101,7 @@ export async function printBillViaNativeAndroid(
   const bridge = getAndroidBridge();
   if (!bridge) {
     throw new Error(
-      'Thermal print needs the Calcutta Sweets Android app (WebView). Open the dashboard there, not in a normal browser.',
+      'Thermal print needs the Fluxen POS Android app (WebView). Open the dashboard there, not in a normal browser.',
     );
   }
   const done = waitForPrintResult(25_000);

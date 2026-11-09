@@ -1,0 +1,319 @@
+.page {
+  --rule: var(--border-strong);
+  min-height: 100vh;
+  background: var(--surface);
+  color: var(--text-primary);
+  overflow-x: clip;
+}
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 4vw, 40px);
+}
+.skipLink {
+  position: absolute;
+  left: 8px;
+  top: -48px;
+  z-index: 60;
+  padding: 0.6rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+.skipLink:focus {
+  top: 8px;
+}
+
+/* nav */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-block: 0.7rem;
+}
+.brand {
+  line-height: 0;
+}
+.navLinks {
+  display: flex;
+  gap: 1.5rem;
+  margin-left: 1rem;
+}
+.navLinks a {
+  font-size: 0.95rem;
+  padding: 0.6rem 0;
+  color: var(--text-secondary);
+}
+.navCta {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-left: auto;
+}
+
+/* buttons: flat, plain */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1.15rem;
+  border-radius: 6px;
+  background: var(--ochre-500);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.btn:hover {
+  background: var(--ochre-600);
+}
+.btnLg {
+  min-height: 50px;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+}
+.textLink {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.textLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.page a:focus-visible,
+.page button:focus-visible {
+  outline: 2px solid var(--ochre-500);
+  outline-offset: 3px;
+}
+
+/* hero */
+.hero {
+  padding-top: clamp(3rem, 8vw, 6.5rem);
+}
+.h1 {
+  margin: 0;
+  max-width: 16ch;
+  font-size: clamp(2.4rem, 5.4vw, 4.1rem);
+  font-weight: 650;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.sub {
+  margin: 1.5rem 0 0;
+  max-width: 56ch;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.heroShot {
+  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+}
+.shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.06), 0 24px 48px -24px rgba(24, 24, 27, 0.25);
+}
+
+/* feature rows */
+.section {
+  padding-top: clamp(4rem, 9vw, 7rem);
+}
+.feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: center;
+  margin-bottom: clamp(4rem, 8vw, 6.5rem);
+}
+.flip .featureText {
+  order: 2;
+}
+.h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.featureText p {
+  margin: 1rem 0 0;
+  max-width: 46ch;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+.crop {
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.06), 0 20px 40px -24px rgba(24, 24, 27, 0.2);
+}
+.cropImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.cropBill {
+  max-width: 400px;
+  justify-self: end;
+}
+
+/* the rest */
+.more {
+  padding-block: clamp(2rem, 4vw, 3rem) clamp(4rem, 9vw, 7rem);
+}
+.moreList {
+  margin: 2rem 0 0;
+  border-top: 1px solid var(--text-primary);
+}
+.moreRow {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 0.5rem 3rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.moreRow dt {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+.moreRow dd {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 60ch;
+}
+
+/* faq */
+.faqSection {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(1.5rem, 5vw, 5rem);
+  align-items: start;
+  padding-bottom: clamp(4rem, 9vw, 7rem);
+}
+.faq {
+  border-top: 1px solid var(--text-primary);
+}
+.faqItem {
+  border-bottom: 1px solid var(--rule);
+}
+.faqItem h3 {
+  margin: 0;
+}
+.faqBtn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-height: 56px;
+  padding: 1rem 0;
+  background: none;
+  border: 0;
+  text-align: left;
+  font: inherit;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.faqIcon {
+  margin-left: auto;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--text-secondary);
+}
+.faqItem p {
+  margin: 0 0 1.25rem;
+  max-width: 60ch;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* closing */
+.cta {
+  padding-block: clamp(3rem, 7vw, 5rem);
+  border-top: 1px solid var(--rule);
+}
+.cta .h2 {
+  max-width: 24ch;
+}
+.footer {
+  border-top: 1px solid var(--border);
+}
+.footer .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.5rem;
+}
+.footer p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* globals.css gives visited links specificity (0,1,1); re-assert at (0,2,x). */
+.page a.btn,
+.page a.btn:visited {
+  color: var(--on-primary);
+}
+.page a.textLink,
+.page a.textLink:visited {
+  color: var(--text-primary);
+}
+.page .navLinks a:visited {
+  color: var(--text-secondary);
+}
+.page .navLinks a:hover {
+  color: var(--text-primary);
+}
+.page a.brand:visited {
+  color: inherit;
+}
+
+@media (max-width: 900px) {
+  .cropBill {
+    justify-self: start;
+  }
+  .feature,
+  .faqSection,
+  .moreRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .flip .featureText {
+    order: 0;
+  }
+  .navLinks {
+    display: none;
+  }
+}
+@media (max-width: 520px) {
+  .navCta .textLink {
+    display: none;
+  }
+  .actions > a:first-child {
+    flex: 1 1 100%;
+  }
+}

@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { apiFetch, EFFECTIVE_SHOP_STORAGE_KEY } from '@/lib/api';
 
-const AUTH_STORAGE_KEY = 'calcutta_auth';
+const AUTH_STORAGE_KEY = 'fluxen_auth';
 
 export type RolePermissions = {
   canAccessDashboard: boolean;
@@ -116,7 +116,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // The next person to sign in on this tab must not inherit an unfinished sale.
     try {
       for (const key of Object.keys(sessionStorage)) {
-        if (key.startsWith("calcutta_pos_draft:")) sessionStorage.removeItem(key);
+        if (key.startsWith("fluxen_pos_draft:")) sessionStorage.removeItem(key);
       }
     } catch {
       // Storage blocked: nothing was saved.

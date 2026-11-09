@@ -18,6 +18,8 @@ import {
   Info,
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatedNumber } from '@/components/motion/AnimatedNumber';
 import type { CustomerFormValues } from '../CustomerDetails';
 import CustomerSelector from '../CustomerDetails/CustomerSelector';
 import { useShop } from '@/contexts/ShopContext';
@@ -175,12 +177,19 @@ export function BillingBillPanel({
 }: BillingBillPanelProps) {
   const { message } = App.useApp();
   const { shops, effectiveShopCode } = useShop();
+  // New bill lines glow once in the brand colour. Lines restored from a draft on load don't.
+  const reduceMotion = useReducedMotion();
+  const [flashArmed, setFlashArmed] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setFlashArmed(true), 600);
+    return () => clearTimeout(t);
+  }, []);
   const currentShop = useMemo(
     () => shops.find((s) => s.shopCode === effectiveShopCode),
     [shops, effectiveShopCode],
   );
 
-  const shopName = currentShop?.name ?? 'Calcutta Sweets';
+  const shopName = currentShop?.name ?? 'Fluxen POS';
   const cgstRate = currentShop?.cgstRate ?? 2.5;
   const sgstRate = currentShop?.sgstRate ?? 2.5;
   const totalTaxRate = (cgstRate + sgstRate) / 100;
@@ -274,7 +283,7 @@ export function BillingBillPanel({
 
   // Discount and payment choice survive leaving the POS page and the sidebar/drawer swap,
   // alongside the cart draft (same key prefix, so logout clears them together).
-  const checkoutDraftKey = `calcutta_pos_draft:${effectiveShopCode}:checkout`;
+  const checkoutDraftKey = `fluxen_pos_draft:${effectiveShopCode}:checkout`;
   const [checkoutDraftShop, setCheckoutDraftShop] = useState<string | null>(null);
 
   useEffect(() => {
@@ -567,7 +576,7 @@ export function BillingBillPanel({
 
     if (printMode === 'thermal' && !isNativeUsbPrinterAvailable()) {
       message.error(
-        'USB thermal printing is only available inside the Calcutta Sweets Android POS app.',
+        'USB thermal printing is only available inside the Fluxen POS Android app.',
       );
       return;
     }
@@ -785,11 +794,25 @@ export function BillingBillPanel({
           </div>
         ) : (
           <ul className="space-y-2 pr-1 sm:space-y-2.5">
+            <AnimatePresence initial={false}>
             {items.map((item) => (
-              <li
+              <motion.li
                 key={item.lineId}
-                className="flex items-start gap-2 border-b border-[var(--pearl-bush)] pb-2 last:border-0 last:pb-0 sm:gap-2.5 sm:pb-2.5"
+                layout="position"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] } }}
+                exit={{ opacity: 0, x: 24, transition: { duration: 0.14 } }}
+                className="relative flex items-start gap-2 border-b border-[var(--pearl-bush)] pb-2 last:border-0 last:pb-0 sm:gap-2.5 sm:pb-2.5"
               >
+                {flashArmed && !reduceMotion && (
+                  <motion.span
+                    aria-hidden
+                    className="pointer-events-none absolute -inset-x-1 inset-y-0 rounded-md bg-[var(--ochre-500)]"
+                    initial={{ opacity: 0.16 }}
+                    animate={{ opacity: 0 }}
+                    transition={{ duration: 0.8, ease: 'easeOut' }}
+                  />
+                )}
                 <div className="h-10 w-10 shrink-0 sm:h-11 sm:w-11">
                   <ProductLineThumb imageUrl={item.imageUrl} alt={item.name} />
                 </div>
@@ -967,8 +990,9 @@ export function BillingBillPanel({
                     </div>
                   )}
                 </div>
-              </li>
+              </motion.li>
             ))}
+            </AnimatePresence>
           </ul>
         )}
       </div>
@@ -1014,7 +1038,7 @@ export function BillingBillPanel({
           <div className="mt-3 flex items-baseline justify-between gap-2 border-t border-[var(--border)] pt-3">
             <span className="text-sm font-medium text-[var(--text-primary)]">Payable total</span>
             <span className="text-2xl font-semibold tabular-nums tracking-tight text-[var(--text-primary)]">
-              ₹{total.toFixed(2)}
+              ₹<AnimatedNumber value={total} format="inr2" duration={0.35} />
             </span>
           </div>
 

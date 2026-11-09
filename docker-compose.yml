@@ -1,0 +1,127 @@
+# Fluxen POS on Dokploy (Docker Compose deployment).
+#
+# - No `ports:` and no `container_name:`. Traefik reaches the containers over Docker
+#   networks, so nothing binds a host port and redeploys never fail on "port in use".
+#   In Dokploy > Domains, add your domain to service `fluxen-dashboard`, container port 3000.
+#   The dashboard proxies /api to the API internally, so the API needs no domain. Add
+#   one (service `fluxen-api`, port 4000) only if something outside calls the API directly.
+# - Service names carry a `fluxen-` prefix: services with domains join the shared
+#   `dokploy-network`, where a bare name like `api` could resolve to another project.
+# - Set the variables below in Dokploy > Environment (see dokploy.env.example).
+#   `${VAR:?}` ones are required; the deploy stops with that message if they are missing.
+
+x-api-env: &api-env
+  NODE_ENV: production
+  PORT: "4000"
+  DATABASE_URL: postgresql://${POSTGRES_USER:-fluxen}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}@fluxen-postgres:5432/${POSTGRES_DB:-fluxen_pos}?schema=public
+  REDIS_URL: redis://fluxen-redis:6379
+  JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET (at least 32 characters)}
+  # Public URL of the dashboard: login links in emails and the Paytm callback
+  # (APP_URL/api/payment/callback, proxied to the API by the dashboard).
+  APP_URL: ${APP_URL:?Set APP_URL to the dashboard URL, e.g. https://pos.example.com}
+  # Where Paytm sends shoppers after paying (the storefront, or the dashboard URL).
+  FRONTEND_URL: ${FRONTEND_URL:?Set FRONTEND_URL}
+  CORS_ORIGIN: ${CORS_ORIGIN:-${APP_URL}}
+  RESEND_API_KEY: ${RESEND_API_KEY:?Set RESEND_API_KEY}
+  EMAIL_FROM: ${EMAIL_FROM:-Fluxen POS <onboarding@resend.dev>}
+  PAYTM_MID: ${PAYTM_MID:?Set PAYTM_MID}
+  PAYTM_MERCHANT_KEY: ${PAYTM_MERCHANT_KEY:?Set PAYTM_MERCHANT_KEY (16 characters)}
+  PAYTM_WEBSITE: ${PAYTM_WEBSITE:-DEFAULT}
+  # Images uploaded to the API are served from here (/uploads/...).
+  PUBLIC_ASSET_ORIGIN: ${PUBLIC_ASSET_ORIGIN:-${APP_URL}}
+  INVENTORY_PUBLIC_BASE_URL: ${INVENTORY_PUBLIC_BASE_URL:-}
+  # Behind Traefik: trust X-Forwarded-* for client IPs (rate limits, logs).
+  TRUST_PROXY: "1"
+  # Self-ping is only for platforms that sleep idle apps; not needed here.
+  KEEP_WARM_URL: "off"
+
+services:
+  fluxen-postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-fluxen}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-fluxen_pos}
+    volumes:
+      - fluxen-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  fluxen-redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - fluxen-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Applies Prisma migrations, then exits. The API starts only after it succeeds.
+  fluxen-migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    restart: "no"
+    working_dir: /repo/packages/database
+    command: ["/repo/node_modules/.bin/prisma", "migrate", "deploy"]
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-fluxen}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}@fluxen-postgres:5432/${POSTGRES_DB:-fluxen_pos}?schema=public
+    depends_on:
+      fluxen-postgres:
+        condition: service_healthy
+
+  fluxen-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    restart: unless-stopped
+    environment: *api-env
+    expose:
+      - "4000"
+    volumes:
+      - fluxen-uploads:/repo/apps/api/public/uploads
+    depends_on:
+      fluxen-postgres:
+        condition: service_healthy
+      fluxen-redis:
+        condition: service_healthy
+      fluxen-migrate:
+        condition: service_completed_successfully
+
+  fluxen-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dashboard
+      args:
+        # Baked into the build: where the dashboard's /api proxy forwards to.
+        API_UPSTREAM_URL: http://fluxen-api:4000
+        NEXT_PUBLIC_API_DEFAULT_SHOP_CODE: ${NEXT_PUBLIC_API_DEFAULT_SHOP_CODE:-}
+        NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: ${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME:-}
+        NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: ${NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET:-}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      # Server-side requests from Next go straight to the API container.
+      INTERNAL_API_URL: http://fluxen-api:4000
+      API_UPSTREAM_URL: http://fluxen-api:4000
+    expose:
+      - "3000"
+    depends_on:
+      fluxen-api:
+        condition: service_healthy
+
+volumes:
+  fluxen-postgres-data:
+  fluxen-redis-data:
+  fluxen-uploads:

@@ -1,4 +1,4 @@
-const AUTH_KEY = "calcutta_auth";
+const AUTH_KEY = "fluxen_auth";
 const API_REQUEST_TIMEOUT_MS = 15000;
 /** Reports and other heavy reads; also covers an API waking from a cold start. */
 const API_LONG_REQUEST_TIMEOUT_MS = 60000;
@@ -11,7 +11,21 @@ export function isRequestTimeout(e: unknown): boolean {
   return e instanceof DOMException && e.name === "TimeoutError";
 }
 
-export const EFFECTIVE_SHOP_STORAGE_KEY = "calcutta_effective_shop";
+export const EFFECTIVE_SHOP_STORAGE_KEY = "fluxen_effective_shop";
+
+/**
+ * Make `shopCode` the active shop for the next requests. Call right after a fresh
+ * sign-in/sign-up: a shop code left over from another account would be rejected by
+ * the API (it belongs to a different business) and block the session from loading.
+ */
+export function pinActiveShop(shopCode: string | null | undefined) {
+  if (typeof window === "undefined" || !shopCode) return;
+  try {
+    localStorage.setItem(EFFECTIVE_SHOP_STORAGE_KEY, shopCode);
+  } catch {
+    // Storage blocked: the API falls back to the user's own shop.
+  }
+}
 
 export function getAuthToken(): string | null {
   if (typeof window === "undefined") return null;

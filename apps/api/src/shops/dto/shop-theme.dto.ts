@@ -1,7 +1,10 @@
 import { Type } from 'class-transformer';
 import {
   IsIn,
+  IsInt,
   IsOptional,
+  Max,
+  Min,
   IsString,
   Matches,
   MaxLength,
@@ -11,7 +14,9 @@ import {
   FONT_STYLES,
   HEADER_STYLES,
   HEX_COLOUR,
+  LOGO_HEIGHT,
   LOGO_URL_MAX_LENGTH,
+  LOGO_WIDTH,
   RADIUS_STYLES,
   SIDEBAR_STYLES,
   THEME_MODES,
@@ -54,6 +59,18 @@ export class ShopThemeConfigDto {
 
   @IsIn(FONT_STYLES)
   font!: (typeof FONT_STYLES)[number];
+
+  @IsOptional()
+  @IsInt()
+  @Min(LOGO_HEIGHT.min)
+  @Max(LOGO_HEIGHT.max)
+  logoHeight?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(LOGO_WIDTH.min)
+  @Max(LOGO_WIDTH.max)
+  logoWidth?: number;
 }
 
 /**

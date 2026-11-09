@@ -231,7 +231,6 @@ export function RefillRequestModal({
               placeholder="Search products..."
               loading={loading}
               className="w-full"
-              size="large"
               filterOption={false}
               options={filteredOptions.map((v) => {
                 const code =
@@ -257,14 +256,12 @@ export function RefillRequestModal({
               value={qty}
               onChange={(v) => setQty(v ?? 1)}
               className="w-full"
-              size="large"
             />
           </div>
           <Button
             type="primary"
             onClick={handleAddLine}
             disabled={!selectedVariantId}
-            size="large"
             style={{
               backgroundColor: 'var(--ochre-600)',
               borderColor: 'var(--ochre-600)',

@@ -30,7 +30,7 @@ import { BulkDeleteVariantsDto } from './dto/bulk-delete-variants.dto';
 import { CloneCatalogDto } from './dto/clone-catalog.dto';
 import { UpdateVariantDto } from './dto/update-variant.dto';
 import { PurgeShopCatalogDto } from './dto/purge-shop-catalog.dto';
-import { UserRole } from '@calcutta/database';
+import { UserRole } from '@fluxen/database';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 

@@ -230,9 +230,6 @@
 
 .sectionSaveRow :global(.ant-btn-primary) {
   min-width: 7.5rem;
-  height: 40px;
-  border-radius: var(--ui-radius-md);
-  font-weight: 600;
   box-shadow: 0 2px 8px rgba(var(--ochre-rgb), 0.2);
 }
 

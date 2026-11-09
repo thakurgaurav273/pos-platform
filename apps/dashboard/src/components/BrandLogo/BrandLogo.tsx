@@ -1,8 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import logo from "@/assets/logo.svg";
-import logoWhite from "@/assets/logowhite.svg";
+import { FluxenLogo } from "@/components/FluxenLogo/FluxenLogo";
 import { useTheme } from "@/contexts/ThemeContext";
 import { sidebarIsDark } from "@/lib/theme/cssVars";
 import styles from "./BrandLogo.module.css";
@@ -15,14 +13,13 @@ type BrandLogoProps = {
   /** Custom logo URL to show instead of the active theme's (used by previews). */
   logoUrl?: string | null;
   className?: string;
-  priority?: boolean;
 };
 
 /**
- * The shop's uploaded logo, or the built-in Calcutta Sweets mark in the colour that
+ * The shop's uploaded logo, or the built-in Fluxen POS logo in the colour that
  * suits the sidebar background.
  */
-export function BrandLogo({ shopName, onDark, logoUrl, className, priority }: BrandLogoProps) {
+export function BrandLogo({ shopName, onDark, logoUrl, className }: BrandLogoProps) {
   const theme = useTheme();
   const src = logoUrl !== undefined ? logoUrl : theme.logoUrl;
   const dark = onDark ?? sidebarIsDark(theme.config, theme.mode);
@@ -39,14 +36,5 @@ export function BrandLogo({ shopName, onDark, logoUrl, className, priority }: Br
       />
     );
   }
-  return (
-    <Image
-      src={dark ? logoWhite : logo}
-      alt="Calcutta Sweets"
-      width={240}
-      height={95}
-      className={`${styles.builtIn} ${className ?? ""}`.trim()}
-      priority={priority}
-    />
-  );
+  return <FluxenLogo size={30} tone={dark ? "light" : "auto"} className={className} />;
 }

@@ -1,10 +1,10 @@
 {
-  "name": "calcutta-sweets",
+  "name": "fluxen-pos",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepare": "pnpm --filter @calcutta/database run build",
+    "prepare": "pnpm --filter @fluxen/database run build",
     "dev": "turbo run dev",
     "dev:api": "turbo run dev --filter=api",
     "dev:dash": "turbo run dev --filter=dashboard",

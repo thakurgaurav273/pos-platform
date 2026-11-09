@@ -28,21 +28,21 @@ async function assertFactoryAndTarget(
   prisma: PrismaClient,
   targetShopCode: string,
 ) {
-  // One factory is assumed; oldest wins so the choice is deterministic.
+  const target = await prisma.shop.findUnique({
+    where: { shopCode: targetShopCode },
+  });
+  if (!target) {
+    throw new Error(`Shop "${targetShopCode}" not found`);
+  }
+  // One factory per organization is assumed; oldest wins so the choice is deterministic.
   const factory = await prisma.shop.findFirst({
-    where: { isFactory: true },
+    where: { isFactory: true, orgId: target.orgId },
     orderBy: { createdAt: 'asc' },
   });
   if (!factory) {
     throw new Error(
       'No factory shop (isFactory=true). Mark a warehouse shop as factory first.',
     );
-  }
-  const target = await prisma.shop.findUnique({
-    where: { shopCode: targetShopCode },
-  });
-  if (!target) {
-    throw new Error(`Shop "${targetShopCode}" not found`);
   }
   if (factory.shopCode === target.shopCode) {
     throw new Error('Choose a retail shop, not the factory.');

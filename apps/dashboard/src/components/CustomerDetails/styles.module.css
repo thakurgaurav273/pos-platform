@@ -141,8 +141,6 @@
 
 .footer :global(.ant-btn-default) {
   min-width: 96px;
-  height: 40px;
-  font-weight: 500;
   border-color: var(--pearl-bush);
   color: var(--bistre-700);
 }
@@ -154,8 +152,6 @@
 
 .footer :global(.ant-btn-primary) {
   min-width: 132px;
-  height: 40px;
-  font-weight: 600;
   background: var(--ochre-600);
   border-color: var(--ochre-600);
 }

@@ -24,12 +24,10 @@ export default function ShopsPage() {
         title="Shops"
         description="Manage retail locations and inventory templates."
         actions={
-          <Button 
-            type="primary" 
-            size="large" 
-            icon={<PlusCircle size={18} />}
+          <Button
+            type="primary"
+            icon={<PlusCircle size={16} />}
             onClick={() => setWizardOpen(true)}
-            style={{ height: 48, borderRadius: 'var(--ui-radius-lg)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}
           >
             Add New Shop
           </Button>

@@ -177,9 +177,6 @@
 
 .step2Actions :global(.ant-btn) {
   flex: 1;
-  height: 44px !important;
-  border-radius: var(--ui-radius-md) !important;
-  font-weight: 600 !important;
 }
 
 .step2Actions :global(.ant-btn-primary) {
@@ -227,9 +224,6 @@
 .doneBtn {
   margin-top: 0.25rem;
   min-width: 10rem;
-  height: 44px !important;
-  border-radius: var(--ui-radius-md) !important;
-  font-weight: 600 !important;
   background: var(--ochre-600) !important;
   border-color: var(--ochre-600) !important;
 }

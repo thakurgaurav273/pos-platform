@@ -31,7 +31,7 @@ describe('AppController', () => {
     it('should return ok without db', () => {
       const res = appController.health();
       expect(res.status).toBe('ok');
-      expect(res.service).toBe('calcutta-sweets-api');
+      expect(res.service).toBe('fluxen-pos-api');
       expect(res.timestamp).toMatch(/^\d{4}-/);
     });
   });

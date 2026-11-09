@@ -1,4 +1,4 @@
-# Calcutta Sweets
+# Fluxen POS
 
 A monorepo for a sweets shop management system-dashboard (Next.js) + REST API (NestJS) + shared database (Prisma + PostgreSQL).
 
@@ -10,7 +10,7 @@ A monorepo for a sweets shop management system-dashboard (Next.js) + REST API (N
 - **pnpm** 10.x (`npm install -g pnpm`)
 - **PostgreSQL** 14+ running locally or via Docker
 
-**Docker (PostgreSQL):** `docker run -d --name calcutta-db -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=calcutta_sweets postgres:16`
+**Docker (PostgreSQL):** `docker run -d --name fluxen-db -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=fluxen_pos postgres:16`
 
 ---
 
@@ -29,7 +29,7 @@ A monorepo for a sweets shop management system-dashboard (Next.js) + REST API (N
 ## Project Structure
 
 ```
-calcutta-sweets/
+fluxen-pos/
 ├── apps/
 │   ├── api/          # NestJS REST API (port 3000)
 │   └── dashboard/    # Next.js frontend (port 3000)
@@ -66,7 +66,7 @@ cp apps/dashboard/.env.example apps/dashboard/.env.local
 
 ```env
 PORT=3000
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/calcutta_sweets"
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/fluxen_pos"
 JWT_SECRET=your-secret-here
 ```
 
@@ -76,17 +76,17 @@ Adjust `DATABASE_URL` if your PostgreSQL user/password/host/port differ.
 
 ```bash
 # Create DB (if it doesn't exist)
-# macOS/Linux: createdb calcutta_sweets
-# Or via psql: psql -U postgres -c "CREATE DATABASE calcutta_sweets;"
+# macOS/Linux: createdb fluxen_pos
+# Or via psql: psql -U postgres -c "CREATE DATABASE fluxen_pos;"
 # Docker: docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=postgres postgres:16
 
-createdb calcutta_sweets
+createdb fluxen_pos
 
 # Run migrations (from database package)
-pnpm --filter @calcutta/database exec prisma migrate deploy
+pnpm --filter @fluxen/database exec prisma migrate deploy
 
 # Generate Prisma client (required after clone/install)
-pnpm --filter @calcutta/database exec prisma generate
+pnpm --filter @fluxen/database exec prisma generate
 ```
 
 ### 4. Start all apps
@@ -112,9 +112,9 @@ Assumes PostgreSQL is running and `createdb` is available:
 ```bash
 pnpm install && \
 cp apps/api/.env.example apps/api/.env && \
-createdb calcutta_sweets 2>/dev/null || true && \
-pnpm --filter @calcutta/database exec prisma migrate deploy && \
-pnpm --filter @calcutta/database exec prisma generate && \
+createdb fluxen_pos 2>/dev/null || true && \
+pnpm --filter @fluxen/database exec prisma migrate deploy && \
+pnpm --filter @fluxen/database exec prisma generate && \
 pnpm dev
 ```
 
@@ -168,19 +168,19 @@ Run from repo root:
 
 ```bash
 # Generate Prisma client (after schema changes)
-pnpm --filter @calcutta/database exec prisma generate
+pnpm --filter @fluxen/database exec prisma generate
 
 # Create a new migration
-pnpm --filter @calcutta/database exec prisma migrate dev --name your_migration_name
+pnpm --filter @fluxen/database exec prisma migrate dev --name your_migration_name
 
 # Apply migrations (production)
-pnpm --filter @calcutta/database exec prisma migrate deploy
+pnpm --filter @fluxen/database exec prisma migrate deploy
 
 # Open Prisma Studio (DB GUI)
-pnpm --filter @calcutta/database exec prisma studio
+pnpm --filter @fluxen/database exec prisma studio
 
 # Reset DB (drops all data)
-pnpm --filter @calcutta/database exec prisma migrate reset
+pnpm --filter @fluxen/database exec prisma migrate reset
 ```
 
 ---
@@ -203,8 +203,8 @@ Prisma 7 needs the `@prisma/adapter-pg` adapter. This is already wired in `Prism
 
 - PostgreSQL is running: `pg_isready -h localhost -p 5432`
 - `DATABASE_URL` in `apps/api/.env` is correct
-- Database exists: `psql -l | grep calcutta_sweets`
-- Migrations applied: `pnpm --filter @calcutta/database exec prisma migrate deploy`
+- Database exists: `psql -l | grep fluxen_pos`
+- Migrations applied: `pnpm --filter @fluxen/database exec prisma migrate deploy`
 
 ### `EADDRINUSE: address already in use`
 
@@ -215,7 +215,7 @@ Another process is using the port. Change `PORT` in `apps/api/.env` or stop the 
 After pulling schema changes or switching branches:
 
 ```bash
-pnpm --filter @calcutta/database exec prisma generate
+pnpm --filter @fluxen/database exec prisma generate
 ```
 
 ### pnpm store / install issues

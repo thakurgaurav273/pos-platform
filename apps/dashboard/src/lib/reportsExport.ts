@@ -92,7 +92,7 @@ export async function downloadReportsExcel(
   shopCode: string,
 ) {
   const wb = new ExcelJS.Workbook();
-  wb.creator = "Calcutta Sweets";
+  wb.creator = "Fluxen POS";
   wb.created = new Date();
 
   const meta: [string, string][] = [

@@ -22,7 +22,7 @@ export class AppController {
   health() {
     return {
       status: 'ok',
-      service: 'calcutta-sweets-api',
+      service: 'fluxen-pos-api',
       timestamp: new Date().toISOString(),
     };
   }

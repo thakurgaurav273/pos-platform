@@ -210,6 +210,8 @@ export function buildThemeVars(
     ...DERIVED_TOKENS,
     "--font-body": fonts.body,
     "--font-heading": fonts.heading,
+    "--logo-height": `${config.logoHeight}px`,
+    "--logo-width": `${config.logoWidth}px`,
     ...chromeVars(config, mode, primary),
   };
 }

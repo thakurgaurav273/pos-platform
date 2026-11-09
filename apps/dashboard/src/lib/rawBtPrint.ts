@@ -25,7 +25,7 @@ const GS = 0x1d;
 /**
  * Line feeds after `ESC @` before the UTF-8 body (hardware top margin).
  * TVS/RawBT often eat the first visible lines under the tear bar, so keep this high
- * enough that “CALCUTTA SWEETS” and the first address line still print.
+ * enough that “FLUXEN POS” and the first address line still print.
  */
 const RAWBT_TOP_MARGIN_LINE_FEEDS = 34;
 
@@ -50,7 +50,7 @@ export function thermalReceiptEffectiveWidth(): number {
 }
 
 /** When shop profile fields are empty, match printed stationery defaults. */
-export const THERMAL_FALLBACK_SHOP_NAME = 'CALCUTTA SWEETS';
+export const THERMAL_FALLBACK_SHOP_NAME = 'FLUXEN POS';
 export const THERMAL_FALLBACK_ADDRESS =
   'Gurudwara Complex, Tatibandh, Raipur (C.G)';
 export const THERMAL_FALLBACK_PHONE = '0771 4060082';

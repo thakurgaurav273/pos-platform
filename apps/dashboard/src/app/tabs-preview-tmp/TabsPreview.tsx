@@ -35,7 +35,7 @@ const PRODUCTS = NAMES.map((name, i) => ({
 
 if (typeof window !== "undefined") {
   localStorage.setItem(
-    "calcutta_auth",
+    "fluxen_auth",
     JSON.stringify({
       token: "preview-token",
       user: { id: "preview", email: "admin@example.com", name: "Local Admin", role: "SUPER_ADMIN", shopCode: "SH000001" },
@@ -46,8 +46,8 @@ if (typeof window !== "undefined") {
       },
     }),
   );
-  localStorage.setItem("calcutta_effective_shop", "SH000001");
-  localStorage.setItem("calcutta_color_mode", "light");
+  localStorage.setItem("fluxen_effective_shop", "SH000001");
+  localStorage.setItem("fluxen_color_mode", "light");
 
   const realFetch = window.fetch.bind(window);
   window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {

@@ -1,4 +1,4 @@
-import type { Shop as DbShop } from "@calcutta/database";
+import type { Shop as DbShop } from "@fluxen/database";
 
 /**
  * Shop as returned by the API. GST rates are DECIMAL in the database but the API

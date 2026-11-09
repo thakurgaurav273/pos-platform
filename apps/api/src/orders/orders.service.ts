@@ -9,7 +9,7 @@ import {
   CreatePosOrderDto,
   PaymentMethodEnum,
 } from './dto/create-pos-order.dto';
-import { OrderStatus, PaymentLegMethod, Prisma } from '@calcutta/database';
+import { OrderStatus, PaymentLegMethod, Prisma } from '@fluxen/database';
 import { reconcilePayments, type ReconciledPayments } from './payments';
 import {
   normalizeIndianMobile,

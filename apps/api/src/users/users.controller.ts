@@ -35,6 +35,11 @@ function userScope(req: Request): string | null {
     : req.effectiveShopCode!;
 }
 
+/** Organization of the signed-in user; super admins are confined to it. */
+function orgOf(req: Request): string {
+  return (req.user as User & { shop: { orgId: string } }).shop.orgId;
+}
+
 @Controller('users')
 @UseGuards(JwtAuthGuard, ShopScopeGuard, PermissionsGuard, RolesGuard)
 export class UsersController {
@@ -60,7 +65,7 @@ export class UsersController {
   @RequirePermission('canAccessUsers')
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
   findOneForManager(@Req() req: Request, @Param('id') id: string) {
-    return this.usersService.findOneForShop(id, userScope(req));
+    return this.usersService.findOneForShop(id, userScope(req), orgOf(req));
   }
 
   @Post()
@@ -86,10 +91,13 @@ export class UsersController {
         'Only a super admin can create ADMIN or SUPER_ADMIN users',
       );
     }
-    return this.usersService.create({
-      ...dto,
-      shopCode,
-    });
+    return this.usersService.create(
+      {
+        ...dto,
+        shopCode,
+      },
+      orgOf(req),
+    );
   }
 
   @Patch(':id')
@@ -101,10 +109,16 @@ export class UsersController {
     @Body() dto: UpdateUserDto,
   ) {
     const actor = req.user as User;
-    return this.usersService.update(id, dto, userScope(req), {
-      id: actor.id,
-      role: actor.role,
-    });
+    return this.usersService.update(
+      id,
+      dto,
+      userScope(req),
+      {
+        id: actor.id,
+        role: actor.role,
+      },
+      orgOf(req),
+    );
   }
 
   @Delete(':id')
@@ -112,10 +126,15 @@ export class UsersController {
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
   remove(@Req() req: Request, @Param('id') id: string) {
     const actor = req.user as User;
-    return this.usersService.remove(id, userScope(req), {
-      id: actor.id,
-      role: actor.role,
-    });
+    return this.usersService.remove(
+      id,
+      userScope(req),
+      {
+        id: actor.id,
+        role: actor.role,
+      },
+      orgOf(req),
+    );
   }
 
   @Get('profile/me')

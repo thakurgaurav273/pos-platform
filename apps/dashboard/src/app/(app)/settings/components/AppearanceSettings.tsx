@@ -113,7 +113,7 @@ export function AppearanceSettings() {
       <div className={styles.footer}>
         <Popconfirm
           title="Restore the default theme?"
-          description="Brand colours and layout go back to Classic. Your logo is kept."
+          description="Brand colours and layout go back to the Fluxen default. Your logo is kept."
           okText="Restore"
           onConfirm={() => setDraft((d) => ({ ...d, config: { ...DEFAULT_THEME } }))}
           disabled={isDefaultTheme}

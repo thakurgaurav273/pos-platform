@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import type { Prisma } from '@calcutta/database';
-import { PrismaClient } from '@calcutta/database';
+import type { Prisma } from '@fluxen/database';
+import { PrismaClient } from '@fluxen/database';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 

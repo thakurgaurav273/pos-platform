@@ -1,4 +1,4 @@
-import { Prisma } from '@calcutta/database';
+import { Prisma } from '@fluxen/database';
 
 export type DecimalLike = Prisma.Decimal | number | string;
 

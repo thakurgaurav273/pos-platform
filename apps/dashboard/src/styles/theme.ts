@@ -1,5 +1,5 @@
 /**
- * Calcutta Sweets - operations palette (mirrors the CSS variables in app/globals.css).
+ * Fluxen POS - operations palette (mirrors the CSS variables in app/globals.css).
  * Neutral ink + stone canvas, one brand accent (deep copper from the logo), status colours.
  */
 export const colors = {
@@ -21,14 +21,14 @@ export const colors = {
   linen90: '#f0f0ee',
   linen80: '#e7e7e4',
 
-  /* Copper - brand accent: CTA, links, selection */
-  ochre700: '#74360f',
-  ochre600: '#8f4218',
-  ochre500: '#a84f1c',
-  ochre400: '#c8773a',
-  ochre300: '#e0a27a',
-  ochre200: '#f3d2bc',
-  ochre100: '#fdf1e8',
+  /* Indigo - brand accent: CTA, links, selection */
+  ochre700: '#36309c',
+  ochre600: '#433cc3',
+  ochre500: '#4f46e5',
+  ochre400: '#726bea',
+  ochre300: '#a39ff1',
+  ochre200: '#d1cff8',
+  ochre100: '#f1f0fd',
 
   parchment: '#fbfbfa',
   pearlBush: '#e6e6e3',

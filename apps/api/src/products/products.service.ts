@@ -27,20 +27,49 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto, shopCode: string) {
     try {
-      return await this.prisma.$transaction(async (tx) => {
-        await assertProductNameAvailable(tx, shopCode, createProductDto.name);
-        await assertSkuAvailable(tx, shopCode, createProductDto.sku);
-        const barcode =
-          createProductDto.barcode?.trim() ||
-          (await this.generateBarcode(shopCode, tx));
-        return this.createWithBarcode(tx, createProductDto, shopCode, barcode);
-      });
+      return await this.prisma.$transaction((tx) =>
+        this.createInTx(tx, createProductDto, shopCode),
+      );
     } catch (e) {
       throw this.mapBarcodeConflict(e);
     }
   }
 
-  private mapBarcodeConflict(e: unknown) {
+  /** `create` inside the caller's transaction (the catalog import runs many in one). */
+  async createInTx(
+    tx: Prisma.TransactionClient,
+    createProductDto: CreateProductDto,
+    shopCode: string,
+  ) {
+    await assertProductNameAvailable(tx, shopCode, createProductDto.name);
+    await assertSkuAvailable(tx, shopCode, createProductDto.sku);
+    const barcode =
+      createProductDto.barcode?.trim() ||
+      (await this.generateBarcode(shopCode, tx));
+    return this.createWithBarcode(tx, createProductDto, shopCode, barcode);
+  }
+
+  /**
+   * Adds a variant to an existing product of this shop, from the same fields as a new
+   * product (its `name`, `categoryId` and other product-level fields are ignored).
+   */
+  async addVariantInTx(
+    tx: Prisma.TransactionClient,
+    productId: string,
+    dto: CreateProductDto,
+    shopCode: string,
+  ) {
+    await assertSkuAvailable(tx, shopCode, dto.sku);
+    const barcode =
+      dto.barcode?.trim() || (await this.generateBarcode(shopCode, tx));
+    const variant = await tx.productVariant.create({
+      data: { ...this.variantData(dto, shopCode, barcode), productId },
+    });
+    await this.applyOpeningStock(tx, variant.id, dto, shopCode);
+    return variant;
+  }
+
+  mapBarcodeConflict(e: unknown) {
     if (
       e instanceof Prisma.PrismaClientKnownRequestError &&
       e.code === 'P2002'
@@ -56,7 +85,6 @@ export class ProductsService {
     shopCode: string,
     barcode: string,
   ) {
-    const quantity = qty(createProductDto.quantity ?? 0);
     const product = await tx.product.create({
       data: {
         name: createProductDto.name.trim(),
@@ -67,43 +95,59 @@ export class ProductsService {
           ? { categoryId: createProductDto.categoryId }
           : {}),
         variants: {
-          create: {
-            shopCode,
-            name: createProductDto.variantName?.trim() || 'Regular',
-            price: createProductDto.price,
-            barcode,
-            quantity: 0,
-            unit: createProductDto.unit ?? Unit.PC,
-            ...(createProductDto.costPrice !== undefined
-              ? { costPrice: createProductDto.costPrice }
-              : {}),
-            ...(createProductDto.sku?.trim()
-              ? { sku: createProductDto.sku.trim() }
-              : {}),
-            ...(createProductDto.hsnCode
-              ? { hsnCode: createProductDto.hsnCode }
-              : {}),
-            ...(createProductDto.minStock !== undefined
-              ? { minStock: createProductDto.minStock }
-              : {}),
-          },
+          create: this.variantData(createProductDto, shopCode, barcode),
         },
       },
       include: { variants: true, category: true },
     });
+    await this.applyOpeningStock(
+      tx,
+      product.variants[0].id,
+      createProductDto,
+      shopCode,
+    );
+    return tx.product.findUniqueOrThrow({
+      where: { id: product.id },
+      include: { variants: true, category: true },
+    });
+  }
+
+  private variantData(
+    dto: CreateProductDto,
+    shopCode: string,
+    barcode: string,
+  ): Prisma.ProductVariantUncheckedCreateWithoutProductInput {
+    return {
+      shopCode,
+      name: dto.variantName?.trim() || 'Regular',
+      price: dto.price,
+      barcode,
+      quantity: 0,
+      unit: dto.unit ?? Unit.PC,
+      ...(dto.costPrice !== undefined ? { costPrice: dto.costPrice } : {}),
+      ...(dto.sku?.trim() ? { sku: dto.sku.trim() } : {}),
+      ...(dto.hsnCode ? { hsnCode: dto.hsnCode } : {}),
+      ...(dto.minStock !== undefined ? { minStock: dto.minStock } : {}),
+    };
+  }
+
+  /** Opening stock goes through the ledger, so it shows up in the stock history. */
+  private async applyOpeningStock(
+    tx: Prisma.TransactionClient,
+    variantId: string,
+    dto: CreateProductDto,
+    shopCode: string,
+  ) {
+    const quantity = qty(dto.quantity ?? 0);
     if (quantity.gt(0)) {
       await applyStockChange(tx, {
-        variantId: product.variants[0].id,
+        variantId,
         shopCode,
         delta: quantity,
         reason: 'ADJUSTMENT',
         note: 'Opening stock',
       });
     }
-    return tx.product.findUniqueOrThrow({
-      where: { id: product.id },
-      include: { variants: true, category: true },
-    });
   }
 
   async findAll(shopCode?: string | null) {

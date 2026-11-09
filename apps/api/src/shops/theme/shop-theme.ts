@@ -18,6 +18,14 @@ export const HEADER_STYLES = ['light', 'brand', 'transparent'] as const;
 export const RADIUS_STYLES = ['sharp', 'default', 'rounded'] as const;
 export const FONT_STYLES = ['geist', 'inter', 'system', 'serif'] as const;
 
+/**
+ * Box an uploaded logo is scaled to fit (px, aspect ratio kept). The sidebar's logo row
+ * grows past its usual 64px for taller logos; the sidebar is 240px wide with 8px side
+ * padding, so 224px is the widest a logo can be.
+ */
+export const LOGO_HEIGHT = { min: 24, max: 96, default: 46 } as const;
+export const LOGO_WIDTH = { min: 80, max: 224, default: 200 } as const;
+
 export type ThemePreset = (typeof THEME_PRESETS)[number];
 
 export type ShopThemeConfig = {
@@ -31,6 +39,8 @@ export type ShopThemeConfig = {
   headerStyle: (typeof HEADER_STYLES)[number];
   radius: (typeof RADIUS_STYLES)[number];
   font: (typeof FONT_STYLES)[number];
+  logoHeight: number;
+  logoWidth: number;
 };
 
 export const HEX_COLOUR = /^#[0-9a-fA-F]{6}$/;
@@ -71,6 +81,26 @@ function colour(value: unknown, field: string): string {
   );
 }
 
+/** Optional whole-pixel size; missing means the default (themes saved before logo sizing). */
+function logoSize(
+  value: unknown,
+  range: { min: number; max: number; default: number },
+  field: string,
+): number {
+  if (value === undefined || value === null) return range.default;
+  if (
+    typeof value === 'number' &&
+    Number.isInteger(value) &&
+    value >= range.min &&
+    value <= range.max
+  ) {
+    return value;
+  }
+  throw new BadRequestException(
+    `themeConfig.${field} must be a whole number from ${range.min} to ${range.max}`,
+  );
+}
+
 /**
  * Validates an incoming theme payload and returns a clean copy with only known keys
  * and lowercase colours. Used after DTO validation so stored JSON is always canonical.
@@ -91,6 +121,8 @@ export function normalizeThemeConfig(input: unknown): ShopThemeConfig {
     headerStyle: pick(HEADER_STYLES, o.headerStyle, 'headerStyle'),
     radius: pick(RADIUS_STYLES, o.radius, 'radius'),
     font: pick(FONT_STYLES, o.font, 'font'),
+    logoHeight: logoSize(o.logoHeight, LOGO_HEIGHT, 'logoHeight'),
+    logoWidth: logoSize(o.logoWidth, LOGO_WIDTH, 'logoWidth'),
   };
 }
 

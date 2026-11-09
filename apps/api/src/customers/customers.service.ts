@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { OrderStatus, Prisma, UserRole } from '@calcutta/database';
+import { OrderStatus, Prisma, UserRole } from '@fluxen/database';
 import { PrismaService } from '../prisma.service';
 import { customerSearchWhere } from '../common/customer-search';
 import {

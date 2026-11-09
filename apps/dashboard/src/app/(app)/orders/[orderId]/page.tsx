@@ -121,7 +121,7 @@ export default function OrderBillDetailPage() {
   const shopName = useMemo(
     () =>
       shops.find((s) => s.shopCode === effectiveShopCode)?.name ??
-      "Calcutta Sweets",
+      "Fluxen POS",
     [shops, effectiveShopCode],
   );
 

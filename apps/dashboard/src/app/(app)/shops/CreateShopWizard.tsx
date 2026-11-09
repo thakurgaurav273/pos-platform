@@ -205,7 +205,7 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
             label="Shop Name"
             rules={[{ required: true, message: 'Please enter shop name' }]}
           >
-            <Input placeholder="e.g., Calcutta Sweets Salt Lake" size="large" />
+            <Input placeholder="e.g., Salt Lake Counter" />
           </Form.Item>
           
           <Form.Item
@@ -217,7 +217,7 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
           </Form.Item>
 
           <div style={{ marginTop: 24, textAlign: 'right' }}>
-            <Button type="primary" size="large" onClick={handleNext}>
+            <Button type="primary" onClick={handleNext}>
               Next: Branding
             </Button>
           </div>
@@ -227,7 +227,7 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
         <div>
           <p style={{ color: 'var(--text-secondary)', fontSize: 13, marginBottom: 16 }}>
             Choose how this shop&apos;s portal looks for its staff. You can skip this and use
-            the default Calcutta Sweets theme; the shop owner can change it later in
+            the default Fluxen theme; the shop owner can change it later in
             Settings &rarr; Appearance &amp; branding.
           </p>
           <ThemeConfigurator
@@ -248,7 +248,7 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
               >
                 Skip, use default
               </Button>
-              <Button type="primary" size="large" onClick={() => setCurrentStep(STEP_INVENTORY)}>
+              <Button type="primary" onClick={() => setCurrentStep(STEP_INVENTORY)}>
                 Next: Select Inventory
               </Button>
             </Space>
@@ -266,7 +266,6 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
               prefix={<Search size={16} />}
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              size="large"
             />
           </div>
 
@@ -291,7 +290,6 @@ export default function CreateShopWizard({ open, onCancel, onSuccess }: CreateSh
               </span>
               <Button 
                 type="primary" 
-                size="large" 
                 loading={loading}
                 onClick={handleCreate}
               >

@@ -369,7 +369,6 @@ export default function UsersManagement() {
         actions={
         <Button
           type="primary"
-          size="large"
           className="rounded-lg shadow-sm font-semibold shrink-0"
           style={{ backgroundColor: 'var(--ochre-600)', borderColor: 'var(--ochre-600)' }}
           icon={<UserPlus size={16} strokeWidth={2.25} />}

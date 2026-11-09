@@ -192,11 +192,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     <>
       <Link
         href="/dashboard"
-        className={`flex h-16 shrink-0 items-center justify-center px-4 ${styles.logoLink}`}
+        className={`flex min-h-16 shrink-0 items-center justify-center px-2 py-2 ${styles.logoLink}`}
         scroll={false}
       >
         <span className={styles.logoFrame}>
-          <BrandLogo shopName={activeShopName} className={styles.logoImage} priority />
+          <BrandLogo shopName={activeShopName} className={styles.logoImage} />
         </span>
       </Link>
       {MainMenu}

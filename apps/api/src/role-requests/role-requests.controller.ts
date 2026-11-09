@@ -18,6 +18,10 @@ import { UserRole } from '@prisma/client';
 import { ShopScopeGuard } from '../auth/shop-scope.guard';
 import { CreateRoleRequestDto } from './dto/create-role-request.dto';
 
+function orgIdOf(req: Request): string {
+  return req.user!.shop.orgId;
+}
+
 @Controller('role-requests')
 @UseGuards(JwtAuthGuard, ShopScopeGuard, RolesGuard)
 export class RoleRequestsController {
@@ -36,19 +40,19 @@ export class RoleRequestsController {
   @Get()
   @Roles(UserRole.SUPER_ADMIN)
   findAll(@Req() req: Request) {
-    // Super admin sees all, or can filter by shop code.
-    return this.roleRequestsService.findAll();
+    // A super admin sees the pending requests of their own business only.
+    return this.roleRequestsService.findAll(orgIdOf(req));
   }
 
   @Patch(':id/approve')
   @Roles(UserRole.SUPER_ADMIN)
-  approve(@Param('id') id: string) {
-    return this.roleRequestsService.approve(id);
+  approve(@Req() req: Request, @Param('id') id: string) {
+    return this.roleRequestsService.approve(id, orgIdOf(req));
   }
 
   @Patch(':id/reject')
   @Roles(UserRole.SUPER_ADMIN)
-  reject(@Param('id') id: string) {
-    return this.roleRequestsService.reject(id);
+  reject(@Req() req: Request, @Param('id') id: string) {
+    return this.roleRequestsService.reject(id, orgIdOf(req));
   }
 }

@@ -54,7 +54,11 @@ export function buildAntdTheme(
       borderRadiusSM: radius(4),
       borderRadiusLG: radius(10),
       borderRadiusXS: radius(2),
+      // One button/input scale for the whole app: 28 (table rows, compact toolbars),
+      // 36 (default: page actions, forms, modals), 44 (touch-first POS controls only).
+      controlHeightSM: 28,
       controlHeight: 36,
+      controlHeightLG: 44,
       // Users who ask the OS for reduced motion get antd without animations. This must be
       // done here rather than by shortening animations in CSS: antd positions popups
       // during their opening animation, so a near-zero animation leaves them off screen.
@@ -70,6 +74,9 @@ export function buildAntdTheme(
     components: {
       Button: {
         fontWeight: 500,
+        paddingInline: 16,
+        paddingInlineSM: 10,
+        paddingInlineLG: 20,
         primaryShadow: "none",
         defaultShadow: "none",
         dangerShadow: "none",

@@ -14,9 +14,32 @@ const valid = {
 };
 
 describe('normalizeThemeConfig', () => {
+  it('keeps a valid logo size and defaults a missing one', () => {
+    const out = normalizeThemeConfig({ ...valid, logoHeight: 32 });
+    expect(out.logoHeight).toBe(32);
+    expect(out.logoWidth).toBe(200);
+  });
+
+  it.each([
+    ['logoHeight', 120],
+    ['logoHeight', 30.5],
+    ['logoWidth', 20],
+    ['logoWidth', '150'],
+  ])('rejects %s = %p', (field, value) => {
+    expect(() => normalizeThemeConfig({ ...valid, [field]: value })).toThrow(
+      BadRequestException,
+    );
+  });
+
   it('keeps known keys, lowercases colours and stamps the version', () => {
     const out = normalizeThemeConfig({ ...valid, extra: 'dropped' });
-    expect(out).toEqual({ version: 1, ...valid, primaryColor: '#4f46e5' });
+    expect(out).toEqual({
+      version: 1,
+      ...valid,
+      primaryColor: '#4f46e5',
+      logoHeight: 46,
+      logoWidth: 200,
+    });
     expect(out).not.toHaveProperty('extra');
   });
 

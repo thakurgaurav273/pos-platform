@@ -3,12 +3,12 @@
 import { App, Button, Checkbox, Form, Input } from 'antd';
 import styles from './styles.module.css';
 import Link from 'next/link';
-import Image from 'next/image';
 import { LockIcon, UserIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { getApiBaseUrl } from '@/lib/api';
-import logo from '@/assets/logo.svg';
+import { getApiBaseUrl, pinActiveShop } from '@/lib/api';
+import { FluxenLogo } from '@/components/FluxenLogo/FluxenLogo';
+import { AuthAside, AUTH_POINTS } from '@/components/AuthAside/AuthAside';
 
 const LoginPage = () => {
   const { message } = App.useApp();
@@ -24,6 +24,7 @@ const LoginPage = () => {
       .then(async (res) => {
         const data = await res.json();
         if (res.ok && data?.access_token) {
+          pinActiveShop(data.user?.shopCode);
           setAuth(data.access_token, data.user ?? null);
           router.replace('/dashboard');
         } else {
@@ -37,43 +38,26 @@ const LoginPage = () => {
     <div className={styles.page}>
       <div className={styles.layout}>
         <header className={styles.topBar}>
-          <Link href="/" className={styles.topLogoWrap} aria-label="Calcutta Sweets home">
-            <Image
-              src={logo}
-              alt="Calcutta Sweets"
-              width={209}
-              height={90}
-              className={styles.topLogo}
-              priority
-              unoptimized
-            />
+          <Link href="/" className={styles.topLogoWrap} aria-label="Fluxen POS home">
+            <span className={styles.logoDesk}>
+              <FluxenLogo size={34} tone="light" />
+            </span>
+            <span className={styles.logoMob}>
+              <FluxenLogo size={34} />
+            </span>
           </Link>
-          <p className={styles.topTagline}>Return to Heritage</p>
+          <Link href="/" className={styles.topTagline}>
+            Back to home
+          </Link>
         </header>
 
         <div className={styles.splitCard}>
-          <div className={styles.visualPane}>
-            <Image
-              src="/login-heritage-hero.png"
-              alt=""
-              fill
-              className={styles.heroImage}
-              sizes="(max-width: 900px) 100vw, 50vw"
-              priority
-            />
-            <div className={styles.visualGradient} aria-hidden />
-            <div className={styles.visualCopy}>
-              <p className={styles.visualQuote}>
-                The sweetness of a thousand years, crafted for today.
-              </p>
-              <p className={styles.visualKicker}>Heritage collection since 1924</p>
-            </div>
-          </div>
+          <AuthAside heading="Pick up where the day left off." points={AUTH_POINTS} />
 
           <div className={styles.formPane}>
             <div className={styles.formInner}>
-              <h1 className={styles.formTitle}>Welcome Back</h1>
-              <p className={styles.formSub}>Sign in to your heritage account</p>
+              <h1 className={styles.formTitle}>Welcome back</h1>
+              <p className={styles.formSub}>Sign in to your Fluxen POS account</p>
 
               <Form layout="vertical" requiredMark={false} onFinish={onFinish} className={styles.form}>
                 <label className={styles.label} htmlFor="login-email">
@@ -124,8 +108,8 @@ const LoginPage = () => {
 
                 <p className={styles.joinRow}>
                   Don&apos;t have an account?{' '}
-                  <Link href="#" className={styles.joinLink} prefetch={false}>
-                    Join the Heritage
+                  <Link href="/signup" className={styles.joinLink}>
+                    Create one
                   </Link>
                 </p>
               </Form>
@@ -146,7 +130,7 @@ const LoginPage = () => {
             </a>
           </nav>
           <p className={styles.copyright}>
-            © 2026 Calcutta Sweets Heritage Editorial. All Rights Reserved.
+            © 2026 Fluxen POS. All rights reserved.
           </p>
         </footer>
       </div>

@@ -125,11 +125,9 @@ export class RoleRequestsService {
     });
   }
 
-  async findAll(shopCode?: string) {
+  async findAll(orgId: string) {
     return this.prisma.roleRequest.findMany({
-      where: shopCode
-        ? { shopCode, status: RequestStatus.PENDING }
-        : { status: RequestStatus.PENDING },
+      where: { status: RequestStatus.PENDING, shop: { orgId } },
       include: {
         user: { select: { name: true, email: true, role: true } },
       },
@@ -137,9 +135,9 @@ export class RoleRequestsService {
     });
   }
 
-  async approve(id: string) {
-    const request = await this.prisma.roleRequest.findUnique({
-      where: { id },
+  async approve(id: string, orgId: string) {
+    const request = await this.prisma.roleRequest.findFirst({
+      where: { id, shop: { orgId } },
       include: { user: true },
     });
     if (!request) throw new NotFoundException('Role request not found');
@@ -229,9 +227,9 @@ export class RoleRequestsService {
     return { message: 'Approved successfully' };
   }
 
-  async reject(id: string) {
-    const request = await this.prisma.roleRequest.findUnique({
-      where: { id },
+  async reject(id: string, orgId: string) {
+    const request = await this.prisma.roleRequest.findFirst({
+      where: { id, shop: { orgId } },
       include: { user: true },
     });
     if (!request) throw new NotFoundException('Role request not found');

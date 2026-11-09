@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 /*
- * Calcutta Sweets design tokens.
+ * Fluxen POS design tokens.
  *
- * These :root values are the light "Classic" theme, i.e. what the server renders.
+ * These :root values are the light "Fluxen" theme, i.e. what the server renders.
  * At runtime the ThemeProvider (src/contexts/ThemeContext.tsx) overwrites them on
  * <html> from the active shop's theme via src/lib/theme/*, including dark mode.
  * Variable names are kept from the original bistre/linen/ochre palette so every
@@ -38,20 +38,20 @@
   --linen-90: #f0f0ee;
   --linen-80: #e7e7e4;
 
-  /* Primary brand scale (Classic: copper from the logo; 500 on white = 5.5:1) */
-  --ochre-800: #5c2b0c;
-  --ochre-700: #74360f;
-  --ochre-600: #8f4218;
-  --ochre-500: #a84f1c;
-  --ochre-400: #c8773a;
-  --ochre-300: #e0a27a;
-  --ochre-200: #f3d2bc;
-  --ochre-100: #fdf1e8;
-  --ochre-50: #fef8f3;
-  --ochre-20: rgba(168, 79, 28, 0.2);
-  --ochre-10: rgba(168, 79, 28, 0.1);
-  --ochre-2: rgba(168, 79, 28, 0.02);
-  --ochre-rgb: 168, 79, 28;
+  /* Primary brand scale (Fluxen default: indigo; 500 on white = 6.3:1) */
+  --ochre-800: #2a2579;
+  --ochre-700: #36309c;
+  --ochre-600: #433cc3;
+  --ochre-500: #4f46e5;
+  --ochre-400: #726bea;
+  --ochre-300: #a39ff1;
+  --ochre-200: #d1cff8;
+  --ochre-100: #f1f0fd;
+  --ochre-50: #f8f8fe;
+  --ochre-20: rgba(79, 70, 229, 0.2);
+  --ochre-10: rgba(79, 70, 229, 0.1);
+  --ochre-2: rgba(79, 70, 229, 0.02);
+  --ochre-rgb: 79, 70, 229;
   --on-ochre: #ffffff;
   --on-primary: #ffffff;
   --ochre: var(--ochre-500);
@@ -59,30 +59,30 @@
   --ochre-dark: var(--ochre-600);
 
   /* Secondary brand scale (charts, secondary highlights) */
-  --secondary-50: #f5faf9;
-  --secondary-100: #ecf4f3;
-  --secondary-200: #c1dbd9;
-  --secondary-300: #82b8b4;
-  --secondary-400: #3f918b;
-  --secondary-500: #0f766e;
-  --secondary-600: #0d645e;
-  --secondary-700: #0a504b;
-  --secondary-800: #083e3a;
-  --secondary-rgb: 15, 118, 110;
-  --on-secondary: #ffffff;
+  --secondary-50: #f5fbfc;
+  --secondary-100: #ebf6f9;
+  --secondary-200: #bfe2eb;
+  --secondary-300: #7fc6d7;
+  --secondary-400: #39a7c1;
+  --secondary-500: #0891b2;
+  --secondary-600: #077b97;
+  --secondary-700: #066279;
+  --secondary-800: #044c5e;
+  --secondary-rgb: 8, 145, 178;
+  --on-secondary: #18181b;
 
   /* Accent scale (badges, highlights, notification dots) */
-  --accent-50: #fdfaf5;
-  --accent-100: #fbf6eb;
-  --accent-200: #f1e1be;
-  --accent-300: #e3c27c;
-  --accent-400: #d5a136;
-  --accent-500: #ca8a04;
-  --accent-600: #9b6903;
-  --accent-700: #7c5402;
-  --accent-800: #604102;
-  --accent-rgb: 202, 138, 4;
-  --on-accent: #18181b;
+  --accent-50: #faf8ff;
+  --accent-100: #f6f2fe;
+  --accent-200: #e1d5fd;
+  --accent-300: #c3aafa;
+  --accent-400: #a27df8;
+  --accent-500: #8b5cf6;
+  --accent-600: #764ed1;
+  --accent-700: #5e3ea7;
+  --accent-800: #493082;
+  --accent-rgb: 139, 92, 246;
+  --on-accent: #ffffff;
 
   /* Legacy highlight aliases now follow the accent */
   --gold-300: var(--accent-300);
@@ -118,7 +118,7 @@
   --shadow-sm: 0 1px 2px rgba(24, 24, 27, 0.05);
   --shadow-md: 0 1px 2px rgba(24, 24, 27, 0.06), 0 10px 24px -14px rgba(24, 24, 27, 0.2);
   --shadow-lg: 0 2px 4px rgba(24, 24, 27, 0.04), 0 18px 40px -18px rgba(24, 24, 27, 0.25);
-  --ring: 0 0 0 3px rgba(168, 79, 28, 0.18);
+  --ring: 0 0 0 3px rgba(79, 70, 229, 0.18);
 
   /* Status (paid / in stock, low stock, cancelled / out of stock, informational) */
   --success: #15803d;
@@ -309,7 +309,7 @@ a:where(:any-link):active {
   color: var(--ochre-600);
 }
 
-/* Custom scrollbars - slim, cream/gold aesthetic */
+/* Custom scrollbars - slim, neutral */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--bistre-200) transparent;
@@ -366,6 +366,12 @@ body {
 :focus-visible {
   outline: 2px solid var(--ochre-400);
   outline-offset: 2px;
+}
+
+/* antd focuses a dialog's close button when it opens; keep that ring on the button itself
+   rather than a detached box around it. */
+.ant-modal-close:focus-visible {
+  outline-offset: 0;
 }
 
 .ant-btn {

@@ -25,6 +25,8 @@ type ShopContextValue = {
   activeShop: Shop | undefined;
   /** Replace a shop in the loaded list after a successful save (no page reload). */
   updateShop: (shop: Shop) => void;
+  /** Reload the shop list (super admins), e.g. after onboarding adds shops. */
+  refreshShops: () => Promise<void>;
 };
 
 const ShopContext = createContext<ShopContextValue | null>(null);
@@ -76,9 +78,7 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
               ? localStorage.getItem(STORAGE_KEY)
               : null;
           const fromStorage = stored && codes.has(stored) ? stored : null;
-          const defaultShop = codes.has(defaultEnv)
-            ? defaultEnv
-            : list.find((s) => s.shopCode === "calcutta-main")?.shopCode;
+          const defaultShop = codes.has(defaultEnv) ? defaultEnv : undefined;
           const fallback =
             fromStorage ||
             defaultShop ||
@@ -157,6 +157,13 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     setShops((prev) => prev.map((s) => (s.id === shop.id ? { ...s, ...shop } : s)));
   }, []);
 
+  const refreshShops = useCallback(async () => {
+    if (role !== "SUPER_ADMIN") return;
+    const res = await apiFetch("/shops");
+    if (!res.ok) return;
+    setShops((await res.json()) as Shop[]);
+  }, [role]);
+
   const value = useMemo<ShopContextValue>(
     () => ({
       effectiveShopCode,
@@ -166,6 +173,7 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       shopSwitcherEnabled,
       activeShop,
       updateShop,
+      refreshShops,
     }),
     [
       effectiveShopCode,
@@ -175,6 +183,7 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       shopSwitcherEnabled,
       activeShop,
       updateShop,
+      refreshShops,
     ],
   );
 

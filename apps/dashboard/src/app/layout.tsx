@@ -29,8 +29,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Calcutta Sweets",
-  description: "Shop and product management",
+  title: "Fluxen POS",
+  description: "Billing, inventory and multi-shop management",
   icons: {
     icon: "/favicon.svg",
   },

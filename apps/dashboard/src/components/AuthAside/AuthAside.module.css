@@ -1,0 +1,48 @@
+.aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  min-width: 0;
+  padding: 6.5rem clamp(2rem, 4.5vw, 4rem) clamp(2rem, 4vw, 3.25rem);
+  background: var(--ochre-700);
+  color: #fff;
+}
+.heading {
+  margin: 0;
+  max-width: 13em;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 650;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.points li {
+  position: relative;
+  padding-left: 1.4rem;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.92);
+}
+.points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: #a5b4fc;
+}
+@media (max-width: 900px) {
+  .aside {
+    display: none;
+  }
+}

@@ -1,5 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import type { Prisma, StockMovementReason } from '@calcutta/database';
+import type { Prisma, StockMovementReason } from '@fluxen/database';
 import { dec, qty, type DecimalLike } from './money';
 
 type Tx = Prisma.TransactionClient;

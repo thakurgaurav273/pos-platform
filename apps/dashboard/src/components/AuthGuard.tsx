@@ -1,9 +1,10 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useShop } from "@/contexts/ShopContext";
+import { apiFetch } from "@/lib/api";
 import {
   matchAppNavItem,
   isAppNavAllowed,
@@ -76,6 +77,34 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     redirectingRef.current = false;
   }, [pathname]);
 
+  // A brand-new business owner finishes first-run setup before using the app.
+  // "checking" holds the page back so the dashboard never flashes before the redirect.
+  const isOwner = isAuthenticated && user?.role === "SUPER_ADMIN";
+  const [setupState, setSetupState] = useState<"checking" | "done" | "needed">("checking");
+  useEffect(() => {
+    if (!isOwner) return;
+    let cancelled = false;
+    apiFetch("/organizations/current")
+      .then(async (res) => {
+        if (cancelled) return;
+        if (!res.ok) return setSetupState("done");
+        const org = (await res.json()) as { onboardingCompleted: boolean };
+        if (org.onboardingCompleted) {
+          setSetupState("done");
+        } else {
+          setSetupState("needed");
+          router.replace("/onboarding");
+        }
+      })
+      .catch(() => {
+        // Offline or transient: never lock an existing owner out of the app.
+        if (!cancelled) setSetupState("done");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isOwner, router]);
+
   useEffect(() => {
     if (isLoading || !isAuthenticated || !user || !permissions) return;
     if (!isProtectedPath(pathname)) return;
@@ -127,6 +156,10 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (!isAuthenticated && isProtectedPath(pathname)) {
     return <PageBootstrapLoader label="Redirecting" />;
+  }
+
+  if (isOwner && setupState !== "done") {
+    return <PageBootstrapLoader label={setupState === "needed" ? "Starting setup" : "Loading session"} />;
   }
 
   if (

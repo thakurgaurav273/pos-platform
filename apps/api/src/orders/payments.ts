@@ -1,5 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import { PaymentLegMethod, PaymentMethod, Prisma } from '@calcutta/database';
+import { PaymentLegMethod, PaymentMethod, Prisma } from '@fluxen/database';
 import { dec, money, type DecimalLike } from '../common/money';
 
 export type PaymentLegInput = { method: PaymentLegMethod; amount: DecimalLike };

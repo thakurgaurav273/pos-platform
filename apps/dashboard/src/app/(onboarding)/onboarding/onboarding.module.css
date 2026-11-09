@@ -1,0 +1,359 @@
+.page {
+  min-height: 100vh;
+  background: var(--linen);
+  padding: clamp(1rem, 3vw, 2rem) 16px 3rem;
+}
+
+.top {
+  max-width: 1120px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.skip {
+  color: var(--text-secondary);
+  min-height: 44px;
+}
+
+.shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+.rail {
+  position: sticky;
+  top: 1.5rem;
+}
+
+.railHello {
+  margin: 0;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.railSub {
+  margin: 0.25rem 0 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.stepItem[data-state="current"] {
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+}
+
+.stepDot {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+}
+
+.stepItem[data-state="current"] .stepDot {
+  background: var(--ochre-500);
+  border-color: var(--ochre-500);
+  color: var(--on-primary);
+}
+
+.stepItem[data-state="done"] .stepDot {
+  background: var(--ochre-100);
+  border-color: var(--ochre-300);
+  color: var(--ochre-700);
+}
+
+.stepLabel {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.stepHint {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  min-width: 0;
+}
+
+.counter {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ochre-600);
+  font-weight: 600;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.lead {
+  margin: 0.5rem 0 1.5rem;
+  max-width: 60ch;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1rem;
+}
+
+.span2 {
+  grid-column: span 2;
+}
+
+.rates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1rem;
+  grid-column: span 2;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.actions :global(.ant-btn) {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.shopList {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.shopRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-subtle);
+}
+
+.shopName {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.shopMeta {
+  margin-left: auto;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.ok {
+  color: var(--success, #15803d);
+}
+
+.applyAll {
+  margin-top: 1rem;
+}
+
+.summary {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+}
+
+.summary > div {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-subtle);
+}
+
+.summary dt {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.summary dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.nextUp {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* The theme step needs room for controls beside the live preview: the rail becomes a top stepper. */
+.shellWide {
+  grid-template-columns: minmax(0, 1fr);
+}
+.shellWide .rail {
+  position: static;
+}
+.shellWide .railSub,
+.shellWide .stepHint {
+  display: none;
+}
+.shellWide .steps {
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0.5rem;
+}
+.shellWide .stepItem {
+  flex-direction: column;
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+  gap: 0.35rem;
+}
+.shellWide .stepLabel {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rail {
+    position: static;
+  }
+  .railSub,
+  .stepHint {
+    display: none;
+  }
+  .steps {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .stepItem {
+    flex-direction: column;
+    text-align: center;
+    padding: 0.5rem 0.25rem;
+    gap: 0.35rem;
+  }
+  .stepLabel {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .grid,
+  .rates {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .span2,
+  .rates {
+    grid-column: auto;
+  }
+  .summary > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepItem {
+    transition: none;
+  }
+}
+
+.title, .railHello { font-weight: 700; letter-spacing: -0.03em; }
+
+/* Ledger language, matching the landing page: hairlines, mono labels, tight corners. */
+.card {
+  border-radius: 6px;
+  box-shadow: none;
+  border-color: var(--border-strong);
+}
+.counter,
+.stepHint {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.stepItem {
+  border-radius: 4px;
+}
+.stepItem[data-state="current"] {
+  box-shadow: none;
+  border: 1px solid var(--border-strong);
+}
+.stepDot {
+  border-radius: 3px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+.shopRow,
+.summary > div {
+  border-radius: 4px;
+}
+.actions {
+  border-top-color: var(--border-strong);
+}

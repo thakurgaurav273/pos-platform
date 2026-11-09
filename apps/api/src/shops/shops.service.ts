@@ -13,7 +13,7 @@ import { UpdateShopDto } from './dto/update-shop.dto';
 import { UpdateShopBrandingDto } from './dto/shop-theme.dto';
 import { normalizeLogoUrl, normalizeThemeConfig } from './theme/shop-theme';
 import { deleteShopAndDependencies } from './shop-delete';
-import { Prisma } from '@calcutta/database';
+import { Prisma } from '@fluxen/database';
 import { qty } from '../common/money';
 import { applyStockChange, LONG_TX, nextSequence } from '../common/stock';
 
@@ -28,13 +28,13 @@ const TAX_EDITOR_ROLES: UserRole[] = [
 export class ShopsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  /** Next `SH000123` code from a counter (existing codes like `calcutta-main` are ignored). */
+  /** Next `SH000123` code from a counter (existing codes like `fluxen-main` are ignored). */
   async generateShopCode(tx?: Prisma.TransactionClient) {
     const n = await nextSequence(tx ?? this.prisma, 'SHOPCODE');
     return `SH${n.toString().padStart(6, '0')}`;
   }
 
-  async create(createShopDto: CreateShopDto) {
+  async create(createShopDto: CreateShopDto, orgId: string) {
     const { themeConfig, ...rest } = createShopDto;
     return this.prisma.$transaction(async (tx) => {
       const shopCode = await this.generateShopCode(tx);
@@ -46,12 +46,16 @@ export class ShopsService {
             ? { themeConfig: normalizeThemeConfig(themeConfig) }
             : {}),
           shopCode,
+          orgId,
         },
       });
     });
   }
 
-  async createWithInitialInventory(dto: CreateShopWithInventoryDto) {
+  async createWithInitialInventory(
+    dto: CreateShopWithInventoryDto,
+    orgId: string,
+  ) {
     // Validate branding before opening the transaction so bad input fails fast.
     const logoUrl = normalizeLogoUrl(dto.logoUrl) ?? undefined;
     const themeConfig = dto.themeConfig
@@ -60,7 +64,7 @@ export class ShopsService {
     return this.prisma.$transaction(async (tx) => {
       const shopCode = dto.shopCode || (await this.generateShopCode(tx));
       const factory = await tx.shop.findFirst({
-        where: { isFactory: true },
+        where: { isFactory: true, orgId },
         orderBy: { createdAt: 'asc' },
         select: { shopCode: true },
       });
@@ -69,6 +73,7 @@ export class ShopsService {
         data: {
           name: dto.name,
           shopCode,
+          orgId,
           currency: dto.currency || 'INR',
           logoUrl,
           ...(themeConfig ? { themeConfig } : {}),
@@ -153,8 +158,9 @@ export class ShopsService {
     }, LONG_TX);
   }
 
-  async findAll() {
+  async findAll(orgId: string) {
     return this.prisma.shop.findMany({
+      where: { orgId },
       orderBy: { createdAt: 'desc' },
     });
   }
@@ -169,8 +175,8 @@ export class ShopsService {
     return shop;
   }
 
-  async findOne(id: string, actor: User) {
-    await this.assertCanAccessShop(id, actor);
+  async findOne(id: string, actor: User, orgId: string) {
+    await this.assertCanAccessShop(id, actor, orgId);
     const shop = await this.prisma.shop.findUnique({
       where: { id },
       include: { products: true, users: true },
@@ -181,8 +187,13 @@ export class ShopsService {
     return shop;
   }
 
-  async update(id: string, updateShopDto: UpdateShopDto, actor: User) {
-    await this.assertCanAccessShop(id, actor);
+  async update(
+    id: string,
+    updateShopDto: UpdateShopDto,
+    actor: User,
+    orgId: string,
+  ) {
+    await this.assertCanAccessShop(id, actor, orgId);
 
     const data =
       actor.role === UserRole.SUPER_ADMIN
@@ -241,9 +252,9 @@ export class ShopsService {
     return out;
   }
 
-  private async assertCanAccessShop(id: string, actor: User) {
-    const row = await this.prisma.shop.findUnique({
-      where: { id },
+  private async assertCanAccessShop(id: string, actor: User, orgId: string) {
+    const row = await this.prisma.shop.findFirst({
+      where: { id, orgId },
       select: { shopCode: true },
     });
     if (!row) {
@@ -265,7 +276,14 @@ export class ShopsService {
     return !!shop?.isFactory;
   }
 
-  async remove(id: string, effectiveShopCode: string) {
+  async remove(id: string, effectiveShopCode: string, orgId: string) {
+    const owned = await this.prisma.shop.findFirst({
+      where: { id, orgId },
+      select: { id: true },
+    });
+    if (!owned) {
+      throw new NotFoundException(`Shop #${id} not found`);
+    }
     if (!(await this.isFactory(effectiveShopCode))) {
       throw new ForbiddenException(
         'Shop deletion is only allowed when scoped to the factory warehouse',

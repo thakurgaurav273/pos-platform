@@ -27,13 +27,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 44px;
+  min-height: 44px;
   padding: 6px 10px;
   border-bottom: 1px solid var(--sidebar-border);
 }
 
 .logo > * {
-  max-height: 30px;
+  /* The preview is roughly two-thirds scale, so the logo setting is scaled to match. */
+  max-height: calc(var(--logo-height, 46px) * 0.65);
+  max-width: min(calc(var(--logo-width, 200px) * 0.65), 100%);
 }
 
 .nav {

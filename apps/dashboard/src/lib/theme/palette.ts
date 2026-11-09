@@ -100,7 +100,7 @@ export const NEUTRALS: Record<ResolvedMode, Record<string, string>> = {
   },
 };
 
-/** Exact copper scale from the original design, so the Classic theme renders unchanged. */
+/** Exact copper scale from the original design, so shops saved with the old copper theme render unchanged. */
 const COPPER_LIGHT: ShadeScale = {
   50: "#fef8f3",
   100: "#fdf1e8",

@@ -774,7 +774,7 @@ function buildInvoiceHtml(
 <body>
   <h1>${esc(data.shopName)}</h1>
   ${shopHeaderBlock(data, 'a4')}
-  <div class="tagline">Shop ${esc(data.shopCode)} · Calcutta Sweets</div>
+  <div class="tagline">Shop ${esc(data.shopCode)} · Fluxen POS</div>
   <div class="meta">
     <div><strong>Invoice no.</strong> ${esc(data.invoiceNo)}</div>
     <div><strong>Date</strong> ${esc(dateStr)}</div>

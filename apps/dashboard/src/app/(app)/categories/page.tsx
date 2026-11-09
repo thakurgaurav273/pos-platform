@@ -1,10 +1,11 @@
 "use client";
 
 import { App, Button, Form, Input, Modal } from "antd";
-import { ChevronRight, FolderSearch, Plus, Search } from "lucide-react";
+import { ChevronRight, FileUp, FolderSearch, Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { CatalogImportModal } from "@/components/CatalogImport/CatalogImportModal";
 import { ContentSkeleton } from "@/components/ContentSkeleton/ContentSkeleton";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { PageHeader } from "@/components/PageHeader/PageHeader";
@@ -67,6 +68,7 @@ export default function CategoriesPage() {
   );
 
   const [createOpen, setCreateOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form] = Form.useForm();
 
@@ -142,13 +144,21 @@ export default function CategoriesPage() {
                 />
               ) : null}
               {isAtLeastManager(user?.role) && (
-                <Button
-                  type="primary"
-                  icon={<Plus size={16} strokeWidth={2.25} />}
-                  onClick={() => setCreateOpen(true)}
-                >
-                  New category
-                </Button>
+                <>
+                  <Button
+                    icon={<FileUp size={16} strokeWidth={2.25} />}
+                    onClick={() => setImportOpen(true)}
+                  >
+                    Import
+                  </Button>
+                  <Button
+                    type="primary"
+                    icon={<Plus size={16} strokeWidth={2.25} />}
+                    onClick={() => setCreateOpen(true)}
+                  >
+                    New category
+                  </Button>
+                </>
               )}
             </div>
           ) : null
@@ -234,6 +244,13 @@ export default function CategoriesPage() {
           </div>
         </Form>
       </Modal>
+
+      <CatalogImportModal
+        kind="categories"
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImported={() => setListVersion((v) => v + 1)}
+      />
     </div>
   );
 }

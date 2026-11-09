@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { Button, Drawer, Segmented, Tabs, Tooltip } from "antd";
+import { motion } from "framer-motion";
 import { Bluetooth, Receipt, ScanBarcode } from "lucide-react";
 import { ContentSkeleton } from "@/components/ContentSkeleton/ContentSkeleton";
 import { BarcodeScannerInput } from "@/components/BarcodeScannerInput/BarcodeScannerInput";
@@ -42,7 +43,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { CUSTOMER_PHONE_EDIT_ROLES } from "@/lib/customerFields";
 import styles from "./page.module.css";
 
-const POS_DRAFT_KEY_PREFIX = "calcutta_pos_draft:";
+const POS_DRAFT_KEY_PREFIX = "fluxen_pos_draft:";
 
 const inrCompact = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -542,11 +543,15 @@ export default function BillingPOSPage() {
         </div>
 
         {stackedBillingLayout ? (
-          <button
+          <motion.button
             type="button"
             className={styles.mobileBillBar}
             onClick={() => setBillDrawerOpen(true)}
             aria-label="Open current sale and checkout"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            whileTap={{ scale: 0.985 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className={styles.mobileBillBarInner}>
               <Receipt
@@ -563,7 +568,7 @@ export default function BillingPOSPage() {
               </div>
               <span className={styles.mobileBillBarCta}>Review & pay</span>
             </div>
-          </button>
+          </motion.button>
         ) : (
           <aside className={styles.sidebar}>
             <BillingBillPanel

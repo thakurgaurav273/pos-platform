@@ -1,0 +1,100 @@
+.perks {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.9rem;
+}
+
+.perks li {
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.perks li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--ochre-300);
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+/* One screen, no scroll: fields pair up two per row and the chrome tightens. */
+.row2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 14px;
+}
+.row2 > div {
+  min-width: 0;
+}
+div.compact {
+  padding: 0;
+}
+.compact .title {
+  font-size: clamp(1.7rem, 3vw, 2.1rem);
+}
+.compact :global(.ant-form-item) {
+  margin-bottom: 18px;
+}
+@media (max-width: 560px) {
+  .row2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.compact .wide {
+  max-width: 500px;
+}
+.row2 + .row2 {
+  margin-top: 16px;
+}
+
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.backLink:hover {
+  color: var(--text-primary);
+}
+.otpRow {
+  margin: 20px 0 24px;
+}
+.otpRow :global(.ant-otp) {
+  width: 100%;
+  justify-content: space-between;
+}
+.otpRow :global(.ant-otp-input) {
+  height: 52px;
+  font-size: 1.4rem;
+}
+.linkButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+.linkButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

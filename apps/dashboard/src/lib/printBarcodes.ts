@@ -45,7 +45,7 @@ export function openPrintableBarcodes(items: BarcodePrintData[]): boolean {
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Labels - Calcutta Sweets</title>
+  <title>Labels - Fluxen POS</title>
   <style>
     * { 
       box-sizing: border-box; 

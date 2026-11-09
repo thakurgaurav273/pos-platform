@@ -3,7 +3,7 @@
  * ever touch a disposable local database: never the shared/production DB in .env.
  *
  *   createdb cs_test
- *   DATABASE_URL=postgresql://localhost:5432/cs_test pnpm --filter @calcutta/database exec prisma migrate deploy
+ *   DATABASE_URL=postgresql://localhost:5432/cs_test pnpm --filter @fluxen/database exec prisma migrate deploy
  *   TEST_DATABASE_URL=postgresql://localhost:5432/cs_test pnpm --filter api test:e2e
  */
 const url = process.env.TEST_DATABASE_URL;

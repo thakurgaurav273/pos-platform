@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { Alert, Button, ColorPicker, Segmented, Select } from "antd";
+import { Alert, Button, ColorPicker, Segmented, Select, Slider } from "antd";
 import { Check, ImagePlus, Trash2 } from "lucide-react";
 import { contrast, isHexColour } from "@/lib/theme/color";
 import { buildThemeVars } from "@/lib/theme/cssVars";
 import { THEME_PRESETS, withPresetMatch } from "@/lib/theme/presets";
+import { LOGO_HEIGHT, LOGO_WIDTH } from "@/lib/theme/types";
 import type {
   FontStyle,
   HeaderStyle,
@@ -53,9 +54,9 @@ const FONT_OPTIONS: { value: FontStyle; label: string }[] = [
 
 /** Brand-friendly swatches shown at the top of every colour picker. */
 const SUGGESTED_COLOURS = [
-  "#a84f1c", "#b45309", "#ca8a04", "#b7791f", "#8b2346", "#be123c",
-  "#c2410c", "#047857", "#0f766e", "#15803d", "#0891b2", "#0284c7",
-  "#1e3a8a", "#4f46e5", "#7c3aed", "#334155", "#3f3f46", "#18181b",
+  "#4f46e5", "#4338ca", "#2563eb", "#0284c7", "#0891b2", "#0d9488",
+  "#047857", "#15803d", "#7c3aed", "#a21caf", "#be185d", "#8b2346",
+  "#be123c", "#c2410c", "#1e3a8a", "#334155", "#3f3f46", "#18181b",
 ];
 
 /**
@@ -183,7 +184,10 @@ export function ThemeConfigurator({
       return;
     }
     const preset = THEME_PRESETS.find((p) => p.id === id);
-    if (preset) onChange({ ...value, config: { ...preset.config, mode: config.mode } });
+    if (preset) {
+      const { mode, logoHeight, logoWidth } = config;
+      onChange({ ...value, config: { ...preset.config, mode, logoHeight, logoWidth } });
+    }
   };
 
   // Roving focus for the preset radio group (arrow keys move and select).
@@ -411,7 +415,7 @@ export function ThemeConfigurator({
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={logoUrl} alt={`${shopName ?? "Shop"} logo`} />
                 ) : (
-                  <span className={styles.logoPlaceholder}>Calcutta Sweets logo</span>
+                  <span className={styles.logoPlaceholder}>Fluxen POS logo</span>
                 )}
               </div>
               <div className={styles.logoActions}>
@@ -446,6 +450,35 @@ export function ThemeConfigurator({
                 </span>
               </div>
             </div>
+            {logoUrl && (
+              <div className={`${styles.optionGrid} ${styles.logoSize}`}>
+                {(
+                  [
+                    { key: "logoHeight", label: "Height", range: LOGO_HEIGHT },
+                    { key: "logoWidth", label: "Max width", range: LOGO_WIDTH },
+                  ] as const
+                ).map(({ key, label, range }) => (
+                  <div key={key} className={styles.option}>
+                    <span className={styles.fieldLabel} id={`logo-${key}`}>
+                      {label} · {config[key]}px
+                    </span>
+                    <Slider
+                      aria-labelledby={`logo-${key}`}
+                      className={styles.logoSlider}
+                      disabled={disabled}
+                      min={range.min}
+                      max={range.max}
+                      value={config[key]}
+                      onChange={(px) => setConfig({ [key]: px })}
+                      tooltip={{ formatter: (px) => `${px}px` }}
+                    />
+                  </div>
+                ))}
+                <span className={styles.fieldHint}>
+                  The logo keeps its shape and fits inside this size in the sidebar.
+                </span>
+              </div>
+            )}
             {logoError && (
               <Alert type="error" showIcon title={logoError} className={styles.logoError} />
             )}

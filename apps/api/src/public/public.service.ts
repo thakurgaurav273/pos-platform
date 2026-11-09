@@ -13,7 +13,7 @@ import {
   OrderStatus,
   PaymentMethod,
   Prisma,
-} from '@calcutta/database';
+} from '@fluxen/database';
 import { dec, qty } from '../common/money';
 import { computeBill, type PricedLine } from '../orders/orders.service';
 import { CreateWebsiteOrderDto } from './dto/create-website-order.dto';

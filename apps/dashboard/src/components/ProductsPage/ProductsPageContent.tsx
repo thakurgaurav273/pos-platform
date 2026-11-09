@@ -1,7 +1,7 @@
 "use client";
 
 import { App, Button, Drawer, Form, Input, InputNumber, Segmented, Select } from "antd";
-import { Plus, Search } from "lucide-react";
+import { FileUp, Plus, Search } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { apiFetch } from "@/lib/api";
 import {
@@ -13,6 +13,7 @@ import {
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 import type { ProductWithRelations } from "@/components/ProductCard/ProductCard";
+import { CatalogImportModal } from "@/components/CatalogImport/CatalogImportModal";
 import { ProductCatalogHeader, ProductCatalogRow } from "./ProductCatalogRow";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { PackageSearch, Inbox } from "lucide-react";
@@ -74,6 +75,7 @@ export function ProductsPageContent({
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   const [createOpen, setCreateOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form] = Form.useForm();
   const createUnit = Form.useWatch("unit", form) as string | undefined;
@@ -255,9 +257,14 @@ export function ProductsPageContent({
             onChange={setStatus}
           />
           {canAddProduct && (
-            <Button type="primary" icon={<Plus size={16} />} onClick={() => setCreateOpen(true)}>
-              New product
-            </Button>
+            <>
+              <Button icon={<FileUp size={16} />} onClick={() => setImportOpen(true)}>
+                Import
+              </Button>
+              <Button type="primary" icon={<Plus size={16} />} onClick={() => setCreateOpen(true)}>
+                New product
+              </Button>
+            </>
           )}
           </>
         }
@@ -395,6 +402,13 @@ export function ProductsPageContent({
           </Form.Item>
         </Form>
       </Drawer>
+
+      <CatalogImportModal
+        kind="products"
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImported={() => onRefresh?.()}
+      />
     </div>
   );
 }

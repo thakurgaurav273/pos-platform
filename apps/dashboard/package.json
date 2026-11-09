@@ -18,10 +18,11 @@
     ]
   },
   "dependencies": {
-    "@calcutta/database": "workspace:*",
+    "@fluxen/database": "workspace:*",
     "@types/jsbarcode": "^3.11.4",
     "antd": "^6.3.3",
     "exceljs": "^4.4.0",
+    "framer-motion": "^14.11.1",
     "jsbarcode": "^3.12.3",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.7",

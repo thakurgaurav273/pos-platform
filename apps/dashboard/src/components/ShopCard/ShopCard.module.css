@@ -175,13 +175,13 @@
   justify-content: center;
   gap: 0.4rem;
   width: 100%;
-  min-height: 46px;
+  min-height: 36px;
   padding: 0 1rem;
-  border-radius: var(--ui-radius-lg);
+  border-radius: var(--ui-radius-md);
   border: none;
   font-size: 0.875rem;
-  font-weight: 700;
-  font-family: var(--font-outfit), "Inter", sans-serif;
+  font-weight: 500;
+  font-family: inherit;
   color: var(--on-primary);
   background: var(--ochre-600);
   box-shadow: var(--shadow-sm);

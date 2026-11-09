@@ -9,13 +9,16 @@ import {
 import { UserRole } from '@prisma/client';
 import type { User } from '@prisma/client';
 import type { Request } from 'express';
+import { PrismaService } from '../prisma.service';
 
 /**
  * After JWT: fills `req.effectiveShopCode` from X-Shop for super admins, otherwise the user's shop.
  */
 @Injectable()
 export class ShopScopeGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<Request>();
     const user = req.user;
     if (!user) {
@@ -42,6 +45,18 @@ export class ShopScopeGuard implements CanActivate {
         throw new BadRequestException(
           'Missing shop context: send X-Shop header or ensure your account has a shop',
         );
+      }
+      // Tenant boundary: a super admin may only act on shops of their own organization.
+      if (req.effectiveShopCode !== user.shopCode) {
+        const target = await this.prisma.shop.findUnique({
+          where: { shopCode: req.effectiveShopCode },
+          select: { orgId: true },
+        });
+        const ownOrgId = (user as User & { shop?: { orgId: string } }).shop
+          ?.orgId;
+        if (!target || !ownOrgId || target.orgId !== ownOrgId) {
+          throw new ForbiddenException('That shop is not part of your business');
+        }
       }
     } else {
       if (headerShop && headerShop !== user.shopCode) {

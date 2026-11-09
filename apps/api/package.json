@@ -22,7 +22,7 @@
     "seed": "nest build && NODE_PATH=\"$PWD/../../node_modules:$PWD/node_modules\" node dist/seed/run.js"
   },
   "dependencies": {
-    "@calcutta/database": "workspace:*",
+    "@fluxen/database": "workspace:*",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "4.0.3",
     "@nestjs/core": "^11.0.1",

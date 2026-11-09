@@ -1,4 +1,4 @@
-# Calcutta Sweets: Data Integrity & Transaction Review
+# Fluxen POS: Data Integrity & Transaction Review
 
 **Review:** 2026-10-17 · **Fixes:** branch `fix/data-integrity` (uncommitted) · **Base commit:** `d44e512`
 
@@ -26,7 +26,7 @@ Run the suite yourself (it refuses any non-local DB host):
 
 ```bash
 createdb -h /tmp cs_test
-DATABASE_URL=postgresql://localhost:5432/cs_test pnpm --filter @calcutta/database exec prisma migrate deploy
+DATABASE_URL=postgresql://localhost:5432/cs_test pnpm --filter @fluxen/database exec prisma migrate deploy
 TEST_DATABASE_URL=postgresql://localhost:5432/cs_test pnpm --filter api test:e2e
 ```
 
@@ -165,14 +165,14 @@ psql "$DATABASE_URL" -Atc "select count(*) from pg_indexes where indexname='Prod
 psql "$DATABASE_URL" -Atc "select count(*) from information_schema.tables where table_name='Customer'"
 
 # 2. Mark the two migrations whose objects already exist
-pnpm --filter @calcutta/database exec prisma migrate resolve --applied 20260419180000_product_variant_barcode_per_product_unique
-pnpm --filter @calcutta/database exec prisma migrate resolve --applied 20260507174000_add_customer_table
+pnpm --filter @fluxen/database exec prisma migrate resolve --applied 20260419180000_product_variant_barcode_per_product_unique
+pnpm --filter @fluxen/database exec prisma migrate resolve --applied 20260507174000_add_customer_table
 
 # 3. Apply: 2 idempotent backfills + the hardening migration
-pnpm --filter @calcutta/database exec prisma migrate deploy
+pnpm --filter @fluxen/database exec prisma migrate deploy
 
 # 4. Verify zero drift
-pnpm --filter @calcutta/database exec prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --script
+pnpm --filter @fluxen/database exec prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --script
 ```
 
 Deploy the API and dashboard together: the POS now expects the server's bill totals and sends `expectedQuantity`, and `DELETE /orders` means cancel. If the public website calls `POST /payment/initiate`, it no longer needs to send `amount` (it is ignored).
