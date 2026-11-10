@@ -6,7 +6,7 @@
   overflow-x: clip;
 }
 .wrap {
-  max-width: 1180px;
+  max-width: 1320px;
   margin: 0 auto;
   padding-inline: clamp(16px, 4vw, 40px);
 }
@@ -108,7 +108,7 @@
 }
 .sub {
   margin: 1.5rem 0 0;
-  max-width: 56ch;
+  max-width: 64ch;
   font-size: 1.15rem;
   line-height: 1.6;
   color: var(--text-secondary);
@@ -156,7 +156,7 @@
 }
 .featureText p {
   margin: 1rem 0 0;
-  max-width: 46ch;
+  max-width: 52ch;
   font-size: 1.05rem;
   line-height: 1.65;
   color: var(--text-secondary);
