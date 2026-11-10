@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -11,6 +12,7 @@ import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { randomInt } from 'crypto';
+import { isDemoEmail } from '../demo/demo.constants';
 
 const SALT_ROUNDS = 10;
 
@@ -106,7 +108,8 @@ export class AuthService {
     const user = await this.prisma.user.findFirst({
       where: { email: emailKey },
     });
-    if (!user) {
+    // Shared demo logins have no real inbox and must keep their sealed password.
+    if (!user || isDemoEmail(user.email)) {
       return {
         message: 'If an account exists, an OTP has been sent to your email.',
       };
@@ -201,6 +204,7 @@ export class AuthService {
   ): Promise<{ message: string }> {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new UnauthorizedException('User not found');
+    this.assertNotDemo(user.email);
 
     if (!(await bcrypt.compare(oldPassword, user.password))) {
       throw new HttpException(
@@ -229,6 +233,7 @@ export class AuthService {
   ): Promise<any> {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new UnauthorizedException('User not found');
+    this.assertNotDemo(user.email);
 
     if (!(await bcrypt.compare(oldPassword, user.password)))
       throw new UnauthorizedException('Incorrect old password');
@@ -264,6 +269,14 @@ export class AuthService {
       if (attempts >= OTP_MAX_ATTEMPTS) await this.redis.del(key, attemptsKey);
     }
     return false;
+  }
+
+  private assertNotDemo(email: string) {
+    if (isDemoEmail(email)) {
+      throw new ForbiddenException(
+        'The demo account is shared, so its password cannot be changed.',
+      );
+    }
   }
 
   private normalizeRole(

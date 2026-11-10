@@ -19,7 +19,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed": "nest build && NODE_PATH=\"$PWD/../../node_modules:$PWD/node_modules\" node dist/seed/run.js"
+    "seed": "nest build && NODE_PATH=\"$PWD/../../node_modules:$PWD/node_modules\" node dist/seed/run.js",
+    "seed:demo": "nest build && NODE_PATH=\"$PWD/../../node_modules:$PWD/node_modules\" node dist/demo/run.js"
   },
   "dependencies": {
     "@fluxen/database": "workspace:*",

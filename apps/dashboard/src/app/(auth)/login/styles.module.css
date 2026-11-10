@@ -290,6 +290,30 @@
   border-color: var(--ochre-600) !important;
 }
 
+.demoButton {
+  margin-top: 0.75rem;
+  height: 48px;
+  width: 100%;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border-radius: 6px;
+  border: 1px solid var(--ochre-500) !important;
+  color: var(--ochre-600) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.demoButton:hover {
+  background: color-mix(in srgb, var(--ochre-500) 10%, transparent) !important;
+}
+
+.demoHint {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--bistre-600);
+}
+
 .joinRow {
   margin: 1.35rem 0 0;
   text-align: center;

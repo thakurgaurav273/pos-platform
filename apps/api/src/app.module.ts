@@ -20,6 +20,7 @@ import { PaymentModule } from './payment/payment.module';
 import { StockTransfersModule } from './stock-transfers/stock-transfers.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { CatalogImportModule } from './catalog-import/catalog-import.module';
+import { DemoModule } from './demo/demo.module';
 import { validateEnv } from './common/env.validation';
 import { KeepWarmService } from './keep-warm.service';
 
@@ -48,6 +49,7 @@ import { KeepWarmService } from './keep-warm.service';
     StockTransfersModule,
     OrganizationsModule,
     CatalogImportModule,
+    DemoModule,
   ],
   controllers: [AppController],
   providers: [AppService, KeepWarmService],
