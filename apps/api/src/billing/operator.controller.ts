@@ -114,6 +114,12 @@ export class OperatorController {
     return this.operator.revoke(id, who(req).email);
   }
 
+  @Post('users/:id/password-reset')
+  @UseGuards(OperatorAuthGuard)
+  sendPasswordReset(@Req() req: Request, @Param('id') id: string) {
+    return this.operator.sendPasswordReset(id, who(req).email);
+  }
+
   @Get('enquiries')
   @UseGuards(OperatorAuthGuard)
   enquiries(@Query('status') status?: EnquiryStatus) {

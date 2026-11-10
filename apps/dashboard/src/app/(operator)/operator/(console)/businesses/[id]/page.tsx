@@ -59,6 +59,12 @@ export default function BusinessDetailPage() {
     reload();
   };
 
+  const sendReset = async (u: UserDetail) => {
+    const r = await operatorRequest(`/users/${u.id}/password-reset`, { method: "POST" });
+    if (!r.ok) return message.error(r.message ?? "Could not send the reset email.");
+    message.success(`Reset code sent to ${u.email}.`);
+  };
+
   const shopColumns: AppTableColumn[] = [
     {
       key: "name",
@@ -166,6 +172,28 @@ export default function BusinessDetailPage() {
       label: "Joined",
       minWidth: 120,
       render: (_v, row) => fmtDate((row as UserDetail).createdAt),
+    },
+    {
+      key: "actions",
+      label: "",
+      minWidth: 150,
+      align: "right",
+      render: (_v, row) => {
+        const u = row as UserDetail;
+        return (
+          <Popconfirm
+            title={`Email a password reset code to ${u.email}?`}
+            description="They enter it on the Forgot password screen. It expires in 5 minutes."
+            okText="Send"
+            onConfirm={() => void sendReset(u)}
+            disabled={org.isDemo}
+          >
+            <Button size="small" disabled={org.isDemo}>
+              Send password reset
+            </Button>
+          </Popconfirm>
+        );
+      },
     },
   ];
 

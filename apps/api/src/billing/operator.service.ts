@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import type { EnquiryStatus } from '@fluxen/database';
 import { PrismaService } from '../prisma.service';
+import { AuthService } from '../auth/auth.service';
 import { DEMO_EMAILS, isDemoEmail } from '../demo/demo.constants';
 import { ActivateDto } from './dto';
 import { BillingService } from './billing.service';
@@ -27,6 +28,7 @@ export class OperatorService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly billing: BillingService,
+    private readonly auth: AuthService,
   ) {}
 
   // ----------------------------------------------------------------- helpers
@@ -407,6 +409,27 @@ export class OperatorService {
     });
     this.logger.log(`operator ${operator} revoked org ${orgId}`);
     return this.result(orgId);
+  }
+
+  // ------------------------------------------------------------------ users
+
+  /**
+   * Starts the normal "forgot password" flow for one of a business's people: emails them
+   * a one-time code (valid 5 minutes) that they enter on the Forgot password screen.
+   * The operator never sees the code or sets a password.
+   */
+  async sendPasswordReset(userId: string, operator: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true },
+    });
+    if (!user) throw new NotFoundException('User not found');
+    if (isDemoEmail(user.email)) {
+      throw new BadRequestException('Demo accounts keep a fixed password.');
+    }
+    await this.auth.sendResetPasswordEmailOTP(user.email);
+    this.logger.log(`operator ${operator} sent a password reset to user ${userId}`);
+    return { ok: true, email: user.email };
   }
 
   // --------------------------------------------------------------- enquiries

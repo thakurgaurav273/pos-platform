@@ -120,6 +120,7 @@
   font-size: 0.8125rem;
 }
 .sideEmail {
+  display: block;
   color: #fff;
   word-break: break-all;
 }
@@ -178,14 +179,22 @@
   gap: 8px;
 }
 .back {
-  display: inline-block;
-  margin-bottom: 10px;
-  color: var(--op-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 6px 12px;
+  border: 1px solid var(--op-border);
+  border-radius: 8px;
+  background: var(--op-surface);
+  color: var(--op-text);
   font-size: 0.85rem;
+  font-weight: 500;
   text-decoration: none;
 }
 .back:hover {
-  color: var(--op-text);
+  border-color: var(--ochre-500);
+  color: var(--ochre-600);
 }
 
 /* ---- cards ---- */

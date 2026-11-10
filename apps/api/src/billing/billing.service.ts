@@ -39,8 +39,16 @@ export class BillingService {
     return view;
   }
 
-  /** Active operators receive plan-request emails. */
-  private async operatorEmails(): Promise<string[]> {
+  /**
+   * Who is told about a new plan request: PLAN_ENQUIRY_TO (comma-separated) when set,
+   * otherwise every active operator.
+   */
+  private async notifyRecipients(): Promise<string[]> {
+    const configured = (process.env.PLAN_ENQUIRY_TO ?? '')
+      .split(',')
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean);
+    if (configured.length > 0) return configured;
     const rows = await this.prisma.operatorAccount.findMany({
       where: { isActive: true },
       select: { email: true },
@@ -90,7 +98,18 @@ export class BillingService {
     });
 
     // The request is saved either way; a failed email must not lose it.
-    const to = await this.operatorEmails();
+    const to = await this.notifyRecipients();
+    try {
+      await this.email.sendPlanEnquiryAckEmail(enquiry.email, {
+        contactName: enquiry.contactName,
+        businessName: enquiry.organization.name,
+        plan: enquiry.plan,
+      });
+    } catch (e) {
+      this.logger.error(
+        `Plan enquiry ${enquiry.id} saved but the acknowledgement email failed: ${(e as Error).message}`,
+      );
+    }
     if (to.length > 0) {
       try {
         await this.email.sendPlanEnquiryEmail(to, {
@@ -108,7 +127,7 @@ export class BillingService {
       }
     } else {
       this.logger.warn(
-        `Plan enquiry ${enquiry.id} saved; no operator account exists yet, so nobody was emailed.`,
+        `Plan enquiry ${enquiry.id} saved; PLAN_ENQUIRY_TO is empty and no operator account exists, so nobody was notified.`,
       );
     }
 

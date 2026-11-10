@@ -117,6 +117,30 @@ export class EmailService {
     return data;
   }
 
+  /** Acknowledges to the business that its plan request was received. */
+  async sendPlanEnquiryAckEmail(
+    to: string,
+    d: { contactName: string; businessName: string; plan: string | null },
+  ) {
+    const { data, error } = await this.resend.emails.send({
+      from: process.env.EMAIL_FROM || 'Fluxen POS <onboarding@resend.dev>',
+      to: [to],
+      subject: 'We received your plan request',
+      html: `
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #18181b; max-width: 520px; margin: 0 auto; border: 1px solid #eee; border-radius: 12px; padding: 32px;">
+          <h2 style="margin-top: 0;">Thanks, we got your request</h2>
+          <p>Hi ${escapeHtml(d.contactName || 'there')}, we received the plan request for <b>${escapeHtml(d.businessName)}</b>${d.plan ? ` (${escapeHtml(d.plan)})` : ''}.</p>
+          <p>Our team will contact you shortly with payment details. Your account keeps working in the meantime.</p>
+          <p style="font-size: 13px; color: #555;">Just reply to this email if you want to add anything.</p>
+        </div>
+      `,
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data;
+  }
+
   async sendPermissionRequestEmail(
     email: string,
     permissionsSummary: string,

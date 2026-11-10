@@ -24,6 +24,8 @@ x-api-env: &api-env
   CORS_ORIGIN: ${CORS_ORIGIN:-${APP_URL}}
   RESEND_API_KEY: ${RESEND_API_KEY:?Set RESEND_API_KEY}
   EMAIL_FROM: ${EMAIL_FROM:-Fluxen POS <onboarding@resend.dev>}
+  # Where "plan request" notifications go (comma-separated). Empty = all active operators.
+  PLAN_ENQUIRY_TO: ${PLAN_ENQUIRY_TO:? Set PLAN_ENQUIRY_TO}
   PAYTM_MID: ${PAYTM_MID:?Set PAYTM_MID}
   PAYTM_MERCHANT_KEY: ${PAYTM_MERCHANT_KEY:?Set PAYTM_MERCHANT_KEY (16 characters)}
   PAYTM_WEBSITE: ${PAYTM_WEBSITE:-DEFAULT}
