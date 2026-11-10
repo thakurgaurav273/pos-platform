@@ -21,10 +21,12 @@ const inter = Inter({
   preload: false,
 });
 
+/* Variable font: no `weight` list. Listing static weights makes Turbopack request one
+   @font-face per weight and subset, which failed in the clean Docker build
+   ("next/font/google queries have exactly one entry"). */
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
   preload: false,
 });
 
