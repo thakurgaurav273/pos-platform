@@ -1,0 +1,337 @@
+/*
+ * globals.css sets overflow-x: hidden on html and body, which makes body a scroll
+ * container that never scrolls, so position: sticky has nothing to stick against.
+ * `clip` still stops horizontal overflow but does not create a scroll container.
+ * Scoped to these pages so the rest of the app is untouched.
+ */
+:global(html:has([data-legal-page])),
+:global(html:has([data-legal-page]) body) {
+  overflow-x: clip;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--linen, var(--surface));
+  color: var(--text-primary);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 4vw, 40px);
+}
+
+/* ---- top bar ---- */
+.nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-strong);
+}
+.navInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 60px;
+}
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.page a.navLink,
+.page a.navLink:visited {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.page a.navLink:hover {
+  color: var(--ochre-600);
+}
+.page a.navCta,
+.page a.navCta:visited {
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 1rem;
+  border-radius: var(--ui-radius-md);
+  background: var(--ochre-600);
+  color: var(--on-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.page a.navCta:hover {
+  background: var(--ochre-500);
+}
+
+/* ---- title band ---- */
+.hero {
+  background: linear-gradient(
+    180deg,
+    rgba(var(--ochre-rgb), 0.09) 0%,
+    rgba(var(--ochre-rgb), 0.02) 100%
+  );
+  border-bottom: 1px solid var(--border-strong);
+  padding-block: clamp(1.5rem, 3vw, 2.25rem);
+}
+.eyebrow {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--ochre-rgb), 0.35);
+  background: var(--surface);
+  color: var(--ochre-800);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.title {
+  margin: 0.7rem 0 0;
+  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  font-weight: 650;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+.meta {
+  margin: 0.4rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+.lead {
+  margin: 0.75rem 0 0;
+  max-width: 70ch;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ---- sidebar + content ---- */
+.layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: start;
+  padding-block: clamp(1.25rem, 3vw, 2rem) clamp(2.5rem, 6vw, 4rem);
+}
+
+.sidebar {
+  position: sticky;
+  top: 20px;
+}
+.sideLabel {
+  margin: 0 0 0.6rem 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.sideList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.page a.sideLink,
+.page a.sideLink:visited {
+  display: block;
+  padding: 0.55rem 0.75rem;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--ui-radius-md) var(--ui-radius-md) 0;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.page a.sideLink:hover {
+  background: rgba(var(--ochre-rgb), 0.07);
+  color: var(--text-primary);
+}
+.page a.sideLinkActive,
+.page a.sideLinkActive:visited {
+  border-left-color: var(--ochre-500);
+  background: rgba(var(--ochre-rgb), 0.12);
+  color: var(--ochre-800);
+  font-weight: 600;
+}
+
+.content {
+  min-width: 0;
+}
+.article {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--ui-radius-xl);
+  box-shadow: var(--shadow-sm);
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.section {
+  padding-top: 1.75rem;
+  margin-top: 1.75rem;
+  border-top: 1px solid var(--border-strong);
+}
+.section:first-child {
+  padding-top: 0;
+  margin-top: 0;
+  border-top: none;
+}
+.h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.3rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+.article p,
+.article li {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+.article p {
+  max-width: 74ch;
+  margin: 0 0 0.9rem;
+}
+.article ul,
+.article ol {
+  max-width: 74ch;
+  margin: 0 0 0.9rem;
+  padding-left: 1.4rem;
+}
+.article ul {
+  list-style: disc;
+}
+.article ol {
+  list-style: decimal;
+}
+.article li {
+  margin-bottom: 0.45rem;
+  padding-left: 0.2rem;
+}
+.article li::marker {
+  color: var(--ochre-500);
+}
+.article strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.page .article a,
+.page .article a:visited {
+  color: var(--ochre-600);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.page .article a:hover {
+  color: var(--ochre-800);
+}
+
+/* ---- contact cards ---- */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0.25rem 0 0.5rem;
+}
+@media (max-width: 640px) {
+  .cardGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.card {
+  padding: 1.25rem 1.35rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--ui-radius-lg, 12px);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.cardTitle {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+  font-weight: 650;
+  color: var(--text-primary);
+}
+.cardBody p,
+.article .cardBody p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+.emailBox {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--ochre-rgb), 0.35);
+  border-radius: var(--ui-radius-lg, 12px);
+  background: rgba(var(--ochre-rgb), 0.07);
+}
+.emailAddress {
+  font-size: clamp(1.15rem, 3vw, 1.5rem);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+.page .article a.button,
+.page .article a.button:visited {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 1.25rem;
+  border-radius: var(--ui-radius-md);
+  background: var(--ochre-600);
+  color: var(--on-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+.page .article a.button:hover {
+  background: var(--ochre-500);
+  color: var(--on-primary);
+}
+
+/* ---- tablet / mobile ---- */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sidebar {
+    position: static;
+  }
+  .sideLabel {
+    display: none;
+  }
+  .sideList {
+    flex-direction: row;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .page a.sideLink,
+  .page a.sideLink:visited {
+    white-space: nowrap;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    padding: 0.45rem 0.9rem;
+    font-size: 0.875rem;
+  }
+  .page a.sideLinkActive,
+  .page a.sideLinkActive:visited {
+    border-color: var(--ochre-500);
+  }
+}
+@media (max-width: 520px) {
+  .navActions .navLink {
+    display: none;
+  }
+}

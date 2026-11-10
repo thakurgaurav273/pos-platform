@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FluxenLogo } from "@/components/FluxenLogo/FluxenLogo";
 import { MotionRoot } from "@/components/motion/MotionRoot";
 import { Reveal } from "@/components/motion/Reveal";
+import { SiteFooter } from "@/components/SiteFooter/SiteFooter";
 import { Faq } from "./Faq";
 import styles from "./Landing.module.css";
 
@@ -31,6 +32,10 @@ const FAQ = [
   {
     q: "Who can see my data?",
     a: "Only people in your business. Each business is kept separate, and staff can open only the shop and screens their role allows.",
+  },
+  {
+    q: "How much does it cost?",
+    a: "Every new account gets a 14-day free trial with everything switched on. No card is needed. When the trial ends your data stays safe and you can still view and export it. To keep making changes, send a plan request from your account and we will set it up and send an invoice.",
   },
   {
     q: "Do I need special hardware?",
@@ -84,6 +89,7 @@ export function Landing() {
                 Sign in
               </Link>
             </div>
+            <p className={styles.trialNote}>14-day free trial. No card needed.</p>
           </section>
 
           <div className={`${styles.wrap} ${styles.heroShot}`}>
@@ -178,12 +184,7 @@ export function Landing() {
           </section>
         </main>
 
-        <footer className={styles.footer}>
-          <div className={styles.wrap}>
-            <FluxenLogo size={24} />
-            <p>© {new Date().getFullYear()} Fluxen POS</p>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </MotionRoot>
   );

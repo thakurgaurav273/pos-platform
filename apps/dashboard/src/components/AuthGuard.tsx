@@ -28,6 +28,7 @@ const PROTECTED_PATHS = [
   "/shops",
   "/logout",
   "/stock-transfers",
+  "/billing",
   ACCESS_DENIED_PATH,
 ];
 

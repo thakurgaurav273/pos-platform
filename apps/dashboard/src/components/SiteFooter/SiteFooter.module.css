@@ -1,0 +1,36 @@
+.footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+.inner {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 1.5rem clamp(16px, 4vw, 40px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+}
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+}
+/* globals.css gives visited links specificity (0,1,1); re-assert it here. */
+.footer a.link,
+.footer a.link:visited {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.footer a.link:hover {
+  color: var(--ochre-600);
+  text-decoration: underline;
+}
+.copy {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}

@@ -75,6 +75,48 @@ export class EmailService {
     return data;
   }
 
+  /** Tells the platform operator that a business asked for a paid plan. */
+  async sendPlanEnquiryEmail(
+    to: string[],
+    d: {
+      businessName: string;
+      contactName: string;
+      email: string;
+      phone: string | null;
+      plan: string | null;
+      message: string | null;
+    },
+  ) {
+    const row = (k: string, v: string | null) =>
+      v
+        ? `<tr><td style="padding:4px 12px 4px 0;color:#555;">${k}</td><td style="padding:4px 0;"><b>${escapeHtml(v)}</b></td></tr>`
+        : '';
+    const { data, error } = await this.resend.emails.send({
+      from: process.env.EMAIL_FROM || 'Fluxen POS <onboarding@resend.dev>',
+      to,
+      replyTo: d.email,
+      subject: `Plan enquiry from ${d.businessName}`,
+      html: `
+        <div style="font-family: Arial;">
+          <h2>New plan enquiry</h2>
+          <table>
+            ${row('Business', d.businessName)}
+            ${row('Contact', d.contactName)}
+            ${row('Email', d.email)}
+            ${row('Phone', d.phone)}
+            ${row('Plan', d.plan)}
+            ${row('Message', d.message)}
+          </table>
+          <p style="font-size:13px;color:#555;">Open the operator page to activate the plan once payment is received.</p>
+        </div>
+      `,
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data;
+  }
+
   async sendPermissionRequestEmail(
     email: string,
     permissionsSummary: string,

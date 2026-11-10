@@ -145,15 +145,15 @@ const LoginPage = () => {
 
         <footer className={styles.footer}>
           <nav className={styles.footerNav} aria-label="Legal">
-            <a href="#" className={styles.footerLink}>
+            <Link href="/privacy" className={styles.footerLink}>
               Privacy Policy
-            </a>
-            <a href="#" className={styles.footerLink}>
+            </Link>
+            <Link href="/terms" className={styles.footerLink}>
               Terms of Service
-            </a>
-            <a href="#" className={styles.footerLink}>
+            </Link>
+            <Link href="/contact" className={styles.footerLink}>
               Contact Us
-            </a>
+            </Link>
           </nav>
           <p className={styles.copyright}>
             © 2026 Fluxen POS. All rights reserved.

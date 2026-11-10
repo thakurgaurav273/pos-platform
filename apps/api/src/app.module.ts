@@ -21,6 +21,7 @@ import { StockTransfersModule } from './stock-transfers/stock-transfers.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { CatalogImportModule } from './catalog-import/catalog-import.module';
 import { DemoModule } from './demo/demo.module';
+import { BillingModule } from './billing/billing.module';
 import { validateEnv } from './common/env.validation';
 import { KeepWarmService } from './keep-warm.service';
 
@@ -50,6 +51,7 @@ import { KeepWarmService } from './keep-warm.service';
     OrganizationsModule,
     CatalogImportModule,
     DemoModule,
+    BillingModule,
   ],
   controllers: [AppController],
   providers: [AppService, KeepWarmService],

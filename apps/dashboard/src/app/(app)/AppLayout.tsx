@@ -28,6 +28,7 @@ import Link from 'next/link';
 import { BrandLogo } from '@/components/BrandLogo/BrandLogo';
 import { ColorModeToggle } from '@/components/ColorModeToggle/ColorModeToggle';
 import { ActivityNotificationsBell } from '@/components/ActivityNotificationsBell/ActivityNotificationsBell';
+import { SubscriptionBanner } from '@/components/SubscriptionBanner/SubscriptionBanner';
 import { useAuth } from '@/contexts/AuthContext';
 import { useShop } from '@/contexts/ShopContext';
 import {
@@ -392,6 +393,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           tabIndex={-1}
           className={`flex min-h-0 flex-1 flex-col p-4 sm:p-6 lg:px-8 lg:py-7 ${styles.content} ${isInventoryListPage ? styles.contentInventoryList : ""}`}
         >
+          <SubscriptionBanner />
           {children}
         </Content>
       </Layout>

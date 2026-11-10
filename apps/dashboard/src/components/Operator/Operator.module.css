@@ -1,0 +1,453 @@
+/*
+ * Admin center styling. Deliberately independent of the shop app: a fixed palette, so a
+ * shop's brand colours or theme can never leak in.
+ */
+.root {
+  --op-bg: #f3f4f6;
+  --op-surface: #ffffff;
+  --op-border: #e5e7eb;
+  --op-text: #111827;
+  --op-muted: #6b7280;
+  --op-nav: #0b1220;
+  --op-nav-hover: #151f38;
+  --op-nav-text: #a9b4c9;
+  --op-accent: #4f46e5;
+
+  /* Shared components (DataTable, antd) read these shop variables: pin them here. */
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --border: #e5e7eb;
+  --border-strong: #e5e7eb;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --ochre-50: #eef2ff;
+  --ochre-500: #4f46e5;
+  --ochre-600: #4338ca;
+  --ochre-rgb: 79, 70, 229;
+
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  background: var(--op-bg);
+  color: var(--op-text);
+}
+
+/* ---- sidebar ---- */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 14px;
+  background: var(--op-nav);
+  color: var(--op-nav-text);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 10px 24px;
+  color: #fff;
+}
+.brandMark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+}
+.brandName {
+  display: block;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+.brandSub {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--op-nav-text);
+}
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.root a.navLink,
+.root a.navLink:visited {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--op-nav-text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+.root a.navLink:hover {
+  background: var(--op-nav-hover);
+  color: #fff;
+}
+.root a.navLinkActive,
+.root a.navLinkActive:visited {
+  background: rgba(99, 102, 241, 0.2);
+  color: #fff;
+}
+.navBadge {
+  margin-left: auto;
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+}
+.sideFooter {
+  margin-top: auto;
+  padding: 14px 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.8125rem;
+}
+.sideEmail {
+  color: #fff;
+  word-break: break-all;
+}
+.sideLabel {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--op-nav-text);
+}
+.signOut {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--op-nav-text);
+  font: inherit;
+  cursor: pointer;
+}
+.signOut:hover {
+  color: #fff;
+}
+
+/* ---- page ---- */
+.main {
+  min-width: 0;
+}
+.content {
+  width: 100%;
+  max-width: 1400px;
+  padding: 28px clamp(16px, 3vw, 40px) 56px;
+}
+.pageHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.sub {
+  margin: 4px 0 0;
+  color: var(--op-muted);
+  font-size: 0.9rem;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.back {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: var(--op-muted);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.back:hover {
+  color: var(--op-text);
+}
+
+/* ---- cards ---- */
+.card {
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: 12px;
+}
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--op-border);
+  font-weight: 650;
+}
+.cardHint {
+  color: var(--op-muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+.cardBody {
+  padding: 18px;
+}
+.cardBodyFlush {
+  padding: 0;
+}
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.stat {
+  padding: 16px 18px;
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: 12px;
+}
+.statLabel {
+  color: var(--op-muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+.statValue {
+  margin-top: 6px;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.statNote {
+  margin-top: 4px;
+  color: var(--op-muted);
+  font-size: 0.8125rem;
+}
+.statDanger .statValue {
+  color: #b91c1c;
+}
+.section {
+  margin-bottom: 20px;
+}
+
+/* ---- lists ---- */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  border-top: 1px solid var(--op-border);
+}
+.item:first-child {
+  border-top: 0;
+}
+.root a.itemLink,
+.root a.itemLink:visited {
+  color: var(--op-text);
+  font-weight: 550;
+  text-decoration: none;
+}
+.root a.itemLink:hover {
+  color: var(--op-accent);
+}
+.itemMeta {
+  color: var(--op-muted);
+  font-size: 0.8125rem;
+}
+.empty {
+  padding: 22px 18px;
+  color: var(--op-muted);
+  text-align: center;
+  font-size: 0.9rem;
+}
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.kv {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 8px 16px;
+  margin: 0;
+  font-size: 0.9rem;
+}
+.kv dt {
+  color: var(--op-muted);
+}
+.kv dd {
+  margin: 0;
+  word-break: break-word;
+}
+.muted {
+  color: var(--op-muted);
+  font-size: 0.8125rem;
+}
+.clickRow {
+  cursor: pointer;
+}
+
+/* ---- sign-in ---- */
+.loginBg {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(900px 500px at 15% 0%, rgba(99, 102, 241, 0.28), transparent 60%),
+    radial-gradient(700px 500px at 100% 100%, rgba(139, 92, 246, 0.2), transparent 60%),
+    #0b1220;
+}
+.loginCard {
+  width: 100%;
+  max-width: 400px;
+  padding: 32px;
+  border-radius: 16px;
+  background: #fff;
+  color: #111827;
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.55);
+}
+.loginBrand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.loginTitle {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.loginSub {
+  margin: 6px 0 20px;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.loginError {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.875rem;
+}
+.loginLabel {
+  display: block;
+  margin: 0 0 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #374151;
+}
+.qr {
+  display: block;
+  margin: 4px auto 8px;
+  border: 1px solid var(--op-border, #e5e7eb);
+  border-radius: 10px;
+}
+.secret {
+  display: block;
+  margin-bottom: 16px;
+  text-align: center;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  word-break: break-all;
+}
+.linkBtn {
+  margin-top: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #6b7280;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.linkBtn:hover {
+  color: #111827;
+}
+
+/* ---- narrow screens ---- */
+@media (max-width: 900px) {
+  .root {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 12px;
+    overflow-x: auto;
+  }
+  .brand {
+    padding: 0 8px 0 0;
+  }
+  .brandSub,
+  .sideLabel {
+    display: none;
+  }
+  .nav {
+    flex-direction: row;
+  }
+  .root a.navLink {
+    white-space: nowrap;
+  }
+  .sideFooter {
+    margin: 0 0 0 auto;
+    padding: 0;
+    border: 0;
+    white-space: nowrap;
+  }
+  .sideEmail {
+    display: none;
+  }
+  .signOut {
+    margin-top: 0;
+  }
+  .grid2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .kv {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+  .kv dd {
+    margin-bottom: 8px;
+  }
+}

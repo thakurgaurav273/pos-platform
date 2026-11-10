@@ -16,6 +16,7 @@ import { AuthService } from '../auth/auth.service';
 import { EmailService } from '../email/email.service';
 import { ShopsService } from '../shops/shops.service';
 import { SignupDto } from './dto/signup.dto';
+import { trialEndsFrom } from '../billing/subscription';
 
 const SALT_ROUNDS = 10;
 const PENDING_TTL_SECONDS = 30 * 60;
@@ -107,7 +108,11 @@ export class OrganizationsService {
     try {
       user = await this.prisma.$transaction(async (tx) => {
         const org = await tx.organization.create({
-          data: { name: pending.businessName },
+          data: {
+            name: pending.businessName,
+            subscriptionStatus: 'TRIALING',
+            trialEndsAt: trialEndsFrom(new Date()),
+          },
         });
         const shopCode = await this.shops.generateShopCode(tx);
         await tx.shop.create({

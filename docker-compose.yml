@@ -37,7 +37,6 @@ x-api-env: &api-env
   # "true" turns on the public "Try the demo" button (shared, pre-filled demo shop).
   # Empty = off in production.
   DEMO_ENABLED: ${DEMO_ENABLED:-}
-
 services:
   fluxen-postgres:
     image: postgres:16-alpine

@@ -20,10 +20,74 @@ model Organization {
   /// Set when the owner finishes the first-run onboarding wizard.
   onboardingCompletedAt DateTime?
 
+  /// Existing rows default to ACTIVE (grandfathered). Signup creates TRIALING with trialEndsAt.
+  subscriptionStatus SubscriptionStatus @default(ACTIVE)
+  trialEndsAt        DateTime?
+  planName           String?
+  /// ACTIVE until this moment; null means no expiry (e.g. the shared demo business).
+  paidUntil          DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  shops Shop[]
+  shops     Shop[]
+  enquiries PlanEnquiry[]
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+}
+
+enum EnquiryStatus {
+  OPEN
+  CONTACTED
+  CLOSED
+}
+
+/// A business asking to move to a paid plan; handled by the platform operator.
+model PlanEnquiry {
+  id    String @id @default(uuid())
+  orgId String
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  /// The user who sent it (kept as a plain id so deleting the user never blocks).
+  userId      String?
+  contactName String
+  email       String
+  phone       String?
+  plan        String?
+  message     String?
+
+  status EnquiryStatus @default(OPEN)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orgId, createdAt])
+  @@index([status, createdAt])
+}
+
+/// A platform operator: signs in to the admin center with email + password + an
+/// authenticator code. Separate from User (shop staff); created only from the CLI.
+model OperatorAccount {
+  id    String  @id @default(uuid())
+  email String  @unique
+  name  String?
+
+  passwordHash String
+  isActive     Boolean @default(true)
+
+  /// AES-256-GCM encrypted base32 secret, stored as "iv.tag.ciphertext" (base64).
+  totpSecretEnc String?
+  /// Null until the operator proves they scanned it by entering a first valid code.
+  totpEnabledAt DateTime?
+  /// Last accepted TOTP time-step, so one code cannot be used twice.
+  lastUsedStep  Int?
+
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Shop {

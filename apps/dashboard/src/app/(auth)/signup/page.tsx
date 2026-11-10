@@ -294,6 +294,20 @@ export default function SignupPage() {
                 <Button type="primary" htmlType="submit" loading={submitting} className={loginStyles.loginButton}>
                   Create account
                 </Button>
+                <p className={loginStyles.demoHint}>
+                  14-day free trial. No card needed.
+                </p>
+                <p className={loginStyles.demoHint}>
+                  By creating an account you agree to our{' '}
+                  <Link href="/terms" className={loginStyles.joinLink}>
+                    Terms of Service
+                  </Link>{' '}
+                  and{' '}
+                  <Link href="/privacy" className={loginStyles.joinLink}>
+                    Privacy Policy
+                  </Link>
+                  .
+                </p>
 
                 <p className={loginStyles.joinRow}>
                   Already have an account?{' '}

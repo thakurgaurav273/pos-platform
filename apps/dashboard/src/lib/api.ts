@@ -176,6 +176,9 @@ function withRequestTimeout(
   };
 }
 
+/** Fired when a write is refused because the business's trial or plan has ended (HTTP 402). */
+export const SUBSCRIPTION_EXPIRED_EVENT = "fluxen:subscription-expired";
+
 export async function apiFetch(
   path: string,
   init: RequestInit = {},
@@ -220,7 +223,11 @@ export async function apiFetch(
   }
 
   try {
-    return await fetch(fullUrl, { ...nextInit, headers });
+    const res = await fetch(fullUrl, { ...nextInit, headers });
+    if (res.status === 402 && typeof window !== "undefined") {
+      window.dispatchEvent(new Event(SUBSCRIPTION_EXPIRED_EVENT));
+    }
+    return res;
   } finally {
     cleanup();
   }

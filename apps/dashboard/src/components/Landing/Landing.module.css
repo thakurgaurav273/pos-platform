@@ -120,6 +120,11 @@
   gap: 1.5rem;
   margin-top: 2rem;
 }
+.trialNote {
+  margin: 0.9rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
 .heroShot {
   margin-top: clamp(2.5rem, 6vw, 4.5rem);
 }
@@ -257,21 +262,6 @@
 }
 .cta .h2 {
   max-width: 24ch;
-}
-.footer {
-  border-top: 1px solid var(--border);
-}
-.footer .wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-block: 1.5rem;
-}
-.footer p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
 }
 
 /* globals.css gives visited links specificity (0,1,1); re-assert at (0,2,x). */
