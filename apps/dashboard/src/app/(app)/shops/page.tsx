@@ -53,6 +53,7 @@ export default function ShopsPage() {
               key={shop.id}
               shop={shop}
               onDeleted={() => void fetchApi()}
+              onUpdated={() => void fetchApi()}
             />
           ))}
         </div>

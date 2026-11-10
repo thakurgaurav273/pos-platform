@@ -197,7 +197,13 @@ export class ShopsService {
 
     const data =
       actor.role === UserRole.SUPER_ADMIN
-        ? updateShopDto
+        ? {
+            ...updateShopDto,
+            // Same https-only rule as branding; an empty string clears the photo.
+            ...(updateShopDto.logoUrl !== undefined
+              ? { logoUrl: normalizeLogoUrl(updateShopDto.logoUrl) }
+              : {}),
+          }
         : this.pickTaxOnlyUpdate(updateShopDto);
 
     if (actor.role !== UserRole.SUPER_ADMIN && Object.keys(data).length === 0) {
