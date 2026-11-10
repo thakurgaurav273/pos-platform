@@ -34,6 +34,9 @@ x-api-env: &api-env
   TRUST_PROXY: "1"
   # Self-ping is only for platforms that sleep idle apps; not needed here.
   KEEP_WARM_URL: "off"
+  # "true" turns on the public "Try the demo" button (shared, pre-filled demo shop).
+  # Empty = off in production.
+  DEMO_ENABLED: ${DEMO_ENABLED:-}
 
 services:
   fluxen-postgres:
